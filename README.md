@@ -33,7 +33,7 @@ nexus3_anonymous_access.**describe**():
         salt myminion nexus3_anonymous_access.describe
     
 
-nexus3_anonymous_access.**enable**(enabled):
+nexus3_anonymous_access.**enable**(*enabled*):
 
     enabled (bool):
         enable or disable anonymous access [True|False]
@@ -43,7 +43,7 @@ nexus3_anonymous_access.**enable**(enabled):
         salt myminion nexus3_anonymous_access.enable True
 
 ---
-nexus3_blobstores.**create**(name,quota_type=None,quota_limit=1000000,store_type='file',s3_bucket='',s3_access_key_id='',s3_secret_access_key=''):
+nexus3_blobstores.**create**(*name,quota_type=None,quota_limit=1000000,store_type='file',s3_bucket='',s3_access_key_id='',s3_secret_access_key=''*):
 
     name (str):
         Name of blobstore
@@ -85,7 +85,7 @@ nexus3_blobstores.**create**(name,quota_type=None,quota_limit=1000000,store_type
         salt myminion nexus3_blobstores.create name=myblobstore quota_type=spaceRemainingQuota spaceRemainingQuota=5000000
     
 
-nexus3_blobstores.**delete**(name):
+nexus3_blobstores.**delete**(*name*):
 
     name (str):
         Name of blobstore
@@ -95,7 +95,7 @@ nexus3_blobstores.**delete**(name):
         salt myminion nexus3_blobstores.delete name=myblobstore
     
 
-nexus3_blobstores.**describe**(name):
+nexus3_blobstores.**describe**(*name*):
 
     name (str):
         Name of blobstore
@@ -112,7 +112,7 @@ nexus3_blobstores.list_all():
         salt myminion nexus3_blobstores.list_all
     
 
-nexus3_blobstores.**update**(name,quota_type=None,quota_limit=1000000):
+nexus3_blobstores.**update**(*name,quota_type=None,quota_limit=1000000*):
 
     Note:
         Only blobstore quotas can be updated
@@ -136,7 +136,7 @@ nexus3_blobstores.**update**(name,quota_type=None,quota_limit=1000000):
         salt myminion nexus3_blobstores.create name=myblobstore quota_type=spaceRemainingQuota quota_limit=5000000
 
 ----
-nexus3_email.**configure**(enabled,fromAddress='nexus@example.org',host='localhost',nexusTrustStoreEnabled=False,password=None,port=0,sslOnConnectEnabled=False,sslServerIdentityCheckEnabled=False,startTlsEnabled=False,startTlsRequired=False,subjectPrefix=None,username=''):
+nexus3_email.**configure**(*enabled,fromAddress='nexus@example.org',host='localhost',nexusTrustStoreEnabled=False,password=None,port=0,sslOnConnectEnabled=False,sslServerIdentityCheckEnabled=False,startTlsEnabled=False,startTlsRequired=False,subjectPrefix=None,username=''*):
 
     enabled (bool):
         enable email support [True|False]
@@ -214,7 +214,7 @@ nexus3_email.**verify**():
 
 
 ----
-nexus3_privileges.**create**(name,type,actions=[],contentSelector=None,description='New Nexus privilege',domain=None,format=None,pattern=None,repository=None,scriptName=None):
+nexus3_privileges.**create**(*name,type,actions=[],contentSelector=None,description='New Nexus privilege',domain=None,format=None,pattern=None,repository=None,scriptName=None*):
 
     name (str):
         privilege name
@@ -264,7 +264,7 @@ nexus3_privileges.**create**(name,type,actions=[],contentSelector=None,descripti
         salt myminion nexus3_privileges.create name=nx-repository-view-nuget-nuget-hosted-browse actions=['BROWSE'] description='Browse privilege for nuget-hosted repository views' format=nuget repository=nuget-hosted type=repository-view
     
 
-nexus3_privileges.**delete**(name):
+nexus3_privileges.**delete**(*name*):
 
     name (str):
         privilege name
@@ -274,7 +274,7 @@ nexus3_privileges.**delete**(name):
         salt myminion nexus3_privileges.delete nx-analytics-all
     
 
-nexus3_privileges.**describe**(name):
+nexus3_privileges.**describe**(*name*):
 
     name (str):
         privilege name
@@ -291,7 +291,7 @@ nexus3_privileges.**list_all**():
         salt myminion nexus3_privileges.list_all
     
 
-nexus3_privileges.**update**(name,actions=None,contentSelector=None,description=None,domain=None,format=None,pattern=None,repository=None,scriptName=None):
+nexus3_privileges.**update**(*name,actions=None,contentSelector=None,description=None,domain=None,format=None,pattern=None,repository=None,scriptName=None*):
 
     name (str):
         privilege name
@@ -359,7 +359,7 @@ nexus3_realms.**reset**():
         salt myminion nexus3_realms.reset
     
 
-nexus3_realms.**update**(realms):
+nexus3_realms.**update**(*realms*):
 
     realms (list):
         list of realms in order they should be used 
@@ -373,7 +373,7 @@ nexus3_realms.**update**(realms):
 
 
 ----
-nexus3_repositories.**delete**(name):
+nexus3_repositories.**delete**(*name*):
 
     name (str):
         name of repository
@@ -383,7 +383,7 @@ nexus3_repositories.**delete**(name):
         salt myminion nexus3_repository.delete name=maven-central
     
 
-nexus3_repositories.**describe**(name):
+nexus3_repositories.**describe**(*name*):
 
     name (str):
         name of repository
@@ -393,7 +393,7 @@ nexus3_repositories.**describe**(name):
         salt myminion nexus3_repository.describe name=maven-central
     
 
-nexus3_repositories.**group**(name,format,blobstore='default',docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_v1_enabled=False,group_members=[],strict_content_validation=True):
+nexus3_repositories.**group**(*name,format,blobstore='default',docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_v1_enabled=False,group_members=[],strict_content_validation=True*):
 
     Nexus 3 supports many different formats.  The bower, docker, maven, and nuget formats have built-in arguments.
 
@@ -438,7 +438,7 @@ nexus3_repositories.**group**(name,format,blobstore='default',docker_force_auth=
         salt myminion nexus3_repositories.group name=test-yum-group format=yum group_members=['test-yum']
     
 
-nexus3_repositories.**hosted**(name,format,apt_dist_name='bionic',apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',cleanup_policies=[],docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_v1_enabled=False,maven_layout_policy='STRICT',maven_version_policy='MIXED',strict_content_validation=True,yum_deploy_policy='STRICT',yum_repodata_depth=0,write_policy='allow_once'):
+nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',cleanup_policies=[],docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_v1_enabled=False,maven_layout_policy='STRICT',maven_version_policy='MIXED',strict_content_validation=True,yum_deploy_policy='STRICT',yum_repodata_depth=0,write_policy='allow_once'*):
 
     Nexus 3 supports many different formats.  The apt, bower, docker, maven, and nuget formats have built-in arguments.
 
@@ -516,7 +516,7 @@ nexus3_repositories.**list_all**():
         salt myminion nexus3_repositories.list_all
 
 
-nexus3_repositories.**proxy**(name,format,remote_url,apt_dist_name='bionic',apt_flat_repo=False,blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_index_type='HUB',docker_index_url='',maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_username=None,strict_content_validation=True):
+nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt_flat_repo=False,blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_index_type='HUB',docker_index_url='',maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_username=None,strict_content_validation=True*):
 
     Nexus 3 supports many different formats.  The apt, bower, docker, maven, and nuget formats have built-in arguments.
 
@@ -588,7 +588,7 @@ nexus3_repositories.**proxy**(name,format,remote_url,apt_dist_name='bionic',apt_
 
 
 ----
-nexus3_roles.**create**(name,description='',privileges=[],roles=[]):
+nexus3_roles.**create**(*name,description='',privileges=[],roles=[]*):
 
     name (str):
         name of role
@@ -607,7 +607,7 @@ nexus3_roles.**create**(name,description='',privileges=[],roles=[]):
         salt myminion nexus3_roles.create name=test_role description='test role' roles="['nx-admin']"
     
 
-nexus3_roles.**delete**(name):
+nexus3_roles.**delete**(*name*):
 
     name (str):
         name of role
@@ -617,7 +617,7 @@ nexus3_roles.**delete**(name):
         salt myminion nexus3_roles.delete nx-admin
     
 
-nexus3_roles.**describe**(name):
+nexus3_roles.**describe**(*name*):
 
     name (str):
         name of role
@@ -634,7 +634,7 @@ nexus3_roles.**list_all**():
         salt myminion nexus3_roles.list_all
     
 
-nexus3_roles.**update**(name,description=None,privileges=None,roles=None):
+nexus3_roles.**update**(*name,description=None,privileges=None,roles=None*):
 
     name (str):
         name of role
@@ -654,7 +654,7 @@ nexus3_roles.**update**(name,description=None,privileges=None,roles=None):
 
 
 ----
-nexus3_users.**create**(name,password,emailAddress,firstName,lastName,roles=['nx-anonymous'],status='active'):
+nexus3_users.**create**(*name,password,emailAddress,firstName,lastName,roles=['nx-anonymous'],status='active'*):
 
     name (str):
         name of user
@@ -686,7 +686,7 @@ nexus3_users.**create**(name,password,emailAddress,firstName,lastName,roles=['nx
             is the user shell history
     
 
-nexus3_users.**delete**(name):
+nexus3_users.**delete**(*name*):
 
     name (str):
         name of user
@@ -696,7 +696,7 @@ nexus3_users.**delete**(name):
         salt myminion nexus3_users.delete test_user
     
 
-nexus3_users.**describe**(name):
+nexus3_users.**describe**(*name*):
 
     name (str):
         name of user
@@ -713,7 +713,7 @@ nexus3_users.**list_all**():
         salt myminion nexus3_users.list_all
     
 
-nexus3_users.**update**(name,emailAddress=None,firstName=None,lastName=None,roles=None,status=None):
+nexus3_users.**update**(*name,emailAddress=None,firstName=None,lastName=None,roles=None,status=None*):
 
     name (str):
         name of user
@@ -738,7 +738,7 @@ nexus3_users.**update**(name,emailAddress=None,firstName=None,lastName=None,role
         salt myminion nexus3_users.update name=test_user firstName=Testing roles="['nx-anonymous']"
     
 
-nexus3_users.**update_password**(name,password):
+nexus3_users.**update_password**(*name,password*):
 
     name (str):
         name of user
@@ -758,7 +758,7 @@ nexus3_users.**update_password**(name,password):
 States
 ======
 
-nexus3_blobstores.**absent**(name):
+nexus3_blobstores.**absent**(*name*):
 
     name (str):
         Name of blobstore
@@ -774,7 +774,7 @@ nexus3_blobstores.**absent**(name):
             - name: myblobstore
 
 
-nexus3_blobstores.**present**(name,quota_type=None,quota_limit=1000000,store_type='file',s3_bucket='',s3_access_key_id='',s3_secret_access_key=''):
+nexus3_blobstores.**present**(*name,quota_type=None,quota_limit=1000000,store_type='file',s3_bucket='',s3_access_key_id='',s3_secret_access_key=''*):
 
     name (str):
         Name of blobstore
@@ -824,7 +824,7 @@ nexus3_blobstores.**present**(name,quota_type=None,quota_limit=1000000,store_typ
 
 
 ----
-nexus3_email.clear(name):
+nexus3_email.clear(*name*):
 
     name (str):
         state id name
@@ -838,7 +838,7 @@ nexus3_email.clear(name):
           nexus3_email.clear
 
 
-nexus3_email.configure(name,enabled,fromAddress='nexus@example.org',host='localhost',nexusTrustStoreEnabled=False,password=None,port=0,sslOnConnectEnabled=False,sslServerIdentityCheckEnabled=False,startTlsEnabled=False,startTlsRequired=False,subjectPrefix=None,username=''):
+nexus3_email.configure(*name,enabled,fromAddress='nexus@example.org',host='localhost',nexusTrustStoreEnabled=False,password=None,port=0,sslOnConnectEnabled=False,sslServerIdentityCheckEnabled=False,startTlsEnabled=False,startTlsRequired=False,subjectPrefix=None,username=''*):
 
     name (str):
         state id name
@@ -903,7 +903,7 @@ nexus3_email.configure(name,enabled,fromAddress='nexus@example.org',host='localh
 
 
 ----
-nexus3_privileges.**absent**(name):
+nexus3_privileges.**absent**(*name*):
 
     name (str):
         name of privilege
@@ -914,7 +914,7 @@ nexus3_privileges.**absent**(name):
           nexus3_privileges.absent
 
 
-nexus3_privileges.**present**(name,type,actions=[],contentSelector=None,description='New Nexus privilege',domain=None,format=None,pattern=None,repository=None,scriptName=None):
+nexus3_privileges.**present**(*name,type,actions=[],contentSelector=None,description='New Nexus privilege',domain=None,format=None,pattern=None,repository=None,scriptName=None*):
 
     name (str):
         privilege name
@@ -970,7 +970,7 @@ nexus3_privileges.**present**(name,type,actions=[],contentSelector=None,descript
 
 
 ----
-nexus3_repositories.**absent**(name):
+nexus3_repositories.**absent**(*name*):
 
     name (str):
         name (str):
@@ -983,7 +983,7 @@ nexus3_repositories.**absent**(name):
             - name: test-yum
 
 
-nexus3_repositories.**present**(name,format,type,apt_dist_name='bionic',apt_flat_repo=False,apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url='',docker_v1_enabled=False,group_members=[],maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_url='',remote_username=None,strict_content_validation=True,write_policy='allow_once',yum_deploy_policy='STRICT',yum_repodata_depth=0):
+nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_flat_repo=False,apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url='',docker_v1_enabled=False,group_members=[],maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_url='',remote_username=None,strict_content_validation=True,write_policy='allow_once',yum_deploy_policy='STRICT',yum_repodata_depth=0*):
 
     name (str):
         name (str):
@@ -1092,7 +1092,7 @@ nexus3_repositories.**present**(name,format,type,apt_dist_name='bionic',apt_flat
 
 
 ----
-nexus3_roles.**absent**(name):
+nexus3_roles.**absent**(*name*):
 
     name (str):
         name of role
@@ -1103,7 +1103,7 @@ nexus3_roles.**absent**(name):
           nexus3_roles.absent
 
 
-nexus3_roles.**present**(name,description,privileges,roles):
+nexus3_roles.**present**(*name,description,privileges,roles*):
 
     name (str):
         name of role
@@ -1131,7 +1131,7 @@ nexus3_roles.**present**(name,description,privileges,roles):
 
 
 ----
-nexus3_scripts.base_url(name):
+nexus3_scripts.base_url(*name*):
 
     Set base url for Nexus
 
@@ -1148,7 +1148,7 @@ nexus3_scripts.base_url(name):
       nexus3_scripts.base_url
 
 
-nexus3_scripts.task(name,typeId,taskProperties,cron,setAlertEmail=None):
+nexus3_scripts.task(*name,typeId,taskProperties,cron,setAlertEmail=None*):
 
     name (str):
         Name of task
@@ -1193,8 +1193,7 @@ nexus3_scripts.task(name,typeId,taskProperties,cron,setAlertEmail=None):
 
 
 ----
-nexus3_security.anonymous_access(name,
-                    enabled):
+nexus3_security.anonymous_access(*name,enabled*):
 
     name (str):
         state id name
@@ -1212,7 +1211,7 @@ nexus3_security.anonymous_access(name,
             - enabled: True
 
 
-nexus3_security.realms(name,realms):
+nexus3_security.realms(*name,realms*):
 
     name (str):
         state id name
@@ -1242,7 +1241,7 @@ nexus3_security.realms(name,realms):
 
 
 ----
-nexus3_users.**absent**(name):
+nexus3_users.**absent**(*name*):
 
     name (str):
         name of role
@@ -1253,7 +1252,7 @@ nexus3_users.**absent**(name):
           nexus3_users.absent
 
 
-nexus3_users.**present**(name,password,emailAddress,firstName,lastName,roles=['nx-anonymous'],status='active'):
+nexus3_users.**present**(*name,password,emailAddress,firstName,lastName,roles=['nx-anonymous'],status='active'*):
 
     name (str):
         name of user
