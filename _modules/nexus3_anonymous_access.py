@@ -30,7 +30,7 @@ anon_access_beta_path = 'beta/security/anonymous'
 
 def describe():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -62,7 +62,7 @@ def enable(enabled):
     enabled (bool):
         enable or disable anonymous access [True|False]
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 

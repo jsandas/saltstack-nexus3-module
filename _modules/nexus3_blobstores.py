@@ -71,7 +71,7 @@ def create(name,
         .. note::
             The blobstore name is used for blobstore path.
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -124,7 +124,7 @@ def delete(name):
     name (str):
         Name of blobstore
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -157,7 +157,7 @@ def describe(name):
     name (str):
         Name of blobstore
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -186,7 +186,7 @@ def describe(name):
 
 def list_all():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -233,7 +233,7 @@ def update(name,
             The limit should be no less than 1000000 bytes (1 MB) otherwise
             it does not display properly in the UI.
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 

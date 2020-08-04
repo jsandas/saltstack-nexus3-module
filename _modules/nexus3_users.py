@@ -57,7 +57,7 @@ def create(name,
     status (str):
         user status [active|disabled] (Default: active)
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -100,12 +100,42 @@ def create(name,
     return ret
 
 
+def delete(name):
+    '''
+    name (str):
+        name of user
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_users.delete test_user
+    '''
+    ret = {}
+
+    path = users_beta_path + '/' + name
+    nc = nexus3.NexusClient()
+
+    resp = nc.delete(path)
+
+    if resp['status'] == 204:
+        ret['comment'] = 'user {} deleted'.format(name)
+    else:
+        ret['comment'] = 'could not delete user {}.'.format(name)
+        ret['error'] = {
+            'code': resp['status'],
+            'msg': resp['body']
+        }
+
+    return ret
+
+
 def describe(name):
     '''
     name (str):
         name of user
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -138,39 +168,9 @@ def describe(name):
     return ret
 
 
-def delete(name):
-    '''
-    name (str):
-        name of user
-
-    CLI Example:
-
-    .. code-block:: bash
-
-        salt myminion nexus3_users.delete test_user
-    '''
-    ret = {}
-
-    path = users_beta_path + '/' + name
-    nc = nexus3.NexusClient()
-
-    resp = nc.delete(path)
-
-    if resp['status'] == 204:
-        ret['comment'] = 'user {} deleted'.format(name)
-    else:
-        ret['comment'] = 'could not delete user {}.'.format(name)
-        ret['error'] = {
-            'code': resp['status'],
-            'msg': resp['body']
-        }
-
-    return ret
-
-
 def list_all():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -223,7 +223,7 @@ def update(name,
     status (str):
         user status [active|disabled] (Default: None)
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -282,7 +282,7 @@ def update_password(name,
     password (str):
         password
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 

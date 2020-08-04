@@ -80,7 +80,7 @@ def create(name,
     scriptName (str):
         script name (Default: None)
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -178,7 +178,7 @@ def delete(name):
     name (str):
         privilege name
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -210,7 +210,7 @@ def describe(name):
     name (str):
         privilege name
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -240,7 +240,7 @@ def describe(name):
 
 def list_all():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -315,7 +315,7 @@ def update(name,
     scriptName (str):
         script name (Default: None)
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 

@@ -30,7 +30,7 @@ realms_beta_path = 'beta/security/realms'
 
 def list_active():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -60,7 +60,7 @@ def list_active():
 
 def list_all():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -92,7 +92,7 @@ def reset():
     '''
     Resets realms to default
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -138,7 +138,7 @@ def update(realms=[]):
             Include all desired realms in list as this will override
             the current list
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 

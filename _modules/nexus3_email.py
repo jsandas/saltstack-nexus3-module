@@ -85,7 +85,7 @@ def configure(enabled,
     username (str):
         smtp username (Default: '')
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -132,7 +132,7 @@ def configure(enabled,
 
 def describe():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -157,7 +157,7 @@ def describe():
 
 def reset():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -183,7 +183,7 @@ def reset():
 
 def verify(to):
     '''
-    CLI Example:
+    CLI Example::
     
     to (str):
         address to send test email to

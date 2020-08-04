@@ -45,7 +45,7 @@ def create(name,
     roles (list):
         roles to inherit from (Default: [])
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -87,7 +87,7 @@ def delete(name):
     name (str):
         name of role
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -117,7 +117,7 @@ def describe(name):
     name (str):
         name of role
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -147,7 +147,7 @@ def describe(name):
 
 def list_all():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -192,7 +192,7 @@ def update(name,
     roles (list):
         roles to inherit from (Default: None)
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 

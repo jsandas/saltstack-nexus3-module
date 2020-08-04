@@ -41,8 +41,6 @@ def group(name,
 
     '''
     Nexus 3 supports many different formats.  The bower, docker, maven, and nuget formats have built-in arguments.
-    Parameters for other formats may be supplied as a dictionary as kwargs.  This would be useful for any new formats
-    add to Nexus.
 
     name (str):
         Name of repository
@@ -80,7 +78,7 @@ def group(name,
         Enable strict content type validation [True|False] (Default: True)
   }
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -179,8 +177,6 @@ def hosted(name,
 
     '''
     Nexus 3 supports many different formats.  The apt, bower, docker, maven, and nuget formats have built-in arguments.
-    Parameters for other formats may be supplied as a dictionary as kwargs.  This would be useful for any new formats
-    add to Nexus.
 
     name (str):
         Name of repository
@@ -242,7 +238,7 @@ def hosted(name,
         Controls if deployments of and updates to artifacts are allowed [allow|allow_once|deny] (Default: allow_once)
   }
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -376,8 +372,6 @@ def proxy(name,
 
     '''
     Nexus 3 supports many different formats.  The apt, bower, docker, maven, and nuget formats have built-in arguments.
-    Parameters for other formats may be supplied as a dictionary as kwargs.  This would be useful for any new formats
-    add to Nexus.
 
     name (str):
         Name of repository
@@ -439,7 +433,7 @@ def proxy(name,
     strict_content_validation (bool):
         Enable strict content type validation [True|False] (Default: True)
 
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -589,7 +583,7 @@ def delete(name):
     name (str):
         name of repository
     
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -622,7 +616,7 @@ def describe(name):
     name (str):
         name of repository
     
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
@@ -654,7 +648,7 @@ def describe(name):
 
 def list_all():
     '''
-    CLI Example:
+    CLI Example::
 
     .. code-block:: bash
 
