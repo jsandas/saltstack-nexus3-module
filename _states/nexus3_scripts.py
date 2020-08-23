@@ -19,13 +19,12 @@ module itself.
 :depends: requests
 
 :configuration: In order to connect to Nexus 3, certain configuration is required
-    in /etc/salt/minion on the relevant minions otherwise defaults are used. A sample dictionary might look
-    like:
+    in /etc/salt/minion on the relevant minions.
     
-        nexus3:
-          host: '127.0.0.1:8081'
-          user: 'admin'
-          pass: 'admin123'
+    nexus3:
+        hostname: '127.0.0.1:8081'
+        username: 'admin'
+        password: 'admin123'
 
 """
 # from __future__ import absolute_import, print_function, unicode_literals

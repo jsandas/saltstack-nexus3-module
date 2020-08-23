@@ -8,9 +8,9 @@ stage module for Nexus 3 users
 
     Example:
       nexus3:
-        host: '127.0.0.1:8081'
-        user: 'admin'
-        pass: 'admin123'
+        hostname: '127.0.0.1:8081'
+        username: 'admin'
+        password: 'admin123'
 
 '''
 

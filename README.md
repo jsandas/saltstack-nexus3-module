@@ -19,9 +19,9 @@ In order to connect to Nexus 3, credentials can be provided through the minion c
 
     Example:
       nexus3:
-        host: '127.0.0.1:8081'
-        user: 'admin'
-        pass: 'admin123'
+        hostname: '127.0.0.1:8081'
+        username: 'admin'
+        password: 'admin123'
 
 If setting up Nexus for the first time, set the admin (or whichever user you choose to use) password and log that user out.
 
