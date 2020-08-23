@@ -64,17 +64,17 @@ nexus3_blobstores.**create**(*name,quota_type=None,quota_limit=1000000,store_typ
     store_type (str):
         Type of blobstore file|s3] (Default: file)
         Note:
-            S3 blobstores are currently untested.
+            S3 blobstores are currently not implemented.
 
     s3_bucket (str):
         Name of S3 bucket (Default: '')
         Note:
-            S3 blobstores are currently untested.
+            S3 blobstores are currently not implemented.
 
     s3_access_key_id (str):
         AWS Access Key for S3 bucket (Default: '')
         Note:
-            S3 blobstores are currently untested.
+            S3 blobstores are currently not implemented.
 
     s3_secret_access_key (str):
         AWS Secret Access Key for S3 bucket (Default: '')
@@ -793,7 +793,7 @@ nexus3_blobstores.**present**(*name,quota_type=None,quota_limit=1000000,store_ty
     store_type (str):
         Type of blobstore [file|s3] (Default: file)
         .. note::
-            The blobstore name is used for blobstore path.
+            S3 blobstores are currently not implemented.
 
     s3_bucket (str):
         Name of S3 bucket (Default: '')
