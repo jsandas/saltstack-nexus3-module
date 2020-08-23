@@ -1,6 +1,8 @@
 ''''
 execution module for Nexus 3 security realms
 
+:version: v0.2
+
 :configuration: In order to connect to Nexus 3, certain configuration is required
     in /etc/salt/minion on the relevant minions.
 
