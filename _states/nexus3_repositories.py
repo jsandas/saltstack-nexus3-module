@@ -320,10 +320,10 @@ def present(name,
                     is_update = True
 
             if format == 'maven2':
-                if maven_layout_policy != repo['maven']['layoutPolicy']:
+                if maven_layout_policy != repo['maven2']['layoutPolicy']:
                     updates['maven_layout_policy'] = maven_layout_policy
                     is_update = True
-                if maven_version_policy != repo['maven']['versionPolicy']:
+                if maven_version_policy != repo['maven2']['versionPolicy']:
                     updates['maven_version_policy'] = maven_version_policy
                     is_update = True                
 
@@ -383,13 +383,14 @@ def present(name,
             if metadata_max_age != repo['proxy']['metadataMaxAge']:
                 updates['metadata_max_age'] = metadata_max_age
                 is_update = True
-            # cannot compare username as there is no way to determine if the same
-            # if remote_password != repo['httpClient']['authentication']['password']:
-            #     updates['remote_password'] = remote_password
-            #     is_update = True
-            if remote_username != repo['httpClient']['authentication']['username']:
-                updates['remote_username'] = remote_username
-                is_update = True
+            if repo['httpClient']['authentication']:
+                # cannot compare password as there is no way to determine if the same
+                # if remote_password != repo['httpClient']['authentication']['password']:
+                #     updates['remote_password'] = remote_password
+                #     is_update = True
+                if remote_username != repo['httpClient']['authentication']['username']:
+                    updates['remote_username'] = remote_username
+                    is_update = True
 
             if format == 'apt':
                 if apt_dist_name != repo['apt']['distribution']:
@@ -413,10 +414,10 @@ def present(name,
                     is_update = True
 
             if format == 'maven2':
-                if maven_layout_policy != repo['maven']['layoutPolicy']:
+                if maven_layout_policy != repo['maven2']['layoutPolicy']:
                     updates['maven_layout_policy'] = maven_layout_policy
                     is_update = True
-                if maven_version_policy != repo['maven']['versionPolicy']:
+                if maven_version_policy != repo['maven2']['versionPolicy']:
                     updates['maven_version_policy'] = maven_version_policy
                     is_update = True   
 

@@ -315,7 +315,7 @@ def hosted(name,
         payload.update(docker)
     
     if format == 'maven2':
-        payload.update(maven)
+        payload.update(maven2)
 
     if format == 'yum':
         payload.update(yum)
@@ -542,7 +542,7 @@ def proxy(name,
         payload.update(docker)
     
     if format == 'maven2':
-        payload.update(maven)
+        payload.update(maven2)
 
     if format == 'nuget':
         payload.update(nuget)
