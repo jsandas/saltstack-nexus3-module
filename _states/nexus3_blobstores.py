@@ -97,7 +97,7 @@ def present(name,
     store_type (str):
         Type of blobstore [file|s3] (Default: file)
         .. note::
-            The blobstore name is used for blobstore path.
+            S3 blobstores are currently not implemented.
 
     s3_bucket (str):
         Name of S3 bucket (Default: '')

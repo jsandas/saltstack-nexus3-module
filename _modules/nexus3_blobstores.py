@@ -54,24 +54,24 @@ def create(name,
             it does not display properly in the UI.
 
     store_type (str):
-        Type of blobstore file|s3] (Default: file)
+        Type of blobstore [file|s3] (Default: file)
         .. note::
-            S3 blobstores are currently untested.
+            S3 blobstores are currently not implemented.
 
     s3_bucket (str):
         Name of S3 bucket (Default: '')
         .. note::
-            S3 blobstores are currently untested.
+            S3 blobstores are currently not implemented.
 
     s3_access_key_id (str):
         AWS Access Key for S3 bucket (Default: '')
         .. note::
-            S3 blobstores are currently untested.
+            S3 blobstores are currently not implemented.
 
     s3_secret_access_key (str):
         AWS Secret Access Key for S3 bucket (Default: '')
         .. note::
-            The blobstore name is used for blobstore path.
+            S3 blobstores are currently not implemented.
 
     CLI Example::
 
