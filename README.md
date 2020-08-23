@@ -1,12 +1,14 @@
 The purpose of this project is to create a (hopefully) easy to use method for managing Nexus 3 using Salt.  This is a major refactor which leverages the REST api rather than the script api.  Sonatype has disabled execution of groovy scripts by default for security reasons (https://help.sonatype.com/repomanager3/rest-and-integration-api/script-api).
 
 Installation:
-Copy the _states, _modules, and _utils folder to the files_root of the saltmaster (usually '/srv/salt').  Then run saltutil.sync_all to copy the files to the minion.
+Download desired release version from https://github.com/jsandas/saltstack-nexus3-module/releases/
+
+Extract archive and copy the _states, _modules, and _utils folder to the files_root of the saltmaster (usually '/srv/salt').
+
+Then run saltutil.sync_all to copy the files to the minion.
 
     Example:
         salt '*' saltutil.sync_all
-
-An alternative to copying these folders would be using gitfs specifying which branch/release to use.  Documentation here: (https://docs.saltstack.com/en/latest/topics/tutorials/gitfs.html).  Note: this has not been tested.
 
 The files under the pillar and states folders under test-env can be used as examples for using these modules.
 
