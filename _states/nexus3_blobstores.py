@@ -50,10 +50,7 @@ def absent(name):
     if not meta['blobstore']:
         exists = False
 
-    if not exists:
-        if __opts__['test']:
-            ret['result'] = None
-        
+    if not exists:       
         ret['comment'] = 'blobstore {} not found'.format(name)
 
     # if test is true
