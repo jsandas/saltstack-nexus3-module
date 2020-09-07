@@ -43,12 +43,12 @@ def absent(name):
     metadata = __salt__['nexus3_repositories.describe'](name=name)
 
     if __opts__['test']:
-        ret['result'] = None
         ret['comment'] = ''
 
         if not metadata['repository']:            
             ret['comment'] = 'repository {} not present.'.format(name)
         else:
+            ret['result'] = None
             ret['comment'] = 'repository {} will be deleted.'.format(name)
         return ret
 
@@ -82,7 +82,7 @@ def present(name,
         docker_http_port=None,
         docker_https_port=None,
         docker_index_type='HUB',
-        docker_index_url='',
+        docker_index_url=None,
         docker_v1_enabled=False,
         group_members=[],
         maven_layout_policy='STRICT',
@@ -154,7 +154,7 @@ def present(name,
             If using CUSTOM then docker_index_url must be specified
 
     docker_index_url (str):
-        Url for docker index
+        Url for docker index (Default: None)
         .. note::
             If using CUSTOM then docker_index_url must be specified
 
@@ -320,11 +320,11 @@ def present(name,
                     is_update = True
 
             if format == 'maven2':
-                if maven_layout_policy != repo['maven2']['layoutPolicy']:
-                    updates['maven_layout_policy'] = maven_layout_policy
+                if maven_layout_policy.upper() != repo['maven']['layoutPolicy']:
+                    updates['maven_layout_policy'] = maven_layout_policy.upper()
                     is_update = True
-                if maven_version_policy != repo['maven2']['versionPolicy']:
-                    updates['maven_version_policy'] = maven_version_policy
+                if maven_version_policy.upper() != repo['maven']['versionPolicy']:
+                    updates['maven_version_policy'] = maven_version_policy.upper()
                     is_update = True                
 
             if format == 'yum':
@@ -406,19 +406,31 @@ def present(name,
                     is_update = True                
 
             if format == 'docker':
-                if docker_index_type != repo['dockerProxy']['indexType']:
-                    updates['docker_index_type'] = docker_index_type
+                if docker_force_auth != repo['docker']['forceBasicAuth']:
+                    updates['docker_force_auth'] = docker_force_auth
+                    is_update = True
+                if docker_v1_enabled != repo['docker']['v1Enabled']:
+                    updates['docker_v1_enabled'] = docker_v1_enabled
+                    is_update = True
+                if docker_http_port != repo['docker']['httpPort']:
+                    updates['docker_http_port'] = docker_http_port
+                    is_update = True
+                if docker_https_port != repo['docker']['httpsPort']:
+                    updates['docker_https_port'] = docker_https_port
+                    is_update = True
+                if docker_index_type.upper() != repo['dockerProxy']['indexType']:
+                    updates['docker_index_type'] = docker_index_type.upper()
                     is_update = True
                 if docker_index_url != repo['dockerProxy']['indexUrl']:
                     updates['docker_index_url'] = docker_index_url
                     is_update = True
 
             if format == 'maven2':
-                if maven_layout_policy != repo['maven2']['layoutPolicy']:
-                    updates['maven_layout_policy'] = maven_layout_policy
+                if maven_layout_policy.upper() != repo['maven']['layoutPolicy']:
+                    updates['maven_layout_policy'] = maven_layout_policy.upper()
                     is_update = True
-                if maven_version_policy != repo['maven2']['versionPolicy']:
-                    updates['maven_version_policy'] = maven_version_policy
+                if maven_version_policy.upper() != repo['maven']['versionPolicy']:
+                    updates['maven_version_policy'] = maven_version_policy.upper()
                     is_update = True   
 
             if format == 'nuget':
@@ -451,8 +463,12 @@ def present(name,
                                                     bower_rewrite_urls,
                                                     cleanup_policies,
                                                     content_max_age,
+                                                    docker_force_auth,
+                                                    docker_http_port,
+                                                    docker_https_port,
                                                     docker_index_type,
                                                     docker_index_url,
+                                                    docker_v1_enabled,
                                                     maven_layout_policy,
                                                     maven_version_policy,
                                                     metadata_max_age,

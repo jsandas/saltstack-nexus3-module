@@ -518,7 +518,7 @@ nexus3_repositories.**list_all**():
         salt myminion nexus3_repositories.list_all
 
 
-nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt_flat_repo=False,blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_index_type='HUB',docker_index_url='',maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_username=None,strict_content_validation=True*):
+nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt_flat_repo=False,blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url=None,docker_index_type='HUB',docker_index_url=None,docker_v1_enabled=False,maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_username=None,strict_content_validation=True*):
 
     Nexus 3 supports many different formats.  The apt, bower, docker, maven, and nuget formats have built-in arguments.
 
@@ -551,15 +551,31 @@ nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt
     content_max_age (int):
         Max age of content cache in seconds (Default: 1440)
 
+    docker_force_auth (bool):
+        Force basic authentication [True|False] (Default: True)
+
+    docker_http_port (int):
+        HTTP port for docker api (Default: None)
+        .. note::
+            Used if the server is behind a secure proxy
+
+    docker_https_port (int):
+        HTTPS port for docker api (Default: None)
+        .. note::
+            Used if the server is configured for https
+
     docker_index_type (str):
         Type of index for docker registry [REGISTRY|HUB|CUSTOM] (Default: HUB)
         Note:
             If using CUSTOM then docker_index_url must be specified
 
     docker_index_url (str):
-        Url for docker index
+        Url for docker index (Default: None)
         Note:
             If using CUSTOM then docker_index_url must be specified
+
+    docker_v1_enabled (bool):
+        Enable v1 api support [True|False] (Default: False)
 
     maven_layout_policy (str):
         Validate all paths are maven artifacts or metadata paths [STRICT|PERMISSIVE] (default: STRICT)
@@ -985,7 +1001,7 @@ nexus3_repositories.**absent**(*name*):
             - name: test-yum
 
 
-nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_flat_repo=False,apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url='',docker_v1_enabled=False,group_members=[],maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_url='',remote_username=None,strict_content_validation=True,write_policy='allow_once',yum_deploy_policy='STRICT',yum_repodata_depth=0*):
+nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_flat_repo=False,apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url=None,docker_v1_enabled=False,group_members=[],maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_url='',remote_username=None,strict_content_validation=True,write_policy='allow_once',yum_deploy_policy='STRICT',yum_repodata_depth=0*):
 
     name (str):
         name (str):
@@ -1040,12 +1056,12 @@ nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_fla
 
     docker_index_type (str):
         Type of index for docker registry [REGISTRY|HUB|CUSTOM] (Default: HUB)
-        .. note::
+        Note:
             If using CUSTOM then docker_index_url must be specified
 
     docker_index_url (str):
-        Url for docker index
-        .. note::
+        Url for docker index (Default: None)
+        Note:
             If using CUSTOM then docker_index_url must be specified
 
     docker_v1_enabled (bool):

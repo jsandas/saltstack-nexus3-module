@@ -27,8 +27,17 @@ __outputter__ = {
     'highstate': 'highstate',
 }
 
-repo_beta_path = 'beta/repositories'
-repo_v1_path = 'v1/repositories'
+repo_base_path = 'v1/repositories'
+
+
+def _format_url_string(format):
+    '''
+    Helper function to handle inconsistency in format name and api url paths
+    '''
+    ret = format
+    if format == 'maven2':
+        ret = 'maven'
+    return ret
 
 
 def group(name,
@@ -42,7 +51,7 @@ def group(name,
         strict_content_validation=True):
 
     '''
-    Nexus 3 supports many different formats.  The bower, docker, maven, and nuget formats have built-in arguments.
+    Nexus 3 supports many different formats.  The bower, docker, maven2, and nuget formats have built-in arguments.
 
     name (str):
         Name of repository
@@ -91,6 +100,8 @@ def group(name,
         'repository': {},
     }
 
+    format_url_string = _format_url_string(format)
+
     payload = {
         'name': name,
         'online': True,
@@ -135,11 +146,11 @@ def group(name,
     nc = nexus3.NexusClient()
 
     if update:
-        update_path = repo_beta_path + '/' + format + '/group/' + name
+        update_path = repo_base_path + '/' + format_url_string + '/group/' + name
         resp = nc.put(update_path, payload)
         ret['comment'] = 'updated repository {}.'.format(name)
     else:
-        create_path = repo_beta_path + '/' + format + '/group'
+        create_path = repo_base_path + '/' + format_url_string + '/group'
         resp = nc.post(create_path, payload)
         ret['comment'] = 'created repository {}.'.format(name)
 
@@ -178,7 +189,7 @@ def hosted(name,
         write_policy='allow_once'):
 
     '''
-    Nexus 3 supports many different formats.  The apt, bower, docker, maven, and nuget formats have built-in arguments.
+    Nexus 3 supports many different formats.  The apt, bower, docker, maven2, and nuget formats have built-in arguments.
 
     name (str):
         Name of repository
@@ -253,6 +264,8 @@ def hosted(name,
         'repository': {},
     }
 
+    format_url_string = _format_url_string(format)
+
     payload = {
         'name': name,
         'online': True,
@@ -285,7 +298,7 @@ def hosted(name,
         }
     }
 
-    maven2 = {
+    maven = {
         'maven': {
             'versionPolicy': maven_version_policy.upper(),
             'layoutPolicy': maven_layout_policy.upper()
@@ -315,7 +328,7 @@ def hosted(name,
         payload.update(docker)
     
     if format == 'maven2':
-        payload.update(maven2)
+        payload.update(maven)
 
     if format == 'yum':
         payload.update(yum)
@@ -329,11 +342,11 @@ def hosted(name,
     nc = nexus3.NexusClient()
 
     if update:
-        update_path = repo_beta_path + '/' + format + '/hosted/' + name
+        update_path = repo_base_path + '/' + format_url_string + '/hosted/' + name
         resp = nc.put(update_path, payload)
         ret['comment'] = 'updated repository {}.'.format(name)
     else:
-        create_path = repo_beta_path + '/' + format + '/hosted'
+        create_path = repo_base_path + '/' + format_url_string + '/hosted'
         resp = nc.post(create_path, payload)
         ret['comment'] = 'created repository {}.'.format(name)
 
@@ -362,8 +375,12 @@ def proxy(name,
         bower_rewrite_urls=True,
         cleanup_policies=[],
         content_max_age=1440,
+        docker_force_auth=True,
+        docker_http_port=None,
+        docker_https_port=None,
         docker_index_type='HUB',
-        docker_index_url='',
+        docker_index_url=None,
+        docker_v1_enabled=False,
         maven_layout_policy='STRICT',
         maven_version_policy='MIXED',
         metadata_max_age=1440,
@@ -373,7 +390,7 @@ def proxy(name,
         strict_content_validation=True):
 
     '''
-    Nexus 3 supports many different formats.  The apt, bower, docker, maven, and nuget formats have built-in arguments.
+    Nexus 3 supports many different formats.  The apt, bower, docker, maven2, and nuget formats have built-in arguments.
 
     name (str):
         Name of repository
@@ -404,15 +421,31 @@ def proxy(name,
     content_max_age (int):
         Max age of content cache in seconds (Default: 1440)
 
+    docker_force_auth (bool):
+        Force basic authentication [True|False] (Default: True)
+
+    docker_http_port (int):
+        HTTP port for docker api (Default: None)
+        .. note::
+            Used if the server is behind a secure proxy
+
+    docker_https_port (int):
+        HTTPS port for docker api (Default: None)
+        .. note::
+            Used if the server is configured for https
+
     docker_index_type (str):
         Type of index for docker registry [REGISTRY|HUB|CUSTOM] (Default: HUB)
         .. note::
             If using CUSTOM then docker_index_url must be specified
 
     docker_index_url (str):
-        Url for docker index
+        Url for docker index (Default: None)
         .. note::
             If using CUSTOM then docker_index_url must be specified
+
+    docker_v1_enabled (bool):
+        Enable v1 api support [True|False] (Default: False)
 
     maven_layout_policy (str):
         Validate all paths are maven artifacts or metadata paths [STRICT|PERMISSIVE] (default: STRICT)
@@ -448,6 +481,8 @@ def proxy(name,
     ret = {
         'repository': {},
     }
+
+    format_url_string = _format_url_string(format)
 
     payload = {
         'name': name,
@@ -507,13 +542,17 @@ def proxy(name,
     }
 
     docker = {
+        'docker': {
+            'v1Enabled': docker_v1_enabled,
+            'forceBasicAuth': docker_force_auth,
+        },
         'dockerProxy': {
             'indexType': docker_index_type.upper(),
             'indexUrl': docker_index_url
         }
     }
 
-    maven2 = {
+    maven = {
         'maven': {
             'versionPolicy': maven_version_policy.upper(),
             'layoutPolicy': maven_layout_policy.upper()
@@ -539,10 +578,14 @@ def proxy(name,
         payload.update(bower)
 
     if format == 'docker':
+        if docker_http_port is not None:
+            docker['docker']['httpPort'] = docker_http_port
+        if docker_https_port is not None:
+            docker['docker']['httpsPort'] = docker_https_port
         payload.update(docker)
     
     if format == 'maven2':
-        payload.update(maven2)
+        payload.update(maven)
 
     if format == 'nuget':
         payload.update(nuget)
@@ -556,11 +599,11 @@ def proxy(name,
     nc = nexus3.NexusClient()
 
     if update:
-        update_path = repo_beta_path + '/' + format + '/proxy/' + name
+        update_path = repo_base_path + '/' + format_url_string + '/proxy/' + name
         resp = nc.put(update_path, payload)
         ret['comment'] = 'updated repository {}.'.format(name)
     else:
-        create_path = repo_beta_path + '/' + format + '/proxy'
+        create_path = repo_base_path + '/' + format_url_string + '/proxy'
         resp = nc.post(create_path, payload)
         ret['comment'] = 'created repository {}.'.format(name)
 
@@ -596,7 +639,7 @@ def delete(name):
         'comment': 'Repository {} deleted'.format(name)
     }
 
-    delete_path = repo_beta_path + '/' + name
+    delete_path = repo_base_path + '/' + name
 
     nc = nexus3.NexusClient()
     resp = nc.delete(delete_path)
@@ -630,7 +673,7 @@ def describe(name):
     }
 
     nc = nexus3.NexusClient()
-    resp = nc.get(repo_beta_path)
+    resp = nc.get('v1/repositorySettings')
 
     if resp['status'] != 200:
         ret['comment'] = 'Error restrieving repository information for {}.'.format(name)
@@ -663,7 +706,7 @@ def list_all():
     }
 
     nc = nexus3.NexusClient()
-    resp = nc.get(repo_v1_path)
+    resp = nc.get('v1/repositorySettings')
 
     if resp['status'] != 200:
         ret['comment'] = 'Error retrieving repositories.'
@@ -673,6 +716,6 @@ def list_all():
         }
         return ret
     
-    ret['repositories'] = resp['body']
+    ret['repositories'] = json.loads(resp['body'])
 
     return ret
