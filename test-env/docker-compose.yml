@@ -14,7 +14,8 @@ services:
       - $PWD/../_modules:/srv/salt/_modules
       - $PWD/../_states:/srv/salt/_states
       - $PWD/../_utils:/srv/salt/_utils
-      - $PWD/states/nexus3:/srv/salt/nexus3
+      - $PWD/pillar:/srv/pillar
+      - $PWD/states:/srv/salt
       - $PWD/../tests/:/tests/
 
   salt-minion:

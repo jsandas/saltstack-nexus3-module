@@ -1,13 +1,13 @@
 nexus:
   blobstores:
     docker: []
-    raw:
+    maven:
       - quota_type: spaceRemainingQuota
       - quota_limit: 1000000000
-    yum: []
     unwanted-blobstore:
       - quota_type: spaceRemainingQuota
       - quota_limit: 1000000000
+    yum: []
   privileges:
     repo-admin:
       - actions: ['ALL']
@@ -22,24 +22,47 @@ nexus:
       - repository: '*'
       - type: repository-admin
   repositories:
-    some-yum-proxy:
+    yum-proxy:
       - format: yum
       - type: proxy
       - remote_url: https://rpm.somerepo.com/
       - blobstore: yum
       - remote_username: username
       - remote_password: password
-    some-yum-group:
+    yum-proxy-noauth:
+      - format: yum
+      - type: proxy
+      - remote_url: https://rpm.someotherrepo.com/
+      - blobstore: yum
+    yum-group:
       - format: yum
       - type: group
-      - group_members: ['some-yum-proxy']
+      - group_members: ['yum-proxy']
       - strict_content_validation: False
-    hosted-docker:
+    docker-hosted:
       - format: docker
       - type: hosted
       - blobstore: docker
       - docker_http_port: 5000
-    hosted-unwanted:
+    docker-proxy:
+      - format: docker
+      - type: proxy
+      - remote_url: https://registry-1.docker.io
+      - blobstore: docker
+      - docker_http_port: 5001
+      - docker_force_auth: False
+      - docker_index_type: HUB
+    maven-hosted:
+      - format: maven2
+      - type: hosted
+      - maven_version_policy: release
+      - maven_layout_policy: strict
+    maven-group:
+      - format: maven2
+      - type: group
+      - group_members:
+        - maven-hosted
+    unwanted-hosted:
       - format: yum
       - type: hosted
       - blobstore: yum

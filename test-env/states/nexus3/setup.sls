@@ -9,7 +9,6 @@ update_realms:
     - realms: 
       - NexusAuthenticatingRealm
       - NexusAuthorizingRealm
-      - NpmToken
       - DockerToken
 
 setup_email:
@@ -56,9 +55,9 @@ repositories_{{ repository }}:
   {% endfor %}
 {% endfor %}
 
-remove_hosted-unwanted_repo:
+remove_unwanted-hosted_repo:
   nexus3_repositories.absent:
-    - name: hosted-unwanted
+    - name: unwanted-hosted
 
 {% for role, data in nexus['roles'].items() %}
 role_{{ role }}:
