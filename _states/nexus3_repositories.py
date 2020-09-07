@@ -93,7 +93,7 @@ def present(name,
         remote_url='',
         remote_username=None,
         strict_content_validation=True,
-        write_policy='allow_once',
+        write_policy='ALLOW_ONCE',
         yum_deploy_policy='STRICT',
         yum_repodata_depth=0):
     '''
@@ -186,7 +186,7 @@ def present(name,
         Enable strict content type validation [True|False] (Default: True)
 
     write_policy (str):
-        Controls if deployments of and updates to artifacts are allowed [allow|allow_once|deny] (Default: allow_once)
+        Controls if deployments of and updates to artifacts are allowed [ALLOW|ALLOW_ONCE|DENY] (Default: ALLOW_ONCE)
 
     yum_deploy_policy (str):
         Validate that all paths are RPMs or yum metadata [STRICT|PERMISSIVE] (Default: STRICT)
@@ -289,8 +289,8 @@ def present(name,
             if repo['cleanup'] is not None and cleanup_policies != repo['cleanup']['policyNames']:
                 updates['cleanup_policies'] = cleanup_policies
                 is_update = True
-            if write_policy != repo['storage']['writePolicy']:
-                updates['write_policy'] = write_policy
+            if write_policy.upper() != repo['storage']['writePolicy']:
+                updates['write_policy'] = write_policy.upper()
                 is_update = True
 
             if format == 'apt':

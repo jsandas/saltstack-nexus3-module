@@ -186,7 +186,7 @@ def hosted(name,
         strict_content_validation=True,
         yum_deploy_policy='STRICT',
         yum_repodata_depth=0,
-        write_policy='allow_once'):
+        write_policy='ALLOW_ONCE'):
 
     '''
     Nexus 3 supports many different formats.  The apt, bower, docker, maven2, and nuget formats have built-in arguments.
@@ -248,7 +248,7 @@ def hosted(name,
         Specifies the repository depth where repodata folder(s) are created (Default: 0)
 
     write_policy (str):
-        Controls if deployments of and updates to artifacts are allowed [allow|allow_once|deny] (Default: allow_once)
+        Controls if deployments of and updates to artifacts are allowed [ALLOW|ALLOW_ONCE|DENY] (Default: ALLOW_ONCE)
   }
 
     CLI Example::
@@ -272,7 +272,7 @@ def hosted(name,
         'storage': {
             'blobStoreName': blobstore,
             'strictContentTypeValidation': strict_content_validation,
-            'writePolicy': write_policy
+            'writePolicy': write_policy.upper()
         }
     }
 

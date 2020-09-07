@@ -440,7 +440,7 @@ nexus3_repositories.**group**(*name,format,blobstore='default',docker_force_auth
         salt myminion nexus3_repositories.group name=test-yum-group format=yum group_members=['test-yum']
     
 
-nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',cleanup_policies=[],docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_v1_enabled=False,maven_layout_policy='STRICT',maven_version_policy='MIXED',strict_content_validation=True,yum_deploy_policy='STRICT',yum_repodata_depth=0,write_policy='allow_once'*):
+nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',cleanup_policies=[],docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_v1_enabled=False,maven_layout_policy='STRICT',maven_version_policy='MIXED',strict_content_validation=True,yum_deploy_policy='STRICT',yum_repodata_depth=0,write_policy='ALLOW_ONCE'*):
 
     Nexus 3 supports many different formats.  The apt, bower, docker, maven, and nuget formats have built-in arguments.
 
@@ -501,7 +501,7 @@ nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passp
         Specifies the repository depth where repodata folder(s) are created (Default: 0)
 
     write_policy (str):
-        Controls if deployments of and updates to artifacts are allowed [allow|allow_once|deny] (Default: allow_once)
+        Controls if deployments of and updates to artifacts are allowed [ALLOW|ALLOW_ONCE|DENY] (Default: ALLOW_ONCE)
   }
 
     CLI Example::
@@ -1001,7 +1001,7 @@ nexus3_repositories.**absent**(*name*):
             - name: test-yum
 
 
-nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_flat_repo=False,apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url=None,docker_v1_enabled=False,group_members=[],maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_url='',remote_username=None,strict_content_validation=True,write_policy='allow_once',yum_deploy_policy='STRICT',yum_repodata_depth=0*):
+nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_flat_repo=False,apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url=None,docker_v1_enabled=False,group_members=[],maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_url='',remote_username=None,strict_content_validation=True,write_policy='ALLOW_ONCE',yum_deploy_policy='STRICT',yum_repodata_depth=0*):
 
     name (str):
         name (str):
@@ -1092,7 +1092,7 @@ nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_fla
         Enable strict content type validation [True|False] (Default: True)
 
     write_policy (str):
-        Controls if deployments of and updates to artifacts are allowed [allow|allow_once|deny] (Default: allow_once)
+        Controls if deployments of and updates to artifacts are allowed [ALLOW|ALLOW_ONCE|DENY] (Default: ALLOW_ONCE)
 
     yum_deploy_policy (str):
         Validate that all paths are RPMs or yum metadata [STRICT|PERMISSIVE] (Default: STRICT)
