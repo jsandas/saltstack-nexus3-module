@@ -34,12 +34,16 @@ def _get_config():
     missing_args = []
     for attr in conn_info:
         if attr not in _opts:
+            if conn_info[attr]:
+                log.warning('Used default value for nexus3 {}: {}'.format(attr, conn_info[attr]))
+                continue
             missing_args.append(attr)
             continue
         conn_info[attr] = _opts[attr]
 
     if missing_args:
-        log.error('The following connection details are missing: {}'.format(missing_args))
+        msg = 'The following connection details are missing: {}'.format(missing_args)
+        log.error(msg)
 
     return conn_info
 
@@ -51,13 +55,9 @@ class NexusClient:
 
     def __init__(self):
         config = _get_config()
-
-        try:
-            self.username = config['username']
-            self.password = config['password']
-            self.base_url = '{}/{}'.format(config['hostname'], base_api_path)
-        except Exception as e:
-            log.error('error with nexus 3 connection info: {}'.format(e))
+        self.username = config['username']
+        self.password = config['password']
+        self.base_url = '{}/{}'.format(config['hostname'], base_api_path)
 
     def delete(self, path):
         '''

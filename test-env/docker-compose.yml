@@ -23,6 +23,7 @@ services:
     container_name: salt-minion
     environment: 
       SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "admin123"}}'
+      # SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081"}}'
     links:
       - salt-master:salt-master
       - nexus3:nexus3

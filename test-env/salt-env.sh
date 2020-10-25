@@ -48,7 +48,9 @@ stop () {
 reload () {
     docker exec -it salt-master salt-key -D -y
     docker rm -f salt-minion
-    docker-compose up -d    
+    docker-compose up -d  
+    docker exec salt-master sh -c 'salt \* saltutil.sync_all' > /dev/null 2>&1
+    docker-compose restart salt-minion  
 }
 
 usage () {
