@@ -162,12 +162,16 @@ def _connection_info():
     missing_args = []
     for attr in conn_info:
         if attr not in _opts:
+            if conn_info[attr]:
+                log.warning('Used default value for nexus3 {}: {}'.format(attr, conn_info[attr]))
+                continue
             missing_args.append(attr)
             continue
         conn_info[attr] = _opts[attr]
 
     if missing_args:
-        log.error('The following connection details are missing: {}'.format(missing_args))
+        msg = 'The following connection details are missing: {}'.format(missing_args)
+        log.error(msg)
 
     return conn_info
 
