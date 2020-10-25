@@ -137,7 +137,7 @@ nexus3_blobstores.**update**(*name,quota_type=None,quota_limit=1000000*):
 
         salt myminion nexus3_blobstores.create name=myblobstore quota_type=spaceRemainingQuota quota_limit=5000000
 
-----
+---
 nexus3_email.**configure**(*enabled,fromAddress='nexus@example.org',host='localhost',nexusTrustStoreEnabled=False,password=None,port=0,sslOnConnectEnabled=False,sslServerIdentityCheckEnabled=False,startTlsEnabled=False,startTlsRequired=False,subjectPrefix=None,username=''*):
 
     enabled (bool):
@@ -215,7 +215,7 @@ nexus3_email.**verify**():
         salt myminion nexus3_email.verify
 
 
-----
+---
 nexus3_privileges.**create**(*name,type,actions=[],contentSelector=None,description='New Nexus privilege',domain=None,format=None,pattern=None,repository=None,scriptName=None*):
 
     name (str):
@@ -337,7 +337,7 @@ nexus3_privileges.**update**(*name,actions=None,contentSelector=None,description
         salt myminion nexus3_privileges.update name=testing actions="['ADD','READ']" description='Change password permission' domain=userschangepw type=application
 
 
-----
+---
 nexus3_realms.**list_active**():
 
     CLI Example::
@@ -374,7 +374,7 @@ nexus3_realms.**update**(*realms*):
         salt myminion nexus3_realms.update realms="['NexusAuthenticatingRealm','NexusAuthorizingRealm','NpmToken','DockerToken']"
 
 
-----
+---
 nexus3_repositories.**delete**(*name*):
 
     name (str):
@@ -605,7 +605,7 @@ nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt
         salt myminion nexus3_repositories.proxy name=test_apt format=apt remote_url=http://test.example.com remote_username=bob remote_password=testing apt_dist_name=bionic apt_flat_repo=False
 
 
-----
+---
 nexus3_roles.**create**(*name,description='',privileges=[],roles=[]*):
 
     name (str):
@@ -671,7 +671,7 @@ nexus3_roles.**update**(*name,description=None,privileges=None,roles=None*):
         salt myminion nexus3_roles.update name=test_role roles="['nx-admin']"
 
 
-----
+---
 nexus3_users.**create**(*name,password,emailAddress,firstName,lastName,roles=['nx-anonymous'],status='active'*):
 
     name (str):
@@ -841,7 +841,7 @@ nexus3_blobstores.**present**(*name,quota_type=None,quota_limit=1000000,store_ty
             - quota_limit: 5000000
 
 
-----
+---
 nexus3_email.clear(*name*):
 
     name (str):
@@ -920,7 +920,7 @@ nexus3_email.configure(*name,enabled,fromAddress='nexus@example.org',host='local
             - startTlsEnabled: True
 
 
-----
+---
 nexus3_privileges.**absent**(*name*):
 
     name (str):
@@ -987,7 +987,7 @@ nexus3_privileges.**present**(*name,type,actions=[],contentSelector=None,descrip
             - type: repository-admin
 
 
-----
+---
 nexus3_repositories.**absent**(*name*):
 
     name (str):
@@ -1109,7 +1109,7 @@ nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_fla
             - remote_url: https://yum.example.com
 
 
-----
+---
 nexus3_roles.**absent**(*name*):
 
     name (str):
@@ -1148,7 +1148,7 @@ nexus3_roles.**present**(*name,description,privileges,roles*):
             - roles: ['nx-admin']
 
 
-----
+---
 nexus3_scripts.base_url(*name*):
 
     Set base url for Nexus
@@ -1210,7 +1210,7 @@ nexus3_scripts.task(*name,typeId,taskProperties,cron,setAlertEmail=None*):
           - task_cron: '0 0 21 * * ?'
 
 
-----
+---
 nexus3_security.anonymous_access(*name,enabled*):
 
     name (str):
@@ -1258,7 +1258,7 @@ nexus3_security.realms(*name,realms*):
               - DockerToken
 
 
-----
+---
 nexus3_status.**check**():
 
     Health check endpoint that returns the results of the system status checks
@@ -1270,7 +1270,49 @@ nexus3_status.**check**():
         salt myminion nexus3_status.check
 
 
-----
+---
+nexus3_tasks.**describe**(*id*):
+
+    id (str):
+        task id
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_tasks.describe id=512be2c3-aa04-448f-b0ce-2047eee34903
+
+nexus3_tasks.**list_all**():
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_tasks.list_all
+
+nexus3_tasks.**run**(*id*):
+
+    id (str):
+        task id
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_tasks.run id=512be2c3-aa04-448f-b0ce-2047eee34903
+
+nexus3_tasks.**stop**(*id*):
+    id (str):
+        task id
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_tasks.stop id=512be2c3-aa04-448f-b0ce-2047eee34903
+
+
+---
 nexus3_users.**absent**(*name*):
 
     name (str):
