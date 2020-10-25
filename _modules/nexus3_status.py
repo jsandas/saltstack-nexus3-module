@@ -52,7 +52,7 @@ def check():
     resp = nc.get(path)
 
     if resp['status'] == 200:
-        ret['role'] = json.loads(resp['body'])
+        ret['status'] = json.loads(resp['body'])
     else:
         ret['comment'] = 'could not get status checks'
         ret['error'] = {
