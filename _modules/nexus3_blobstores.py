@@ -27,8 +27,7 @@ __outputter__ = {
     "highstate": "highstate",
 }
 
-blobstore_beta_path = 'beta/blobstores'
-blobstore_v1_path = 'v1/blobstores'
+blobstore_path = 'v1/blobstores'
 
 
 def create(name,
@@ -85,7 +84,7 @@ def create(name,
         'blobstore': {},
     }
 
-    path = '{}/{}'.format(blobstore_beta_path, store_type)
+    path = '{}/{}'.format(blobstore_path, store_type)
 
     payload = {
         'name': name,
@@ -137,7 +136,7 @@ def delete(name):
         'comment': 'Deleted blobstore "{}"'.format(name)
     }
 
-    path = '{}/{}'.format(blobstore_beta_path, name)
+    path = '{}/{}'.format(blobstore_path, name)
 
     nc = nexus3.NexusClient()
     resp = nc.delete(path)
@@ -200,7 +199,7 @@ def list_all():
     }
 
     nc = nexus3.NexusClient()
-    resp = nc.get(blobstore_beta_path)
+    resp = nc.get(blobstore_path)
 
     if resp['status'] == 200:
         ret['blobstores'] = json.loads(resp['body'])
@@ -261,7 +260,7 @@ def update(name,
     if not metadata['blobstore']:
         return metadata
 
-    path = '{}/{}/{}'.format(blobstore_beta_path, metadata['blobstore']['type'].lower(), name)
+    path = '{}/{}/{}'.format(blobstore_path, metadata['blobstore']['type'].lower(), name)
 
     nc = nexus3.NexusClient()
 
