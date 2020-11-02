@@ -37,7 +37,7 @@ def create(name,
         s3_accessKeyId='',
         s3_bucket='nexus3',
         s3_endpoint='',
-        s3_expiration='3',
+        s3_expiration=3,
         s3_forcePathStyle=False,
         s3_prefix='',
         s3_region='Default',
@@ -128,6 +128,7 @@ def create(name,
                 # 'sessionToken': 'string'
             }
 
+        # TODO: added encryption support
         # "encryption": {
         #     'encryptionType': 's3ManagedEncryption',
         #     'encryptionKey': 'string'
@@ -285,7 +286,7 @@ def update(name,
         s3_accessKeyId='',
         s3_bucket='nexus3',
         s3_endpoint='',
-        s3_expiration='3',
+        s3_expiration=3,
         s3_forcePathStyle=False,
         s3_prefix='',
         s3_region='Default',
@@ -375,6 +376,7 @@ def update(name,
                 # 'sessionToken': 'string'
             }
 
+        # TODO: added encryption support
         # "encryption": {
         #     'encryptionType': 's3ManagedEncryption',
         #     'encryptionKey': 'string'
