@@ -292,6 +292,7 @@ def update(name,
         s3_region='Default',
         s3_secretAccessKey=''):
     '''
+
     name (str):
         Name of blobstore
         .. note::
@@ -337,7 +338,7 @@ def update(name,
 
     .. code-block:: bash
 
-        salt myminion nexus3_blobstores.create name=myblobstore quota_type=spaceRemainingQuota quota_limit=5000000
+        salt myminion nexus3_blobstores.update name=myblobstore quota_type=spaceRemainingQuota quota_limit=5000000
         salt myminion nexus3_blobstores.update name=mys3blobstore s3_bucket=nexus3 s3_accessKeyId=AKIAIOSFODNN7EXAMPLE s3_secretAccessKey=wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY s3_endpoint=http://minio:9000 s3_forcePathStyle=True
     '''
 
