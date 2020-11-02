@@ -14,7 +14,6 @@ stage module for Nexus 3 blobstores
 
 '''
 
-import json
 import logging
 
 log = logging.getLogger(__name__)
@@ -75,9 +74,14 @@ def present(name,
         quota_type=None,
         quota_limit=1000000,
         store_type='file',
-        s3_bucket='',
-        s3_access_key_id='',
-        s3_secret_access_key=''):
+        s3_accessKeyId='',
+        s3_bucket='nexus3',
+        s3_endpoint='',
+        s3_expiration=3,
+        s3_forcePathStyle=False,
+        s3_prefix='',
+        s3_region='Default',
+        s3_secretAccessKey=''):
     '''
     name (str):
         Name of blobstore
@@ -91,26 +95,32 @@ def present(name,
             The limit should be no less than 1000000 bytes (1 MB) otherwise
             it does not display properly in the UI.
 
-    store_type (str):
-        Type of blobstore [file|s3] (Default: file)
-        .. note::
-            S3 blobstores are currently not implemented.
+    s3_accessKeyId (str):
+        AWS Access Key for S3 bucket (Default: '')
 
     s3_bucket (str):
-        Name of S3 bucket (Default: '')
-        .. note::
-            S3 blobstores are currently not implemented.
+        Name of S3 bucket (Default: 'nexus3')
 
-    s3_access_key_id (str):
-        AWS Access Key for S3 bucket (Default: '')
+    s3_endpoint (str):
+        custom URL for s3 api [http://localhost:9000] (Default: '')
         .. note::
-            S3 blobstores are currently not implemented.
+            only required if using a s3 compatible service
 
-    s3_secret_access_key (str):
+    s3_expiration (int):
+        days until deleted blobs are purged from bucket (Default: 3)
+        .. note::
+            set to -1 to disable
+
+    s3_forcePathStyle (bool):
+        force path style url format (Default: False)
+        .. note:
+            if using s3 compatible service like min.io, set this to True
+
+    s3_region (str):
+        Region of S3 bucket [us-east-1,us-east-2,us-west-1,us-west-2,etc] (Default: 'Default')
+
+    s3_secretAccessKey (str):
         AWS Secret Access Key for S3 bucket (Default: '')
-        .. note::
-            S3 blobstores are currently not implemented.
-
 
     .. code-block:: yaml
 
@@ -124,6 +134,13 @@ def present(name,
             - store_type: file
             - quota_type: spaceUsedQuota
             - quota_limit: 5000000
+
+        mys3blobstore:
+          nexus3_blobstores.present:
+            - store_type: s3
+            - s3_bucket: nexus3
+            - s3_accessKeyId: AKIAIOSFODNN7EXAMPLE
+            - s3_secretAccessKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
     '''
 
     ret = {
@@ -148,7 +165,12 @@ def present(name,
             return ret
 
 
-        create_results = __salt__['nexus3_blobstores.create'](name, quota_type, quota_limit, store_type)
+        create_results = __salt__['nexus3_blobstores.create'](name, quota_type, 
+                                                                quota_limit, store_type,
+                                                                s3_accessKeyId,s3_bucket,
+                                                                s3_endpoint,s3_expiration,
+                                                                s3_forcePathStyle,s3_prefix,
+                                                                s3_region,s3_secretAccessKey)
         if 'error' in create_results.keys():
             ret['result'] = False
             ret['comment'] = create_results['error']
@@ -179,6 +201,37 @@ def present(name,
             updates['quota_limit'] = quota_limit
             is_update = True
 
+        if 'bucketConfiguration' in meta['blobstore']:
+            s3_config = meta['blobstore']['bucketConfiguration']
+
+            if s3_config['bucket']['region'] != s3_region:
+                updates['s3_region'] = s3_region
+                is_update = True
+            
+            if s3_config['bucket']['name'] != s3_bucket:
+                updates['s3_bucket'] = s3_bucket
+                is_update = True
+
+            if s3_config['bucket']['prefix'] != s3_prefix:
+                updates['s3_prefix'] = s3_prefix
+                is_update = True
+
+            if s3_config['bucket']['expiration'] != s3_expiration:
+                updates['s3_expiration'] = s3_expiration
+                is_update = True
+
+            if s3_config['bucketSecurity']['accessKeyId'] != s3_accessKeyId:
+                updates['s3_accessKeyId'] = s3_accessKeyId
+                is_update = True
+
+            if s3_config['advancedBucketConnection']['endpoint'] != s3_endpoint:
+                updates['s3_endpoint'] = s3_endpoint
+                is_update = True
+
+            if s3_config['advancedBucketConnection']['forcePathStyle'] != s3_forcePathStyle:
+                updates['s3_forcePathStyle'] = s3_forcePathStyle
+                is_update = True
+
         if __opts__['test']:
             if is_update:
                 ret['result'] = None
@@ -188,7 +241,11 @@ def present(name,
             return ret
 
         if is_update:
-            update_results = __salt__['nexus3_blobstores.update'](name, quota_type, quota_limit)
+            update_results = __salt__['nexus3_blobstores.update'](name, quota_type,quota_limit,
+                                                                s3_accessKeyId,s3_bucket,
+                                                                s3_endpoint,s3_expiration,
+                                                                s3_forcePathStyle,s3_prefix,
+                                                                s3_region,s3_secretAccessKey)
             if 'error' in update_results.keys():
                 ret['result'] = False
                 ret['comment'] = update_results['error']
