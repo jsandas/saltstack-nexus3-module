@@ -11,15 +11,19 @@ def test_create_blobstore():
     assert ret['test.minion']['blobstore']['name'] == 'test1','blobstore test1 not created'
     assert ret['test.minion']['blobstore']['type'] == 'File','wrong store type found'
 
-    ret = client.cmd('test.minion', 'nexus3_blobstores.create', ['name=test2'])
+    ret = client.cmd('test.minion', 'nexus3_blobstores.create', ['name=test2', 'store_type=s3', 
+                        's3_bucket=nexus3', 's3_accessKeyId=AKIAIOSFODNN7EXAMPLE', 
+                        's3_secretAccessKey=wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY', 
+                        's3_endpoint=http://minio:9000', 's3_forcePathStyle=True'])
     print(ret)
     assert ret['test.minion']['blobstore'] != {},'blobstore is empty'
     assert ret['test.minion']['blobstore']['name'] == 'test2','blobstore test2 not created'
-    assert ret['test.minion']['blobstore']['type'] == 'File','wrong store type found'
+    assert ret['test.minion']['blobstore']['type'] == 'S3','wrong store type found'
 
 
 def test_update_blobstore():
-    ret = client.cmd('test.minion', 'nexus3_blobstores.update', ['name=test1','quota_type=spaceRemainingQuota','quota_limit=5000000'])
+    ret = client.cmd('test.minion', 'nexus3_blobstores.update', ['name=test1','quota_type=spaceRemainingQuota',
+                                                                    'quota_limit=5000000'])
     print(ret)
     assert ret['test.minion']['blobstore'] != {},'data is empty'
     assert ret['test.minion']['blobstore']['name'] == 'test1','blobstore test1 not found'
@@ -28,12 +32,12 @@ def test_update_blobstore():
 
 
 def test_describe_blobstore():
-    ret = client.cmd('test.minion', 'nexus3_blobstores.describe', ['name=test1'])
+    ret = client.cmd('test.minion', 'nexus3_blobstores.describe', ['name=test2'])
     print(ret)
     assert ret['test.minion']['blobstore'] != {},'data is empty'
-    assert ret['test.minion']['blobstore']['name'] == 'test1','blobstore test1 not found'
-    assert ret['test.minion']['blobstore']['type'] == 'File','wrong store type found'
-
+    assert ret['test.minion']['blobstore']['name'] == 'test2','blobstore test1 not found'
+    assert ret['test.minion']['blobstore']['type'] == 'S3','wrong store type found'
+    assert ret['test.minion']['blobstore']['bucketConfiguration']['bucket']['name'] == 'nexus3','wrong bucket name found'
 
 def test_list_blobstores():
     ret = client.cmd('test.minion', 'nexus3_blobstores.list_all')
