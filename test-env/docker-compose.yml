@@ -36,3 +36,18 @@ services:
       - "5000:5000"
     volumes:
       - $PWD/files/nexus.properties:/nexus-data/etc/nexus.properties
+    links:
+      - minio:minio.test.com
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+     - "9000:9000"
+    environment:
+      MINIO_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
+      MINIO_SECRET_KEY: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+    volumes:
+      # - $PWD/data:/data
+      - $PWD/files/config.json:/root/.mc/config.json
+    command: server /data
