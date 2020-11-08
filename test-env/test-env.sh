@@ -39,6 +39,7 @@ start () {
 
     echo ""
     echo "admin password: $(docker exec nexus3 bash -c 'cat /nexus-data/admin.password')"
+    echo ""
 }
 
 stop () {
@@ -58,6 +59,14 @@ usage () {
     echo " Usage:" 
     echo " ./salt-env (start|stop|reload|cmd) ARGS"
     echo ""
+}
+
+_setup_minio () {
+    echo "setting up minio..."
+    docker-compose exec minio wget -P /usr/bin https://dl.min.io/client/mc/release/linux-amd64/mc
+    docker-compose exec minio chmod +x /usr/bin/mc
+    docker-compose exec minio mc mb local/nexus3
+    echo "done"
 }
 
 while [[ $# -gt 0 ]]
@@ -85,6 +94,7 @@ done
 
 if [[ $START -gt 0 ]]; then
     start
+    _setup_minio
 elif [[ $STOP -gt 0 ]]; then
     stop
 elif [[ $RELOAD_MINION -gt 0 ]]; then

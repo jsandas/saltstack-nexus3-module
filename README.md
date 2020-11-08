@@ -45,7 +45,7 @@ nexus3_anonymous_access.**enable**(*enabled*):
         salt myminion nexus3_anonymous_access.enable True
 
 ---
-nexus3_blobstores.**create**(*name,quota_type=None,quota_limit=1000000,store_type='file',s3_bucket='',s3_access_key_id='',s3_secret_access_key=''*):
+nexus3_blobstores.**create**(*name,quota_type=None,quota_limit=1000000,store_type='file',s3_accessKeyId='',s3_bucket='nexus3',s3_endpoint='',s3_expiration=3,s3_forcePathStyle=False,s3_region=Default,s3_secretAccessKey=''*):
 
     name (str):
         Name of blobstore
@@ -62,29 +62,40 @@ nexus3_blobstores.**create**(*name,quota_type=None,quota_limit=1000000,store_typ
             it does not display properly in the UI.
 
     store_type (str):
-        Type of blobstore file|s3] (Default: file)
-        Note:
-            S3 blobstores are currently not implemented.
+        Type of blobstore [file|s3] (Default: file)
+
+    s3_accessKeyId (str):
+        AWS Access Key for S3 bucket (Default: '')
 
     s3_bucket (str):
-        Name of S3 bucket (Default: '')
-        Note:
-            S3 blobstores are currently not implemented.
+        Name of S3 bucket (Default: 'nexus3')
 
-    s3_access_key_id (str):
-        AWS Access Key for S3 bucket (Default: '')
+    s3_endpoint (str):
+        custom URL for s3 api [http://localhost:9000] (Default: '')
         Note:
-            S3 blobstores are currently not implemented.
+            only required if using a s3 compatible service
 
-    s3_secret_access_key (str):
+    s3_expiration (int):
+        days until deleted blobs are purged from bucket (Default: 3)
+        Note:
+            set to -1 to disable
+
+    s3_forcePathStyle (bool):
+        force path style url format (Default: False)
+        .. note:
+            if using s3 compatible service like min.io, set this to True
+
+    s3_region (str):
+        Region of S3 bucket [us-east-1,us-east-2,us-west-1,us-west-2,etc] (Default: 'Default')
+
+    s3_secretAccessKey (str):
         AWS Secret Access Key for S3 bucket (Default: '')
-        Note:
-            The blobstore name is used for blobstore path.
 
     CLI Example::
 
         salt myminion nexus3_blobstores.create name=myblobstore
         salt myminion nexus3_blobstores.create name=myblobstore quota_type=spaceRemainingQuota spaceRemainingQuota=5000000
+        salt myminion nexus3_blobstores.create name=mys3blobstore store_type=s3 s3_bucket=nexus3 s3_accessKeyId=AKIAIOSFODNN7EXAMPLE s3_secretAccessKey=wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY s3_endpoint=http://minio:9000 s3_forcePathStyle=True
     
 
 nexus3_blobstores.**delete**(*name*):
@@ -107,22 +118,19 @@ nexus3_blobstores.**describe**(*name*):
         salt myminion nexus3_blobstores.describe name=myblobstore
     
 
-nexus3_blobstores.list_all():
+nexus3_blobstores.**list_all**():
 
     CLI Example::
 
         salt myminion nexus3_blobstores.list_all
     
 
-nexus3_blobstores.**update**(*name,quota_type=None,quota_limit=1000000*):
-
-    Note:
-        Only blobstore quotas can be updated
+nexus3_blobstores.**update**(*name,quota_type=None,quota_limit=1000000,s3_accessKeyId='',s3_bucket='nexus3',s3_endpoint='',s3_expiration=3,s3_forcePathStyle=False,s3_prefix='',s3_region='Default',s3_secretAccessKey=''*):
 
     name (str):
         Name of blobstore
         Note:
-            The blobstore name is used for blobstore path.
+            The blobstore name is used for blobstore path.  
 
     quota_type (str):
         Quota type [None|spaceRemainingQuota|spaceUsedQuota] (Default: None)
@@ -133,9 +141,37 @@ nexus3_blobstores.**update**(*name,quota_type=None,quota_limit=1000000*):
             The limit should be no less than 1000000 bytes (1 MB) otherwise
             it does not display properly in the UI.
 
+    s3_accessKeyId (str):
+        AWS Access Key for S3 bucket (Default: '')
+
+    s3_bucket (str):
+        Name of S3 bucket (Default: 'nexus3')
+
+    s3_endpoint (str):
+        custom URL for s3 api [http://localhost:9000] (Default: '')
+        Note:
+            only required if using a s3 compatible service
+
+    s3_expiration (int):
+        days until deleted blobs are purged from bucket (Default: 3)
+        Note:
+            set to -1 to disable
+
+    s3_forcePathStyle (bool):
+        force path style url format (Default: False)
+        .. note:
+            if using s3 compatible service like min.io, set this to True
+
+    s3_region (str):
+        Region of S3 bucket [us-east-1,us-east-2,us-west-1,us-west-2,etc] (Default: 'Default')
+
+    s3_secretAccessKey (str):
+        AWS Secret Access Key for S3 bucket (Default: '')
+
     CLI Example::
 
-        salt myminion nexus3_blobstores.create name=myblobstore quota_type=spaceRemainingQuota quota_limit=5000000
+        salt myminion nexus3_blobstores.update name=myblobstore quota_type=spaceRemainingQuota quota_limit=5000000
+        salt myminion nexus3_blobstores.update name=mys3blobstore s3_bucket=nexus3 s3_accessKeyId=AKIAIOSFODNN7EXAMPLE s3_secretAccessKey=wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY s3_endpoint=http://minio:9000 s3_forcePathStyle=True
 
 ---
 nexus3_email.**configure**(*enabled,fromAddress='nexus@example.org',host='localhost',nexusTrustStoreEnabled=False,password=None,port=0,sslOnConnectEnabled=False,sslServerIdentityCheckEnabled=False,startTlsEnabled=False,startTlsRequired=False,subjectPrefix=None,username=''*):
@@ -556,12 +592,12 @@ nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt
 
     docker_http_port (int):
         HTTP port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is behind a secure proxy
 
     docker_https_port (int):
         HTTPS port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is configured for https
 
     docker_index_type (str):
@@ -802,28 +838,28 @@ nexus3_blobstores.**present**(*name,quota_type=None,quota_limit=1000000,store_ty
 
     quota_limit (int):
         Quota size in bytes (Default: 1000000)
-        .. note::
+        Note:
             The limit should be no less than 1000000 bytes (1 MB) otherwise
             it does not display properly in the UI.
 
     store_type (str):
         Type of blobstore [file|s3] (Default: file)
-        .. note::
+        Note:
             S3 blobstores are currently not implemented.
 
     s3_bucket (str):
         Name of S3 bucket (Default: '')
-        .. note::
+        Note:
             S3 blobstores are currently not implemented.
 
     s3_access_key_id (str):
         AWS Access Key for S3 bucket (Default: '')
-        .. note::
+        Note:
             S3 blobstores are currently not implemented.
 
     s3_secret_access_key (str):
         AWS Secret Access Key for S3 bucket (Default: '')
-        .. note::
+        Note:
             S3 blobstores are currently not implemented.
 
 
@@ -846,7 +882,7 @@ nexus3_email.clear(*name*):
 
     name (str):
         state id name
-        .. note::
+        Note:
             do not provide this argument, this is only here
             because salt passes this arg always
 
@@ -860,7 +896,7 @@ nexus3_email.configure(*name,enabled,fromAddress='nexus@example.org',host='local
 
     name (str):
         state id name
-        .. note::
+        Note:
             do not provide this argument, this is only here
             because salt passes this arg always
 
@@ -875,7 +911,7 @@ nexus3_email.configure(*name,enabled,fromAddress='nexus@example.org',host='local
 
     nexusTrustStoreEnabled (bool):
         use nexus truststore [True|False] (Default: False)
-        .. note::
+        Note:
             Ensure CA certificate is add to the Nexus trustore
 
     password (str):
@@ -886,7 +922,7 @@ nexus3_email.configure(*name,enabled,fromAddress='nexus@example.org',host='local
 
     sslOnConnectEnabled (bool):
         connect using tls (SMTPS) (Default: False)
-        .. note::
+        Note:
             sslOnConnectEnabled and startTlsEnabled/startTlsRequired should be mutually exclusive
 
     sslServerIdentityCheckEnabled (bool):
@@ -894,12 +930,12 @@ nexus3_email.configure(*name,enabled,fromAddress='nexus@example.org',host='local
 
     startTlsEnabled (bool):
         enable starttls (Default: False)
-        .. note::
+        Note:
             sslOnConnectEnabled and startTlsEnabled/startTlsRequired should be mutually exclusive
 
     startTlsRequired (bool):
         require starttls (Default: False)
-        .. note::
+        Note:
             sslOnConnectEnabled and startTlsEnabled/startTlsRequired should be mutually exclusive
 
 
@@ -945,7 +981,7 @@ nexus3_privileges.**present**(*name,type,actions=[],contentSelector=None,descrip
 
     contentSelector (str):
         name of content selector (Default: None)
-        .. note::
+        Note:
             required for respository-content-selector privilege type
             content selector must exist before assigning privileges
 
@@ -954,22 +990,22 @@ nexus3_privileges.**present**(*name,type,actions=[],contentSelector=None,descrip
 
     domain (str):
         domain of privilege [roles|scripts|search|selectors|settings|ssl-truststore|tasks|users|userschangepw] (Default: None)
-        .. note::
+        Note:
             required for application privilege type
 
     format (str):
         respository format [bower|cocoapads|conan|docker|etc.] (Default: None)
-        .. note::
+        Note:
             required for repository-admin, respository-content-selector, and repository-view privilege types
 
     pattern (regex):
         regex pattern to group other privileges (Default: None)
-        .. note::
+        Note:
             required for wildcard privilege type
 
     repository (str):
         repository name (Default: None)
-        .. note::
+        Note:
             required for repository-admin, respository-content-selector, and repository-view privilege types
 
     scriptName (str):
@@ -1009,7 +1045,7 @@ nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_fla
 
     format (str):
         Format of repository [apt|bower|cocoapads|conan|docker|maven2|etc.]
-        .. note::
+        Note:
             This can be any officaly supported repository format for Nexus
 
     type (str):
@@ -1026,7 +1062,7 @@ nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_fla
 
     apt_gpg_priv_key (str):
         GPG signing private key (Default: '')
-        .. note::
+        Note:
             This is require for hosted apt repositories
 
     blobstore (str):
@@ -1046,12 +1082,12 @@ nexus3_repositories.**present**(*name,format,type,apt_dist_name='bionic',apt_fla
 
     docker_http_port (int):
         HTTP port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is behind a secure proxy
 
     docker_https_port (int):
         HTTPS port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is configured for https
 
     docker_index_type (str):
@@ -1131,12 +1167,12 @@ nexus3_roles.**present**(*name,description,privileges,roles*):
 
     privileges (list):
         list of privileges
-        .. note::
+        Note:
             requires at least an empty list
 
     roles (list):
         roles to inherit from
-        .. note::
+        Note:
             requires at least an empty list
 
     .. code-block:: yaml
@@ -1156,7 +1192,7 @@ nexus3_scripts.base_url(*name*):
     name (str):
       URL to set base_url to for Nexus 3
 
-      .. note::
+      Note:
         This would usually be the FQDN used
         to access Nexus
 
@@ -1176,7 +1212,7 @@ nexus3_scripts.task(*name,typeId,taskProperties,cron,setAlertEmail=None*):
 
     taskProperties (dict):
         Dictionary of the task properties
-        .. note::
+        Note:
             The key/values under task_properties is indented 4 spaces instead
             of two.  This is how salt creates a dictionary from the yaml
 
@@ -1189,7 +1225,7 @@ nexus3_scripts.task(*name,typeId,taskProperties,cron,setAlertEmail=None*):
         .. example::
             '0 0 11 * 5 ?'
 
-        .. note::
+        Note:
             Cron schedule notes:
             Field Name	Allowed Values
             Seconds	    0-59
@@ -1215,7 +1251,7 @@ nexus3_security.anonymous_access(*name,enabled*):
 
     name (str):
         state id name
-        .. note::
+        Note:
             do not provide this argument, this is only here
             because salt passes this arg always
     
@@ -1233,13 +1269,13 @@ nexus3_security.realms(*name,realms*):
 
     name (str):
         state id name
-        .. note::
+        Note:
             do not provide this argument, this is only here
             because salt passes this arg always
     
     realms (list):
         list of realms in order they should be used 
-        .. note::
+        Note:
             Include all desired realms in list as this will override
             the current list
 
@@ -1334,7 +1370,7 @@ nexus3_users.**present**(*name,password,emailAddress,firstName,lastName,roles=['
 
     emailAddress (str):
         email address
-        .. note::
+        Note:
             password will always be updated as there is not
             a way to determine it's current value
 
