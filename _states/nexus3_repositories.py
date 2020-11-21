@@ -384,6 +384,10 @@ def present(name,
                 updates['metadata_max_age'] = metadata_max_age
                 is_update = True
             if repo['httpClient']['authentication']:
+                if remote_username is None:
+                    updates['remote_username'] = remote_username
+                    updates['remote_username'] = remote_password
+                    is_update = True
                 # cannot compare password as there is no way to determine if the same
                 # if remote_password != repo['httpClient']['authentication']['password']:
                 #     updates['remote_password'] = remote_password

@@ -501,6 +501,7 @@ def proxy(name,
             'timeToLive': 1440
         },
         'httpClient': {
+            'authentication': None,
             'blocked': False,
             'autoBlock': True,
             'connection': {
