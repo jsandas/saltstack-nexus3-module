@@ -1,6 +1,6 @@
 include:
   - .blobstores
-  - .repositores
+  - .repositories
   - .privileges
   - .roles
   - .users
