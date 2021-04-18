@@ -21,7 +21,7 @@ start () {
     echo ""
     echo "Waiting for admin.password to be generated"
     _dur=0
-    _timeout=60
+    _timeout=120
     until docker exec nexus3 bash -c 'test -f /nexus-data/admin.password'
     do
         if [ $_dur -gt $_timeout ]; then
@@ -65,7 +65,7 @@ usage () {
 
 _setup_minio () {
     echo "setting up minio..."
-    docker-compose exec minio wget -P /usr/bin https://dl.min.io/client/mc/release/linux-amd64/mc
+    docker-compose exec minio curl -o /usr/bin/mc https://dl.min.io/client/mc/release/linux-amd64/mc
     docker-compose exec minio chmod +x /usr/bin/mc
     docker-compose exec minio mc mb local/nexus3
     echo "done"
