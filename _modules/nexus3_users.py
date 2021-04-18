@@ -27,7 +27,7 @@ __outputter__ = {
     'highstate': 'highstate',
 }
 
-users_beta_path = 'beta/security/users'
+users_path = 'v1/security/users'
 
 
 def create(name,
@@ -74,7 +74,7 @@ def create(name,
         'user': {},
     }
 
-    path = users_beta_path
+    path = users_path
 
     payload = {
         'userId': name,
@@ -115,7 +115,7 @@ def delete(name):
     '''
     ret = {}
 
-    path = users_beta_path + '/' + name
+    path = users_path + '/' + name
     nc = nexus3.NexusClient()
 
     resp = nc.delete(path)
@@ -148,7 +148,7 @@ def describe(name):
         'user': {},
     }
 
-    path = users_beta_path
+    path = users_path
     nc = nexus3.NexusClient()
 
     resp = nc.get(path)
@@ -183,7 +183,7 @@ def list_all():
         'users': {},
     }
 
-    path = users_beta_path
+    path = users_path
     nc = nexus3.NexusClient()
 
     resp = nc.get(path)
@@ -242,7 +242,7 @@ def update(name,
         ret['comment'] = 'user {} does not exist'.format(name)
         return ret
 
-    path = users_beta_path + '/' + name
+    path = users_path + '/' + name
 
     if emailAddress is not None:
         meta['emailAddress'] = emailAddress
@@ -305,7 +305,7 @@ def update_password(name,
         ret['comment'] = 'user {} does not exist'.format(name)
         return ret
 
-    path = users_beta_path + '/' + name + '/change-password'
+    path = users_path + '/' + name + '/change-password'
 
     nc = nexus3.NexusClient()
 

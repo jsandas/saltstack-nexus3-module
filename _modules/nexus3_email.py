@@ -27,7 +27,7 @@ __outputter__ = {
     'highstate': 'highstate',
 }
 
-email_path = 'beta/email'
+email_path = 'v1/email'
 
 
 def configure(enabled,

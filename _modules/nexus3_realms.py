@@ -27,7 +27,7 @@ __outputter__ = {
     'highstate': 'highstate',
 }
 
-realms_beta_path = 'beta/security/realms'
+realms_path = 'v1/security/realms'
 
 
 def list_active():
@@ -43,7 +43,7 @@ def list_active():
         'realms': {},
     }
 
-    path = realms_beta_path + '/active'
+    path = realms_path + '/active'
     nc = nexus3.NexusClient()
 
     resp = nc.get(path)
@@ -73,7 +73,7 @@ def list_all():
         'realms': {},
     }
 
-    path = realms_beta_path + '/available'
+    path = realms_path + '/available'
     nc = nexus3.NexusClient()
 
     resp = nc.get(path)
@@ -105,7 +105,7 @@ def reset():
         'realms': {},
     }
 
-    path = realms_beta_path + '/active'
+    path = realms_path + '/active'
 
     # these are the defaults enabled
     # upon first start of Nexus 3
@@ -151,7 +151,7 @@ def update(realms=[]):
         'realms': {},
     }
 
-    path = realms_beta_path + '/active'
+    path = realms_path + '/active'
 
     nc = nexus3.NexusClient()
 
