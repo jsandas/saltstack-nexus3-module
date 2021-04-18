@@ -241,7 +241,7 @@ nexus3_email.**reset**():
         salt myminion nexus3_email.reset
     
 
-nexus3_email.**verify**(to):
+nexus3_email.**verify**(*to*):
 
     CLI Example::
     
@@ -371,6 +371,32 @@ nexus3_privileges.**update**(*name,actions=None,contentSelector=None,description
     CLI Example::
 
         salt myminion nexus3_privileges.update name=testing actions="['ADD','READ']" description='Change password permission' domain=userschangepw type=application
+
+
+---
+nexus3_readonly.**describe**():
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_readonly.describe
+
+
+nexus3_readonly.**enabled**(*state, force_release=True*):
+
+    state (bool):
+        enable or disable read-only [True|False]
+
+    force_release (bool):
+        force release of read-only [True|False] (Default: False)
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_readonly.enabled True
+        salt myminion nexus3_readonly.enabled state=False
 
 
 ---
