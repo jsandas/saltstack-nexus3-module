@@ -103,7 +103,7 @@ class NexusClient:
 
         return ret
 
-    def post(self, path, data):
+    def post(self, path, data=None):
         '''
         post payload to Nexus server
         '''
@@ -133,7 +133,7 @@ class NexusClient:
 
         return ret
 
-    def put(self, path, data):
+    def put(self, path, data=None):
         '''
         put payload to Nexus server
         '''
