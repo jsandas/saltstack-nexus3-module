@@ -241,14 +241,14 @@ nexus3_email.**reset**():
         salt myminion nexus3_email.reset
     
 
-nexus3_email.**verify**():
+nexus3_email.**verify**(to):
 
     CLI Example::
     
     to (str):
         address to send test email to
     
-        salt myminion nexus3_email.verify
+        salt myminion nexus3_email.verify to=test@domain.com
 
 
 ---

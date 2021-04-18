@@ -199,7 +199,7 @@ def verify(to):
     verify_path = email_path + '/verify'
 
     nc = nexus3.NexusClient()
-    resp = nc.post_str(verify_path, to)
+    resp = nc.post(verify_path, to)
 
     if resp['status'] == 200:
         status = json.loads(resp['body'])
