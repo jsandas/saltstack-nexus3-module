@@ -75,7 +75,7 @@ nexus:
       - blobstore: yum
   roles:
     repo-admin:
-      - privileges: ['nx-repository-view-*-*-*']
+      - privileges: ['nx-repository-admin-*-*-*']
       - description: 'role with privileges to administer repositories'
       - roles: ['nx-anonymous']
     repo-user:

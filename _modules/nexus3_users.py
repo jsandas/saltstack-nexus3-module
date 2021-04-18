@@ -309,7 +309,7 @@ def update_password(name,
 
     nc = nexus3.NexusClient()
 
-    resp = nc.put_str(path, password)
+    resp = nc.put(path, password)
 
     if resp['status'] == 204:
         ret['comment'] = 'updated password for {}.'.format(name)
