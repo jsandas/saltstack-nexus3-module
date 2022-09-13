@@ -1,7 +1,7 @@
 ''''
 stage module for Nexus 3 security settings
 
-:version: v0.2.1
+:version: v0.2.2
 
 :configuration: In order to connect to Nexus 3, certain configuration is required
     in /etc/salt/minion on the relevant minions.
