@@ -1,8 +1,8 @@
-version: '2'
+version: '3'
 
 services:
   salt-master:
-    image: saltstack/salt:3002
+    image: saltstack/salt:3004
     container_name: salt-master
     ports:
       - "4505:4505"
@@ -11,18 +11,18 @@ services:
       SALT_MASTER_CONFIG: '{"auto_accept": true}'
       # SALT_MASTER_CONFIG: '{"auto_accept": true, "fileserver_backend": ["roots", "gitfs"], "gitfs_remotes": [{"https://github.com/jsandas/saltstack-nexus3.git":[{"name":"nexus3_modules_repo"},{"base":"v2.0"}]}]}'
     volumes:
-      - $PWD/../_modules:/srv/salt/_modules
-      - $PWD/../_states:/srv/salt/_states
-      - $PWD/../_utils:/srv/salt/_utils
-      - $PWD/pillar:/srv/pillar
-      - $PWD/states:/srv/salt
-      - $PWD/../tests/:/tests/
+      - $PWD/_modules:/srv/salt/_modules
+      - $PWD/_states:/srv/salt/_states
+      - $PWD/_utils:/srv/salt/_utils
+      - $PWD/test-env/pillar:/srv/pillar
+      - $PWD/test-env/states:/srv/salt
+      - $PWD/test-env/tests/:/tests/
 
   salt-minion:
-    image: saltstack/salt:3002
+    image: saltstack/salt:3004
     container_name: salt-minion
     environment: 
-      SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "admin123"}}'
+      SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "${NEXUS_PASSWORD}"}}'
       # SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081"}}'
     links:
       - salt-master:salt-master
@@ -34,8 +34,8 @@ services:
     ports:
       - "8081:8081"
       - "5000:5000"
-    volumes:
-      - $PWD/files/nexus.properties:/nexus-data/etc/nexus.properties
+    # volumes:
+    #   - $PWD/test-env/files/nexus.properties:/nexus-data/etc/nexus.properties
     links:
       - minio:minio.test.com
 
@@ -47,7 +47,14 @@ services:
     environment:
       MINIO_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
       MINIO_SECRET_KEY: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
-    volumes:
-      # - $PWD/data:/data
-      - $PWD/files/config.json:/root/.mc/config.json
+    # volumes:
+      # - $PWD/test-env/data:/data
+      # - $PWD/test-env/files/config.json:/root/.mc/config.json
     command: server /data
+
+  minio-mc:
+    image: minio/mc
+    container_name: minio-mc
+    volumes:
+      - $PWD/test-env/files/config.json:/root/.mc/config.json
+    command: 'mb local/nexus3'
