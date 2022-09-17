@@ -2,7 +2,7 @@ version: '3'
 
 services:
   salt-master:
-    image: saltstack/salt:3004
+    image: saltstack/salt:3005
     container_name: salt-master
     ports:
       - "4505:4505"
@@ -19,7 +19,7 @@ services:
       - $PWD/test-env/tests/:/tests/
 
   salt-minion:
-    image: saltstack/salt:3004
+    image: saltstack/salt:3005
     container_name: salt-minion
     environment: 
       SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "${NEXUS_PASSWORD}"}}'
