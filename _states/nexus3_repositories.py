@@ -401,7 +401,7 @@ def present(name,
                 if apt_dist_name != repo['apt']['distribution']:
                     updates['apt_dist_name'] = apt_dist_name
                     is_update = True
-                if apt_flat_repo != repo['flat']:
+                if apt_flat_repo != repo['apt']['flat']:
                     updates['apt_flat_repo'] = apt_flat_repo
                     is_update = True
 
