@@ -9,7 +9,7 @@
                     "path": "dns"
             },
             "local": {
-                    "url": "http://localhost:9000",
+                    "url": "http://minio:9000",
                     "accessKey": "AKIAIOSFODNN7EXAMPLE",
                     "secretKey": "wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY",
                     "api": "s3v4",

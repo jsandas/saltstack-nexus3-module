@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import salt.client
 
@@ -6,7 +6,7 @@ client = salt.client.LocalClient()
 
 def test_create_blobstore():
     ret = client.cmd('test.minion', 'nexus3_blobstores.create', ['name=test1'])
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['blobstore'] != {},'blobstore is empty'
     assert ret['test.minion']['blobstore']['name'] == 'test1','blobstore test1 not created'
     assert ret['test.minion']['blobstore']['type'] == 'File','wrong store type found'
@@ -15,7 +15,7 @@ def test_create_blobstore():
                         's3_bucket=nexus3', 's3_accessKeyId=AKIAIOSFODNN7EXAMPLE', 
                         's3_secretAccessKey=wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY', 
                         's3_endpoint=http://minio:9000', 's3_forcePathStyle=True'])
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['blobstore'] != {},'blobstore is empty'
     assert ret['test.minion']['blobstore']['name'] == 'test2','blobstore test2 not created'
     assert ret['test.minion']['blobstore']['type'] == 'S3','wrong store type found'
@@ -24,7 +24,7 @@ def test_create_blobstore():
 def test_update_blobstore():
     ret = client.cmd('test.minion', 'nexus3_blobstores.update', ['name=test1','quota_type=spaceRemainingQuota',
                                                                     'quota_limit=5000000'])
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['blobstore'] != {},'data is empty'
     assert ret['test.minion']['blobstore']['name'] == 'test1','blobstore test1 not found'
     assert ret['test.minion']['blobstore']['softQuota']['type'] == 'spaceRemainingQuota','wrong quota type found'
@@ -33,7 +33,7 @@ def test_update_blobstore():
 
 def test_describe_blobstore():
     ret = client.cmd('test.minion', 'nexus3_blobstores.describe', ['name=test2'])
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['blobstore'] != {},'data is empty'
     assert ret['test.minion']['blobstore']['name'] == 'test2','blobstore test1 not found'
     assert ret['test.minion']['blobstore']['type'] == 'S3','wrong store type found'
@@ -41,7 +41,7 @@ def test_describe_blobstore():
 
 def test_list_blobstores():
     ret = client.cmd('test.minion', 'nexus3_blobstores.list_all')
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['blobstores'] != {},'data is empty'
     # this test is brittle as it assumes no other blobstores exists
     # in the nexus instance being tested
@@ -51,11 +51,11 @@ def test_list_blobstores():
 
 def test_delete_blobstore():
     ret = client.cmd('test.minion', 'nexus3_blobstores.delete', ['name=test1'])
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['comment'] == 'Deleted blobstore "test1"','blobstore test1 not deleted'
 
     ret = client.cmd('test.minion', 'nexus3_blobstores.delete', ['name=test2'])
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['comment'] == 'Deleted blobstore "test2"','blobstore test2 not deleted'
 
 

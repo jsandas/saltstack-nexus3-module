@@ -1,7 +1,7 @@
 ''''
 stage module for Nexus 3 repositories
 
-:version: v0.2.1
+:version: v0.2.2
 
 :configuration: In order to connect to Nexus 3, certain configuration is required
     in /etc/salt/minion on the relevant minions.
@@ -301,9 +301,10 @@ def present(name,
                 # if apt_gpg_passphrase != repo['aptSigning']['passphrase']:
                 #     updates['apt_gpg_passphrase'] = apt_gpg_passphrase
                 #     is_update = True
-                if apt_gpg_priv_key != repo['aptSigning']['keypair']:
-                    updates['apt_gpg_priv_key'] = apt_gpg_priv_key
-                    is_update = True
+                # if apt_gpg_priv_key != repo['aptSigning']['keypair']:
+                #     updates['apt_gpg_priv_key'] = apt_gpg_priv_key
+                #     is_update = True
+                is_update = True
 
             if format == 'docker':
                 if docker_force_auth != repo['docker']['forceBasicAuth']:

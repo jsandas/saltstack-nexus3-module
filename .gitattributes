@@ -1,2 +1,4 @@
 .git*   export-ignore
-test*   export-ignore
+test-env   export-ignore
+docker-compose.yml  export-ignore
+Makefile    export-ignore

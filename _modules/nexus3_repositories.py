@@ -1,7 +1,7 @@
 ''''
 execution module for the Nexus 3 repositories
 
-:version: v0.2.1
+:version: v0.2.2
 
 :configuration: In order to connect to Nexus 3, certain configuration is required
     in /etc/salt/minion on the relevant minions.
@@ -14,6 +14,7 @@ execution module for the Nexus 3 repositories
 
 '''
 
+import base64
 import json
 import logging
 
@@ -206,9 +207,10 @@ def hosted(name,
         GPG signing private key passphrase (Default: '')
 
     apt_gpg_priv_key (str):
-        GPG signing private key (Default: '')
+        Base64 string of GPG signing private key (Default: '')
         .. note::
-            This is require for hosted apt repositories
+            create base64 string to preserve newline characters:
+              ?> base64 private-key.gpg
 
     blobstore (str):
         Name of blobstore to use (Default: default)
@@ -282,12 +284,18 @@ def hosted(name,
         }
     }
 
+    base64_bytes = apt_gpg_priv_key.encode('utf-8')
+    message_bytes = base64.b64decode(base64_bytes)
+    message = message_bytes.decode('utf-8')
+
     apt = {
         'apt': {
             'distribution': apt_dist_name,
         },
         'aptSigning': {
-            'keypair': apt_gpg_priv_key
+            'keypair': message,
+            'passphrase': apt_gpg_passphrase
+
         }
     }
 
@@ -316,8 +324,6 @@ def hosted(name,
         payload.update(cleanup)
         
     if format == 'apt':
-        if apt_gpg_passphrase != '':
-            apt['aptSigning']['passphrase'] = apt_gpg_passphrase
         payload.update(apt)
 
     if format == 'docker':

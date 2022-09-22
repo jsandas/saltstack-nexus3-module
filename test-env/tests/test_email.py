@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import salt.client
 
@@ -9,7 +9,7 @@ def test_configure_email():
     ret = client.cmd('test.minion', 'nexus3_email.configure', ['enabled=True',
         'host=notlocalhost','port=587','fromAddress=test@example.com','startTlsEnabled=True'])
 
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['email']['host'] == 'notlocalhost','host incorrect'
 
     assert ret['test.minion']['email']['port'] == 587,'port incorrect'
@@ -25,7 +25,7 @@ def test_describe_email():
 
     ret = client.cmd('test.minion', 'nexus3_email.describe')
 
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['email']['host'] == 'notlocalhost','host incorrect'
 
     assert ret['test.minion']['email']['port'] == 465,'port incorrect'
