@@ -27,7 +27,6 @@ def test_group():
     assert data['name'] == 'test-yum-group','repo name is incorrect'
     assert data['group']['memberNames'] == ['test-yum-hosted'],'memberNames is incorrect'
 
-
 def test_proxy():
     ret = client.cmd('test.minion', 'nexus3_repositories.proxy', ['name=test-yum-proxy','format=yum','remote_url=https://randomurl.com'])
     # print(ret)
@@ -35,6 +34,13 @@ def test_proxy():
     assert data['name'] == 'test-yum-proxy','repo name is incorrect'
     assert data['proxy']['remoteUrl'] == 'https://randomurl.com','remoteUrl is incorrect'
     assert data['httpClient']['authentication'] is None,'authentication is incorrect'
+
+    ret = client.cmd('test.minion', 'nexus3_repositories.proxy', ['name=test-apt-proxy','format=apt','remote_url=https://randomurl.com'])
+    print(ret)
+    data = ret['test.minion']['repository']
+    assert data['name'] == 'test-apt-proxy','repo name is incorrect'
+    assert data['proxy']['remoteUrl'] == 'https://randomurl.com','remoteUrl is incorrect'
+    assert data['apt']['flat'] == False,'apt flat is incorrect'
 
 def test_proxy_with_auth():
     ret = client.cmd('test.minion', 'nexus3_repositories.proxy', ['name=test-yum-proxy_auth','format=yum','remote_url=https://randomurlauth.com','remote_username=test_user','remote_password=test_password'])
@@ -49,25 +55,38 @@ def test_describe():
     ret = client.cmd('test.minion', 'nexus3_repositories.describe', ['name=test-yum-hosted'])
     # print(ret)
     assert ret['test.minion']['repository'] != {},'data is empty'
-    assert ret['test.minion']['repository']['name'] == 'test-yum-hosted','repository test-yum not found'
-    assert ret['test.minion']['repository']['format'] == 'yum','format found'
-    assert ret['test.minion']['repository']['type'] == 'hosted','type found'
+    assert ret['test.minion']['repository']['name'] == 'test-yum-hosted','repository test-yum-hosted not found'
+    assert ret['test.minion']['repository']['format'] == 'yum','wrong format found'
+    assert ret['test.minion']['repository']['type'] == 'hosted','wrong type found'
 
+    ret = client.cmd('test.minion', 'nexus3_repositories.describe', ['name=test-apt-proxy'])
+    print(ret)
+    assert ret['test.minion']['repository'] != {},'data is empty'
+    assert ret['test.minion']['repository']['name'] == 'test-apt-proxy','repository test-apt-proxy not found'
+    assert ret['test.minion']['repository']['format'] == 'apt','wrong format found'
+    assert ret['test.minion']['repository']['type'] == 'proxy','wrong type found'
+    assert ret['test.minion']['repository']['apt']['flat'] == False,'apt flat is incorrect'
 
 # clean the slate
-client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-hosted'])
-client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-group'])
-client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy'])
-client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy_auth'])
+def cleanup():
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-hosted'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-group'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-apt-proxy'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy_auth'])
 
-test_list_all()
 
-test_hosted()
+if __name__ == "__main__":
+    cleanup()
 
-test_group()
+    test_list_all()
 
-test_proxy() 
+    test_hosted()
 
-test_proxy_with_auth()
+    test_group()
 
-test_describe()
+    test_proxy() 
+
+    test_proxy_with_auth()
+
+    test_describe()
