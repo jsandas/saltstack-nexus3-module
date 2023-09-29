@@ -5,18 +5,18 @@ import salt.client
 client = salt.client.LocalClient()
 
 def test_update_realms():
-    ret = client.cmd('test.minion', 'nexus3_realms.update', [['NexusAuthenticatingRealm','NexusAuthorizingRealm','DockerToken']])
+    ret = client.cmd('test.minion', 'nexus3_realms.update', [['NexusAuthenticatingRealm','DockerToken']])
     # print(ret)
     assert ret['test.minion']['realms'] != {},'realms is empty'
-    assert ret['test.minion']['realms']== ['NexusAuthenticatingRealm','NexusAuthorizingRealm','DockerToken'],'realms is incorrect'
+    assert ret['test.minion']['realms']== ['NexusAuthenticatingRealm','DockerToken'],'realms is incorrect'
 
 
 def test_active_realms():
-    client.cmd('test.minion', 'nexus3_realms.update', [['NexusAuthenticatingRealm','NexusAuthorizingRealm','DockerToken','NpmToken']])
+    client.cmd('test.minion', 'nexus3_realms.update', [['NexusAuthenticatingRealm','DockerToken','NpmToken']])
     ret = client.cmd('test.minion', 'nexus3_realms.list_active')
     # print(ret)
     assert ret['test.minion']['realms'] != {},'realms is empty'
-    assert ret['test.minion']['realms'] == ['NexusAuthenticatingRealm','NexusAuthorizingRealm','DockerToken','NpmToken'],'realms is incorrect'
+    assert ret['test.minion']['realms'] == ['NexusAuthenticatingRealm','DockerToken','NpmToken'],'realms is incorrect'
 
 
 # clean the slate
