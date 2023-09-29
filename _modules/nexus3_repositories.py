@@ -390,7 +390,10 @@ def proxy(name,
         maven_layout_policy='STRICT',
         maven_version_policy='MIXED',
         metadata_max_age=1440,
+        ntlm_domain=None,
+        ntlm_host=None,
         nuget_cache_max_age=3600,
+        remote_auth_type='username',
         remote_password=None,
         remote_username=None,
         strict_content_validation=True):
@@ -465,6 +468,15 @@ def proxy(name,
     nuget_cache_max_age (int):
         Nuget cache max age in seconds (Default: 3600)
 
+    ntlm_domain (str):
+        NTLM domain (Default: None)
+
+    ntlm_host (str):
+        NTLM Host (Default: None)
+
+    remote_auth_type (str):
+        Authentication type for remote url [username|ntlm|bearerToken] (Default: username)
+
     remote_password (str):
         Password for remote url (Default: None)
 
@@ -521,12 +533,30 @@ def proxy(name,
         'routingRule': 'string'
     }
 
+    # auth dictionary that filters on remote_auth_type
     auth =  {
-        'authentication': {
-            'type': 'username',
-            'username': remote_username,
-            'password': remote_password
-        }
+        'username': {
+            'authentication': {
+                'type': 'username',
+                'username': remote_username,
+                'password': remote_password
+            },
+        },
+        'bearerToken': {
+            'authentication': {
+                'type': 'bearerToken',
+                'bearerToken': remote_password
+            },
+        },
+        'ntlm': {
+            'authentication': {
+                'type': 'ntlm',
+                'username': remote_username,
+                'password': remote_password,
+                'ntlmDomain': ntlm_domain,
+                'ntlmHost': ntlm_host,
+            },
+        },
     }
 
     cleanup = {
@@ -572,8 +602,8 @@ def proxy(name,
         }
     }
 
-    if remote_username is not None:
-        payload['httpClient'].update(auth)
+    if remote_username is not None or remote_password is not None:
+        payload['httpClient'].update(auth[remote_auth_type])
 
     if cleanup_policies:
         payload.update(cleanup)
