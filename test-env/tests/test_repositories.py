@@ -36,7 +36,7 @@ def test_proxy():
     assert data['httpClient']['authentication'] is None,'authentication is incorrect'
 
     ret = client.cmd('test.minion', 'nexus3_repositories.proxy', ['name=test-apt-proxy','format=apt','remote_url=https://randomurl.com'])
-    print(ret)
+    # print(ret)
     data = ret['test.minion']['repository']
     assert data['name'] == 'test-apt-proxy','repo name is incorrect'
     assert data['proxy']['remoteUrl'] == 'https://randomurl.com','remoteUrl is incorrect'
@@ -60,7 +60,7 @@ def test_describe():
     assert ret['test.minion']['repository']['type'] == 'hosted','wrong type found'
 
     ret = client.cmd('test.minion', 'nexus3_repositories.describe', ['name=test-apt-proxy'])
-    print(ret)
+    # print(ret)
     assert ret['test.minion']['repository'] != {},'data is empty'
     assert ret['test.minion']['repository']['name'] == 'test-apt-proxy','repository test-apt-proxy not found'
     assert ret['test.minion']['repository']['format'] == 'apt','wrong format found'
