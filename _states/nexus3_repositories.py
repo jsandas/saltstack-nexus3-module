@@ -400,20 +400,22 @@ def present(name,
             if metadata_max_age != repo['proxy']['metadataMaxAge']:
                 updates['metadata_max_age'] = metadata_max_age
                 is_update = True
+
+            # check for changes in authentication
+            if repo['httpClient']['authentication'] and remote_auth_type is None:
+                updates['remote_auth_type'] = remote_auth_type
+                is_update = True
             if repo['httpClient']['authentication'] and remote_auth_type is not None:
                 if remote_auth_type != repo['httpClient']['authentication']['type']:
                     updates['remote_auth_type'] = remote_auth_type
                     is_update = True
                 
                 if remote_auth_type == 'username' or remote_auth_type == 'ntlm':
-                    try:
-                        if remote_username != repo['httpClient']['authentication']['username']:
+                    if repo['httpClient']['authentication'] is None:
+                        updates['remote_username'] = remote_username                    
+                    elif remote_username != repo['httpClient']['authentication']['username']:
                             updates['remote_username'] = remote_username
-                    except:
-                        # assume that repo['httpClient']['authentication']['username'] resulted
-                        # in a keyerror because it does exist yet
-                        if remote_username is not None:
-                            updates['remote_username'] = remote_username
+                            is_update = True
                     # cannot compare passwords so always set it as new
                     if remote_password is not None:
                         updates['remote_password'] = '*******'
