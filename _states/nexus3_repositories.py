@@ -92,6 +92,7 @@ def present(name,
         ntlm_host=None,
         nuget_cache_max_age=3600,
         remote_auth_type='username',
+        remote_bearer_token=None,
         remote_password=None,
         remote_url='',
         remote_username=None,
@@ -184,6 +185,9 @@ def present(name,
 
     remote_auth_type (str):
         Authentication type for remote url [username|ntlm|bearerToken] (Default: username)
+
+    remote_bearer_token (str):
+        Bearer Token for remote url (Default: None)
 
     remote_password (str):
         Password for remote url (Default: None)
@@ -396,22 +400,36 @@ def present(name,
             if metadata_max_age != repo['proxy']['metadataMaxAge']:
                 updates['metadata_max_age'] = metadata_max_age
                 is_update = True
-            if repo['httpClient']['authentication']:
-                if remote_username is None or remote_password is not None:
-                    updates['remote_auth_type'] = remote_auth_type
-                    updates['remote_username'] = remote_username
-                    updates['remote_username'] = remote_password
-                    is_update = True
-                # cannot compare password as there is no way to determine if the same
-                # if remote_password != repo['httpClient']['authentication']['password']:
-                #     updates['remote_password'] = remote_password
-                #     is_update = True
-                if remote_password != repo['httpClient']['authentication']['remote_auth_type']:
+            if repo['httpClient']['authentication'] and remote_auth_type is not None:
+                if remote_auth_type != repo['httpClient']['authentication']['type']:
                     updates['remote_auth_type'] = remote_auth_type
                     is_update = True
-                if remote_username != repo['httpClient']['authentication']['username']:
-                    updates['remote_username'] = remote_username
-                    is_update = True
+                
+                if remote_auth_type == 'username' or remote_auth_type == 'ntlm':
+                    try:
+                        if remote_username != repo['httpClient']['authentication']['username']:
+                            updates['remote_username'] = remote_username
+                    except:
+                        # assume that repo['httpClient']['authentication']['username'] resulted
+                        # in a keyerror because it does exist yet
+                        if remote_username is not None:
+                            updates['remote_username'] = remote_username
+                    # cannot compare passwords so always set it as new
+                    if remote_password is not None:
+                        updates['remote_password'] = '*******'
+                        is_update = True
+
+                if remote_auth_type == 'bearerToken':
+                    # cannot compare passwords so always set it as new
+                    if remote_bearer_token is not None:
+                        updates['remote_bearer_token'] = '*******'
+                        is_update = True
+
+                if remote_auth_type == 'ntlm':
+                    if ntlm_domain != repo['httpClient']['authentication']['ntlmDomain']:
+                        updates['ntlm_domain'] = ntlm_domain
+                    if ntlm_host != repo['httpClient']['authentication']['ntlmHost']:
+                        updates['ntlm_host'] = ntlm_host                                       
 
             if format == 'apt':
                 if apt_dist_name != repo['apt']['distribution']:
@@ -496,6 +514,8 @@ def present(name,
                                                     ntlm_domain,
                                                     ntlm_host,
                                                     nuget_cache_max_age,
+                                                    remote_auth_type,
+                                                    remote_bearer_token,
                                                     remote_password,
                                                     remote_username,
                                                     strict_content_validation)

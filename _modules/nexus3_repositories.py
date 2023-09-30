@@ -394,6 +394,7 @@ def proxy(name,
         ntlm_host=None,
         nuget_cache_max_age=3600,
         remote_auth_type='username',
+        remote_bearer_token=None,
         remote_password=None,
         remote_username=None,
         strict_content_validation=True):
@@ -477,6 +478,9 @@ def proxy(name,
     remote_auth_type (str):
         Authentication type for remote url [username|ntlm|bearerToken] (Default: username)
 
+    remote_bearer_token (str):
+        Bearer Token for remote url (Default: None)
+
     remote_password (str):
         Password for remote url (Default: None)
 
@@ -545,7 +549,7 @@ def proxy(name,
         'bearerToken': {
             'authentication': {
                 'type': 'bearerToken',
-                'bearerToken': remote_password
+                'bearerToken': remote_bearer_token
             },
         },
         'ntlm': {
@@ -602,7 +606,7 @@ def proxy(name,
         }
     }
 
-    if remote_username is not None or remote_password is not None:
+    if remote_auth_type in ['username', 'bearerToken','ntlm'] and (remote_username is not None or remote_bearer_token is not None):
         payload['httpClient'].update(auth[remote_auth_type])
 
     if cleanup_policies:
