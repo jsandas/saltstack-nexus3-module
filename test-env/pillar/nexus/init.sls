@@ -48,6 +48,15 @@ nexus:
       - docker_http_port: 5001
       - docker_force_auth: False
       - docker_index_type: HUB
+    npm-proxy:
+      - format: npm
+      - type: proxy
+      - remote_url: https://npm.somerepo.com/
+      # currently setting the bearer token for NPM is not possible
+      # with the Nexus REST API at this time.
+      # https://github.com/sonatype/nexus-public/issues/247
+      # - remote_auth_type: bearerToken
+      # - remote_bearer_token: password
     yum-proxy:
       - format: yum
       - type: proxy

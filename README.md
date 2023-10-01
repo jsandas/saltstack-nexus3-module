@@ -580,7 +580,7 @@ nexus3_repositories.**list_all**():
         salt myminion nexus3_repositories.list_all
 
 
-nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt_flat_repo=False,blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url=None,docker_index_type='HUB',docker_index_url=None,docker_v1_enabled=False,maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,nuget_cache_max_age=3600,remote_password=None,remote_username=None,strict_content_validation=True*):
+nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt_flat_repo=False,blobstore='default',bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url=None,docker_index_type='HUB',docker_index_url=None,docker_v1_enabled=False,maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,ntlm_domain=None,ntlm_host=None,nuget_cache_max_age=3600,remote_auth_type='username',remote_bearer_token=None,remote_password=None,remote_username=None,strict_content_validation=True*):
 
     Nexus 3 supports many different formats.  The apt, bower, docker, maven, and nuget formats have built-in arguments.
 
@@ -648,8 +648,26 @@ nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt
     metadata_max_age (int):
         Max age of metadata cache in seconds (Default: 1440)
 
+    ntlm_domain (str):
+        NTLM domain (Default: None)
+
+    ntlm_host (str):
+        NTLM Host (Default: None)
+
     nuget_cache_max_age (int):
         Nuget cache max age in seconds (Default: 3600)
+
+    remote_auth_type (str):
+        Authentication type for remote url [username|ntlm|bearerToken] (Default: username)
+        .. note::
+            Setting the bearerToken value currently does work with the REST API.  This will have to be set in the UI for now.
+            https://github.com/sonatype/nexus-public/issues/247
+
+    remote_bearer_token (str):
+        Bearer Token for remote url (Default: None)
+        .. note::
+            Setting the bearerToken value currently does work with the REST API.  This will have to be set in the UI for now.
+            https://github.com/sonatype/nexus-public/issues/247
 
     remote_password (str):
         Password for remote url (Default: None)

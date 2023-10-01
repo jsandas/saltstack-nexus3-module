@@ -88,7 +88,11 @@ def present(name,
         maven_layout_policy='STRICT',
         maven_version_policy='MIXED',
         metadata_max_age=1440,
+        ntlm_domain=None,
+        ntlm_host=None,
         nuget_cache_max_age=3600,
+        remote_auth_type='username',
+        remote_bearer_token=None,
         remote_password=None,
         remote_url='',
         remote_username=None,
@@ -170,8 +174,26 @@ def present(name,
     metadata_max_age (int):
         Max age of metadata cache in seconds (Default: 1440)
 
+    ntlm_domain (str):
+        NTLM domain (Default: None)
+
+    ntlm_host (str):
+        NTLM Host (Default: None)
+
     nuget_cache_max_age (int):
         Nuget cache max age in seconds (Default: 3600)
+
+    remote_auth_type (str):
+        Authentication type for remote url [username|ntlm|bearerToken] (Default: username)
+        .. note::
+            Setting the bearerToken value currently does work with the REST API.  This will have to be set in the UI for now.
+            https://github.com/sonatype/nexus-public/issues/247
+
+    remote_bearer_token (str):
+        Bearer Token for remote url (Default: None)
+        .. note::
+            Setting the bearerToken value currently does work with the REST API.  This will have to be set in the UI for now.
+            https://github.com/sonatype/nexus-public/issues/247
 
     remote_password (str):
         Password for remote url (Default: None)
@@ -384,18 +406,38 @@ def present(name,
             if metadata_max_age != repo['proxy']['metadataMaxAge']:
                 updates['metadata_max_age'] = metadata_max_age
                 is_update = True
-            if repo['httpClient']['authentication']:
-                if remote_username is None:
-                    updates['remote_username'] = remote_username
-                    updates['remote_username'] = remote_password
+
+            # check for changes in authentication
+            if repo['httpClient']['authentication'] and remote_auth_type is None:
+                updates['remote_auth_type'] = remote_auth_type
+                is_update = True
+            if repo['httpClient']['authentication'] and remote_auth_type is not None:
+                if remote_auth_type != repo['httpClient']['authentication']['type']:
+                    updates['remote_auth_type'] = remote_auth_type
                     is_update = True
-                # cannot compare password as there is no way to determine if the same
-                # if remote_password != repo['httpClient']['authentication']['password']:
-                #     updates['remote_password'] = remote_password
-                #     is_update = True
-                if remote_username != repo['httpClient']['authentication']['username']:
-                    updates['remote_username'] = remote_username
-                    is_update = True
+                
+                if remote_auth_type == 'username' or remote_auth_type == 'ntlm':
+                    if repo['httpClient']['authentication'] is None:
+                        updates['remote_username'] = remote_username                    
+                    elif remote_username != repo['httpClient']['authentication']['username']:
+                            updates['remote_username'] = remote_username
+                            is_update = True
+                    # cannot compare passwords so always set it as new
+                    if remote_password is not None:
+                        updates['remote_password'] = '*******'
+                        is_update = True
+
+                if remote_auth_type == 'bearerToken':
+                    # cannot compare passwords so always set it as new
+                    if remote_bearer_token is not None:
+                        updates['remote_bearer_token'] = '*******'
+                        is_update = True
+
+                if remote_auth_type == 'ntlm':
+                    if ntlm_domain != repo['httpClient']['authentication']['ntlmDomain']:
+                        updates['ntlm_domain'] = ntlm_domain
+                    if ntlm_host != repo['httpClient']['authentication']['ntlmHost']:
+                        updates['ntlm_host'] = ntlm_host                                       
 
             if format == 'apt':
                 if apt_dist_name != repo['apt']['distribution']:
@@ -477,7 +519,11 @@ def present(name,
                                                     maven_layout_policy,
                                                     maven_version_policy,
                                                     metadata_max_age,
+                                                    ntlm_domain,
+                                                    ntlm_host,
                                                     nuget_cache_max_age,
+                                                    remote_auth_type,
+                                                    remote_bearer_token,
                                                     remote_password,
                                                     remote_username,
                                                     strict_content_validation)
