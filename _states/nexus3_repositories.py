@@ -185,9 +185,15 @@ def present(name,
 
     remote_auth_type (str):
         Authentication type for remote url [username|ntlm|bearerToken] (Default: username)
+        .. note::
+            Setting the bearerToken value currently does work with the REST API.  This will have to be set in the UI for now.
+            https://github.com/sonatype/nexus-public/issues/247
 
     remote_bearer_token (str):
         Bearer Token for remote url (Default: None)
+        .. note::
+            Setting the bearerToken value currently does work with the REST API.  This will have to be set in the UI for now.
+            https://github.com/sonatype/nexus-public/issues/247
 
     remote_password (str):
         Password for remote url (Default: None)
