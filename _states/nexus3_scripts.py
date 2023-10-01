@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-""""
-State module for working with the Nexus 3 Script API
+'''
+state module for working with the Nexus 3 Script API
 
 :version: v0.2.2
 
@@ -26,7 +25,7 @@ module itself.
         username: 'admin'
         password: 'admin123'
 
-"""
+'''
 # from __future__ import absolute_import, print_function, unicode_literals
 
 import json

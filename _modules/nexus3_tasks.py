@@ -1,4 +1,4 @@
-''''
+'''
 execution module for Nexus 3 tasks
 
 :version: v0.2.2

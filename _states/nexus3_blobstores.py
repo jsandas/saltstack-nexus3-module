@@ -1,5 +1,5 @@
-''''
-stage module for Nexus 3 blobstores
+'''
+state module for Nexus 3 blobstores
 
 :version: v0.2.2
 

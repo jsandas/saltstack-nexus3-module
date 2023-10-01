@@ -1,5 +1,5 @@
-''''
-stage module for Nexus 3 privileges
+'''
+state module for Nexus 3 privileges
 
 :version: v0.2.2
 

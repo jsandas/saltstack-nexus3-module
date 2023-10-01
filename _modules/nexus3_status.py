@@ -1,4 +1,4 @@
-''''
+'''
 execution module for Nexus 3 status check
 
 :version: v0.2.2

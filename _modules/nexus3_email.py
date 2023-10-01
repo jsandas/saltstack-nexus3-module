@@ -1,4 +1,4 @@
-''''
+'''
 execution module for Nexus 3 email settings
 
 :version: v0.2.2

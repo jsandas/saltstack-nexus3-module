@@ -1,5 +1,5 @@
-''''
-stage module for Nexus 3 security settings
+'''
+state module for Nexus 3 security settings
 
 :version: v0.2.2
 

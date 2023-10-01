@@ -1,5 +1,5 @@
-''''
-stage module for Nexus 3 repositories
+'''
+state module for Nexus 3 repositories
 
 :version: v0.2.2
 

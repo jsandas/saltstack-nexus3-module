@@ -1,4 +1,4 @@
-''''
+'''
 execution module for the Nexus 3 repositories
 
 :version: v0.2.2

@@ -1,5 +1,5 @@
-''''
-stage module for Nexus 3 users
+'''
+state module for Nexus 3 users
 
 :version: v0.2.2
 

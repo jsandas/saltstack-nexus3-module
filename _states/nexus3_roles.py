@@ -1,5 +1,5 @@
-''''
-stage module for Nexus 3 roles
+'''
+state module for Nexus 3 roles
 
 :version: v0.2.2
 
