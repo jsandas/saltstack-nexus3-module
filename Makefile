@@ -32,3 +32,6 @@ reload:
 	@docker-compose up -d
 	@sleep 10
 	@docker exec salt-master ash -c 'salt \* saltutil.sync_all' > /dev/null 2>&1 
+
+shell:
+	@docker exec -it -w /srv salt-master ash

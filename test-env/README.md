@@ -25,7 +25,7 @@ Log out of Nexus 3
 
 Switch to cli in salt-master container
 ```bash
-./salt-env.sh cmd
+make shell
 ```
 
 Test module
