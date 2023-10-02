@@ -23,8 +23,8 @@ start_nexus:
 stop:
 	@docker-compose stop
 
-acceptance:
-	@docker exec -w /tests salt-master ash -c './test_all.sh'
+acceptance: start
+	@docker exec -w /tests salt-master ash -c 'pip install pytest; pytest ./'
 
 reload:
 	@docker exec -it salt-master salt-key -D -y
@@ -34,4 +34,4 @@ reload:
 	@docker exec salt-master ash -c 'salt \* saltutil.sync_all' > /dev/null 2>&1 
 
 shell:
-	@docker exec -it -w /srv salt-master ash
+	@docker exec -it -w /srv salt-master ash || true

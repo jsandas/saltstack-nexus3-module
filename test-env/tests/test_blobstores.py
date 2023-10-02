@@ -29,29 +29,38 @@ test_data ={
     },
 }
 
+blobstores = []
 
-def main():
-    blobstores = []
+# def main():
+#     # blobstores = []
 
+#     for name, values in test_data.items():
+#         # print(" Creating blobstore {}".format(name))
+#         try:
+#             test_create_blobstore(name, values)
+#             blobstores.append(name)
+#         except:
+#             print(" Failed creating blobstore {}".format(name))
+
+#     test_list_blobstores(len(blobstores))
+
+#     for name in blobstores:
+#         # print(" Deleting blobstore {}".format(name))
+#         test_delete_blobstore(name)
+
+#     # print(" Running blobstore states")
+#     blobstores_state()
+
+def test_create_blobstore():
     for name, values in test_data.items():
         # print(" Creating blobstore {}".format(name))
         try:
-            create_blobstore(name, values)
+            _create_blobstore(name, values)
             blobstores.append(name)
         except:
             print(" Failed creating blobstore {}".format(name))
 
-    list_blobstores(len(blobstores))
-
-    for name in blobstores:
-        # print(" Deleting blobstore {}".format(name))
-        delete_blobstore(name)
-
-    # print(" Running blobstore states")
-    blobstores_state()
-
-
-def create_blobstore(name, values):
+def _create_blobstore(name, values):
     list1 = [name]
     args = list1 + values['inputs']
 
@@ -61,20 +70,24 @@ def create_blobstore(name, values):
     assert ret['test.minion']['blobstore']['name'] == name,'blobstore {} not created'.format(name)
     assert ret['test.minion']['blobstore']['type'] == values['results']['type'],'wrong store type {} found'.format(values['results']['type'])
 
+def test_list_blobstores():
+    ret = client.cmd('test.minion', 'nexus3_blobstores.list_all')
+    # print(ret)
+    count = len(blobstores)
+    assert ret['test.minion']['blobstores'] != {},'data is empty'
+    assert len(ret['test.minion']['blobstores']) != count,'blobstore count {}, expected {}'.format(len(ret['test.minion']['blobstores']) , count)
 
-def delete_blobstore(blobstore):
+def test_delete_blobstore():
+    for name in blobstores:
+        # print(" Deleting blobstore {}".format(name))
+        _delete_blobstore(name)
+
+def _delete_blobstore(blobstore):
     ret = client.cmd('test.minion', 'nexus3_blobstores.delete', ['name={}'.format(blobstore)])
     # print(ret)
     assert ret['test.minion']['comment'] == 'Deleted blobstore "{}"'.format(blobstore),'blobstore {} not deleted'.format(blobstore)
 
-
-def list_blobstores(count):
-    ret = client.cmd('test.minion', 'nexus3_blobstores.list_all')
-    # print(ret)
-    assert ret['test.minion']['blobstores'] != {},'data is empty'
-
-
-def blobstores_state():
+def test_blobstores_state():
     pillar = {
         "nexus": {
             "blobstores": {
@@ -111,7 +124,7 @@ def blobstores_state():
     # pp.pprint(pillar)
     ret = client.cmd('test.minion', 'state.apply', ['nexus3.blobstores', f'pillar={pillar}'])
     # pp.pprint(ret['test.minion'])
-    validate_return(ret)
+    _validate_return(ret)
 
     # pp.pprint(pillar_update)
     ret = client.cmd('test.minion', 'state.apply', ['nexus3.blobstores', 'pillar={}'.format(pillar_update), 'test=True'])
@@ -119,10 +132,10 @@ def blobstores_state():
 
     # clean up
     for blobstore in pillar['nexus']['blobstores']:
-        delete_blobstore(blobstore)
+        client.cmd('test.minion', 'nexus3_blobstores.delete', ['name={}'.format(blobstore)])
 
 
-def validate_return(ret):
+def _validate_return(ret):
     pp = pprint.PrettyPrinter(indent=2)
 
     try:
@@ -141,5 +154,5 @@ def validate_return(ret):
         pp.pprint(ret['test.minion'])
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

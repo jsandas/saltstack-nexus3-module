@@ -72,7 +72,8 @@ def enable(enabled):
     '''
 
     ret = {
-        'anonymous_access': {}
+        'anonymous_access': {},
+        'error': None
     }
 
     payload = {
@@ -81,10 +82,9 @@ def enable(enabled):
         'realmName': 'NexusAuthorizingRealm'
     }
 
-    metadata = describe()
-
-    if not metadata['anonymous_access']:
-        return metadata
+    if not isinstance(enabled, bool):
+        ret['error'] = f'\"{enabled}\" is not a boolean value'     
+        return ret 
 
     nc = nexus3.NexusClient()
 
@@ -93,10 +93,9 @@ def enable(enabled):
     if resp['status'] == 200:
         ret['anonymous_access'] = json.loads(resp['body'])
     else:
-        ret['comment'] = 'Failed to update anonymous access.'
         ret['error'] = {
-            'code': resp['status'],
-            'msg': resp['body']
+            'http_code': resp['status'],
+            'msg': json.loads(resp['body'])
         }
 
     return ret

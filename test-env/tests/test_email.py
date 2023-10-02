@@ -5,6 +5,10 @@ import salt.client
 client = salt.client.LocalClient()
 
 
+def test_cleanup():
+    # clean the slate
+    client.cmd('test.minion', 'nexus3_email.reset')
+
 def test_configure_email():
     ret = client.cmd('test.minion', 'nexus3_email.configure', ['enabled=True',
         'host=notlocalhost','port=587','fromAddress=test@example.com','startTlsEnabled=True'])
@@ -17,7 +21,6 @@ def test_configure_email():
     assert ret['test.minion']['email']['fromAddress'] == 'test@example.com','fromAddress incorrect'
 
     assert ret['test.minion']['email']['startTlsEnabled'] == True,'startTlsEnabled incorrect'
-
 
 def test_describe_email():
     client.cmd('test.minion', 'nexus3_email.configure', ['enabled=True',
@@ -33,11 +36,3 @@ def test_describe_email():
     assert ret['test.minion']['email']['fromAddress'] == 'test@example.com','fromAddress incorrect'
 
     assert ret['test.minion']['email']['sslOnConnectEnabled'] == True,'sslOnConnectEnabled incorrect'
-
-
-# clean the slate
-client.cmd('test.minion', 'nexus3_email.reset')
-
-test_configure_email()
-
-test_describe_email()
