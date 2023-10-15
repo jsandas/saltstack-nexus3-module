@@ -10,7 +10,7 @@ Then run saltutil.sync_all to copy the files to the minion.
     Example:
         salt '*' saltutil.sync_all
 
-The files under the pillar and states folders under test-env can be used as examples for using these modules.
+The files under the `nexus3` and `salt/pillar` folders can be used as examples for using these modules.
 
 The nexus3 execution modules depend on the python requests library which should already be installed from the installation of the salt minion.
 

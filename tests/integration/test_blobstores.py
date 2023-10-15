@@ -76,7 +76,7 @@ def list_blobstores(count):
 
 def blobstores_state():
     pillar = {
-        "nexus": {
+        "nexus3": {
             "blobstores": {
                 "apt": [],
                 "docker": [],
@@ -118,7 +118,7 @@ def blobstores_state():
     # pp.pprint(ret['test.minion'])
 
     # clean up
-    for blobstore in pillar['nexus']['blobstores']:
+    for blobstore in pillar['nexus3']['blobstores']:
         delete_blobstore(blobstore)
 
 
