@@ -23,7 +23,7 @@ start_nexus:
 stop:
 	@docker-compose stop
 
-acceptance: start
+integration: start
 	@docker exec -w /tests salt-master ash -c 'pip install pytest; pytest ./'
 
 reload:

@@ -7,6 +7,8 @@ import salt.client
 
 client = salt.client.LocalClient()
 
+pp = pprint.PrettyPrinter(indent=2)
+
 test_data ={
     'test_blobstore': {
         'inputs': [],
@@ -32,24 +34,24 @@ test_data ={
 blobstores = []
 
 # def main():
-#     # blobstores = []
+    # blobstores = []
 
-#     for name, values in test_data.items():
-#         # print(" Creating blobstore {}".format(name))
-#         try:
-#             test_create_blobstore(name, values)
-#             blobstores.append(name)
-#         except:
-#             print(" Failed creating blobstore {}".format(name))
+    # for name, values in test_data.items():
+    #     # print(" Creating blobstore {}".format(name))
+    #     try:
+    #         test_create_blobstore(name, values)
+    #         blobstores.append(name)
+    #     except:
+    #         print(" Failed creating blobstore {}".format(name))
 
-#     test_list_blobstores(len(blobstores))
+    # test_list_blobstores(len(blobstores))
 
-#     for name in blobstores:
-#         # print(" Deleting blobstore {}".format(name))
-#         test_delete_blobstore(name)
+    # for name in blobstores:
+    #     # print(" Deleting blobstore {}".format(name))
+    #     test_delete_blobstore(name)
 
-#     # print(" Running blobstore states")
-#     blobstores_state()
+    # print(" Running blobstore states")
+    # test_blobstores_state()
 
 def test_create_blobstore():
     for name, values in test_data.items():
@@ -120,15 +122,19 @@ def test_blobstores_state():
             },
         }
     }
-    # pp = pprint.PrettyPrinter(indent=2)
+
     # pp.pprint(pillar)
     ret = client.cmd('test.minion', 'state.apply', ['nexus3.blobstores', f'pillar={pillar}'])
     # pp.pprint(ret['test.minion'])
-    _validate_return(ret)
+    for key, value in ret['test.minion'].items():
+        assert value['result'] == True,'state {} wrong result expect: True got: {}'.format(key, value['result'])
 
     # pp.pprint(pillar_update)
     ret = client.cmd('test.minion', 'state.apply', ['nexus3.blobstores', 'pillar={}'.format(pillar_update), 'test=True'])
     # pp.pprint(ret['test.minion'])
+    for key, value in ret['test.minion'].items():
+        assert value['result'] == None,'state {} wrong result expect: None got: {}'.format(key, value)
+        assert value['comment'] == "blobstore maven will be updated with: {'quota_limit': 2000000000}", 'state {} wrong comment expect: "blobstore maven will be updated with: {\'quota_limit\': 2000000000}" got: \"{}\"'.format(key, value['comment'])
 
     # clean up
     for blobstore in pillar['nexus']['blobstores']:
@@ -136,22 +142,21 @@ def test_blobstores_state():
 
 
 def _validate_return(ret):
-    pp = pprint.PrettyPrinter(indent=2)
+    # try:
+    for key, value in ret['test.minion'].items():
+        assert value['result'] == True,'state {} wrong result expect: True got: {}'.format(key, value)
+            # if value['result']:
+            #     continue
 
-    try:
-        for key, value in ret['test.minion'].items():
-            if value['result']:
-                continue
-
-            print("state failure occurred")
-            print("state name: '{}'\nreturn value:").format(key)
-            pp.pprint(value)
-            sys.exit()
+            # print("state failure occurred")
+            # print("state name: '{}'\nreturn value:").format(key)
+            # pp.pprint(value)
+            # sys.exit()
 
         # pp.pprint(ret)
-    except Exception as e:
-        print(e)
-        pp.pprint(ret['test.minion'])
+    # except Exception as e:
+    #     print(e)
+    #     pp.pprint(ret['test.minion'])
 
 
 # if __name__ == "__main__":
