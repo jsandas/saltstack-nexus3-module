@@ -91,7 +91,7 @@ def _delete_blobstore(blobstore):
 
 def test_blobstores_state():
     pillar = {
-        "nexus": {
+        "nexus3": {
             "blobstores": {
                 "apt": [],
                 "docker": [],

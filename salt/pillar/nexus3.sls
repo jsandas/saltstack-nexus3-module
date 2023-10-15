@@ -1,4 +1,4 @@
-nexus:
+nexus3:
   blobstores:
     apt: []
     docker: []

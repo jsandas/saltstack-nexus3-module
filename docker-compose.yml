@@ -2,28 +2,25 @@ version: '3'
 
 services:
   salt-master:
-    image: saltstack/salt:3005
+    image: saltstack/salt:3006.3
     container_name: salt-master
     ports:
       - "4505:4505"
       - "4506:4506"
     environment: 
       SALT_MASTER_CONFIG: '{"auto_accept": true}'
-      # SALT_MASTER_CONFIG: '{"auto_accept": true, "fileserver_backend": ["roots", "gitfs"], "gitfs_remotes": [{"https://github.com/jsandas/saltstack-nexus3.git":[{"name":"nexus3_modules_repo"},{"base":"v2.0"}]}]}'
     volumes:
       - $PWD/_modules:/srv/salt/_modules
       - $PWD/_states:/srv/salt/_states
       - $PWD/_utils:/srv/salt/_utils
-      - $PWD/test-env/pillar:/srv/pillar
-      - $PWD/test-env/states:/srv/salt
-      - $PWD/test-env/tests/:/tests/
+      - $PWD/nexus3:/srv/salt/nexus3
+      - $PWD/salt/pillar:/srv/pillar
 
   salt-minion:
-    image: saltstack/salt:3005
+    image: saltstack/salt:3006.3
     container_name: salt-minion
     environment: 
       SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "${NEXUS_PASSWORD}"}}'
-      # SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081"}}'
     links:
       - salt-master:salt-master
       - nexus3:nexus3
@@ -35,26 +32,4 @@ services:
       - "8081:8081"
       - "5000:5000"
     # volumes:
-    #   - $PWD/test-env/files/nexus.properties:/nexus-data/etc/nexus.properties
-    links:
-      - minio:minio.test.com
-
-  minio:
-    image: minio/minio
-    container_name: minio
-    ports:
-     - "9000:9000"
-    environment:
-      MINIO_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
-      MINIO_SECRET_KEY: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
-    # volumes:
-      # - $PWD/test-env/data:/data
-      # - $PWD/test-env/files/config.json:/root/.mc/config.json
-    command: server /data
-
-  minio-mc:
-    image: minio/mc
-    container_name: minio-mc
-    volumes:
-      - $PWD/test-env/files/config.json:/root/.mc/config.json
-    command: 'mb local/nexus3'
+    #   - $PWD/tests/files/nexus.properties:/nexus-data/etc/nexus.properties

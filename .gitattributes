@@ -1,4 +1,7 @@
 .git*   export-ignore
-test-env   export-ignore
+tests   export-ignore
 docker-compose.yml  export-ignore
+integration.yml  export-ignore
 Makefile    export-ignore
+bin     export-ignore
+salt    export-ignore
