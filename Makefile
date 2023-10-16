@@ -27,7 +27,7 @@ stop:
 integration: clean
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml start_nexus
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml start
-	@docker exec -w /tests/integration salt-master ash -c './test_all.sh'
+	@docker exec -w /tests/integration salt-master ash -c 'pip install pytest; pytest ./'
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml stop
 
 reload:
