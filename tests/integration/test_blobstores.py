@@ -9,7 +9,9 @@ client = salt.client.LocalClient()
 
 pp = pprint.PrettyPrinter(indent=2)
 
-test_data ={
+
+## Modules Integration Tests ##
+test_data = {
     'test_blobstore': {
         'inputs': [],
         'results': {
@@ -32,26 +34,6 @@ test_data ={
 }
 
 blobstores = []
-
-# def main():
-    # blobstores = []
-
-    # for name, values in test_data.items():
-    #     # print(" Creating blobstore {}".format(name))
-    #     try:
-    #         test_create_blobstore(name, values)
-    #         blobstores.append(name)
-    #     except:
-    #         print(" Failed creating blobstore {}".format(name))
-
-    # test_list_blobstores(len(blobstores))
-
-    # for name in blobstores:
-    #     # print(" Deleting blobstore {}".format(name))
-    #     test_delete_blobstore(name)
-
-    # print(" Running blobstore states")
-    # test_blobstores_state()
 
 def test_create_blobstore():
     for name, values in test_data.items():
@@ -89,8 +71,10 @@ def _delete_blobstore(blobstore):
     # print(ret)
     assert ret['test.minion']['comment'] == 'Deleted blobstore "{}"'.format(blobstore),'blobstore {} not deleted'.format(blobstore)
 
-def test_blobstores_state():
-    pillar = {
+
+## States Integration Tests ##
+state_test_data = {
+    "pillar": {
         "nexus3": {
             "blobstores": {
                 "apt": [],
@@ -107,13 +91,66 @@ def test_blobstores_state():
                     {"s3_endpoint": "http://minio:9000"},
                     {"s3_forcePathStyle": True}
                 ],
-                "yum": []
+                "unwanted-blobstore": []
             },
         }
+    },
+    "results": {
+        "apt": {
+            "result": True,
+            "changes": {
+                "type": "File",
+                "softQuota": None
+            },
+            "comment": "",
+        },
+        "docker": {
+            "result": True,
+            "changes": {
+                "type": "File",
+                "softQuota": None
+            },
+            "comment": "",
+        },
+        "maven": {
+            "result": True,
+            "changes": {
+                "type": "File",
+                "softQuota": {
+                    "limit": 1000000000,
+                    "type": "spaceRemainingQuota"
+                },
+            },
+            "comment": "",
+        },
+        "s3blobstore": {
+            "result": True,
+            "changes": {
+                "type": "S3",
+                "softQuota": None,
+            },
+            "comment": "",
+        },
     }
+}
 
-    pillar_update = {
-        "nexus": {
+def test_blobstores_state():
+    pillar = state_test_data['pillar']
+    # pp.pprint(pillar)
+    ret = client.cmd('test.minion', 'state.apply', ['nexus3.blobstores', f'pillar={pillar}'])
+    # pp.pprint(ret['test.minion'])
+    for key, values in state_test_data['results'].items():
+        id = f"nexus3_blobstores_|-create_blobstore_{key}_|-{key}_|-present"
+        output = ret['test.minion'][id]
+        assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
+        assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
+        assert values['changes']['type'] == output['changes']['blobstore']['type'], f"wrong type result! expected: \"{values['changes']['type']}\" got: \"{output['changes']['blobstore']['type']}\""
+        assert values['changes']['softQuota'] == output['changes']['blobstore']['softQuota'], f"wrong type result! expected: \"{values['changes']['softQuota']}\" got: \"{output['changes']['blobstore']['softQuota']}\""
+
+
+state_test_data2 = {
+    "pillar": {
+        "nexus3": {
             "blobstores": {
                 "maven": [
                     {"quota_type": "spaceRemainingQuota"},
@@ -121,43 +158,22 @@ def test_blobstores_state():
                 ],
             },
         }
+    },
+    "results" : {
+        "maven": {
+            "result": None,
+            "comment": "blobstore maven will be updated with: {'quota_limit': 2000000000}",
+        },
     }
+}
 
-    # pp.pprint(pillar)
-    ret = client.cmd('test.minion', 'state.apply', ['nexus3.blobstores', f'pillar={pillar}'])
+def test_blobstores_state2():
+    pillar = state_test_data2['pillar']
+    # # pp.pprint(pillar)
+    ret = client.cmd('test.minion', 'state.apply', ['nexus3.blobstores', 'pillar={}'.format(pillar), 'test=True'])
     # pp.pprint(ret['test.minion'])
-    for key, value in ret['test.minion'].items():
-        assert value['result'] == True,'state {} wrong result expect: True got: {}'.format(key, value['result'])
-
-    # pp.pprint(pillar_update)
-    ret = client.cmd('test.minion', 'state.apply', ['nexus3.blobstores', 'pillar={}'.format(pillar_update), 'test=True'])
-    # pp.pprint(ret['test.minion'])
-    for key, value in ret['test.minion'].items():
-        assert value['result'] == None,'state {} wrong result expect: None got: {}'.format(key, value)
-        assert value['comment'] == "blobstore maven will be updated with: {'quota_limit': 2000000000}", 'state {} wrong comment expect: "blobstore maven will be updated with: {\'quota_limit\': 2000000000}" got: \"{}\"'.format(key, value['comment'])
-
-    # clean up
-    for blobstore in pillar['nexus']['blobstores']:
-        client.cmd('test.minion', 'nexus3_blobstores.delete', ['name={}'.format(blobstore)])
-
-
-def _validate_return(ret):
-    # try:
-    for key, value in ret['test.minion'].items():
-        assert value['result'] == True,'state {} wrong result expect: True got: {}'.format(key, value)
-            # if value['result']:
-            #     continue
-
-            # print("state failure occurred")
-            # print("state name: '{}'\nreturn value:").format(key)
-            # pp.pprint(value)
-            # sys.exit()
-
-        # pp.pprint(ret)
-    # except Exception as e:
-    #     print(e)
-    #     pp.pprint(ret['test.minion'])
-
-
-# if __name__ == "__main__":
-#     main()
+    for key, values in state_test_data2['results'].items():
+        id = f"nexus3_blobstores_|-create_blobstore_{key}_|-{key}_|-present"
+        output = ret['test.minion'][id]
+        assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
+        assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
