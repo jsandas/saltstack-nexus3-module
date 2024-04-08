@@ -377,7 +377,9 @@ def proxy(name,
         remote_url,
         apt_dist_name='bionic',
         apt_flat_repo=False,
+        auto_block=True,
         blobstore='default',
+        blocked=False,
         bower_rewrite_urls=True,
         cleanup_policies=[],
         content_max_age=1440,
@@ -387,9 +389,13 @@ def proxy(name,
         docker_index_type='HUB',
         docker_index_url=None,
         docker_v1_enabled=False,
+        http_timeout=60,
+        http_user_agent='',
         maven_layout_policy='STRICT',
         maven_version_policy='MIXED',
         metadata_max_age=1440,
+        negative_cache_enabled=True,
+        negative_cache_max_age=1440,
         ntlm_domain=None,
         ntlm_host=None,
         nuget_cache_max_age=3600,
@@ -419,8 +425,14 @@ def proxy(name,
     apt_flat_repo (bool):
         Repo is flat ie: no folders (Default: False)
 
+    auto_block (bool):
+        Auto-block upstream if too many errors (Default: True)
+
     blobstore (str):
         Name of blobstore to use (Default: default)
+
+    blocked (boo):
+        Block repository (Default: False)
 
     bower_rewrite_urls (bool):
         Bower rewrite urls (Default: True)
@@ -457,6 +469,12 @@ def proxy(name,
     docker_v1_enabled (bool):
         Enable v1 api support [True|False] (Default: False)
 
+    http_timeout: (int):
+        Timeout for proxy repositories to upstream in seconds (Default: 60)
+
+    http_user_agent (str):
+        User agent suffix for proxy repositories (Default: '')
+
     maven_layout_policy (str):
         Validate all paths are maven artifacts or metadata paths [STRICT|PERMISSIVE] (default: STRICT)
 
@@ -465,6 +483,12 @@ def proxy(name,
 
     metadata_max_age (int):
         Max age of metadata cache in seconds (Default: 1440)
+
+    negative_cache_enabled (bool):
+        Enable negative caching (ie 404, etc.) (Default: True)
+
+    negative_cache_max_age (int):
+        Negative cache max age in seconds (Default: 1440)
 
     nuget_cache_max_age (int):
         Nuget cache max age in seconds (Default: 3600)
@@ -524,22 +548,26 @@ def proxy(name,
             'metadataMaxAge': metadata_max_age
         },
         'negativeCache': {
-            'enabled': True,
-            'timeToLive': 1440
+            'enabled': negative_cache_enabled,
+            'timeToLive': negative_cache_max_age
         },
         'httpClient': {
             'authentication': None,
-            'blocked': False,
-            'autoBlock': True,
-            'connection': {
-                'retries': 0,
-                'userAgentSuffix': 'string',
-                'timeout': 60,
-                'enableCircularRedirects': False,
-                'enableCookies': False
-            }
+            'blocked': blocked,
+            'autoBlock': auto_block
         },
         'routingRule': 'string'
+    }
+
+    # connection dictionary
+    http_conn = {
+        'connection': {
+            'retries': 0,
+            'userAgentSuffix': http_user_agent,
+            'timeout': http_timeout,
+            'enableCircularRedirects': False,
+            'enableCookies': False
+        }
     }
 
     # auth dictionary that filters on remote_auth_type
@@ -613,6 +641,9 @@ def proxy(name,
 
     if remote_auth_type in ['username', 'bearerToken','ntlm'] and (remote_username is not None or remote_bearer_token is not None):
         payload['httpClient'].update(auth[remote_auth_type])
+
+    if http_timeout != 60 or http_user_agent != '':
+        payload['httpClient'].update(http_conn)
 
     if cleanup_policies:
         payload.update(cleanup)
