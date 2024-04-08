@@ -13,7 +13,7 @@ services:
       - ../../_modules:/srv/salt/_modules
       - ../../_states:/srv/salt/_states
       - ../../_utils:/srv/salt/_utils
-      - ../../nexus3:/srv/salt/nexus3
+      - ./salt/nexus3:/srv/salt/nexus3
       - ../integration:/tests/integration
 
   salt-minion:

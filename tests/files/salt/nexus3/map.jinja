@@ -1,0 +1,12 @@
+{% set nexus = ({
+  'docker_image':   'sonatype/nexus',
+  'image_version':  'latest',
+  'data_dir':       '/data/nexus',
+  'user_id':        '200',
+  'blobstores':     salt['pillar.get']('nexus3:blobstores',{}),
+  'privileges':     salt['pillar.get']('nexus3:privileges',{}),
+  'repositories':   salt['pillar.get']('nexus3:repositories',{}),
+  'roles':          salt['pillar.get']('nexus3:roles',{}),
+  'users':          salt['pillar.get']('nexus3:users',{}),
+  'tasks':          salt['pillar.get']('nexus3:tasks',{})
+}) %}
