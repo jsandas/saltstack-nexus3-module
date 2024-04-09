@@ -389,8 +389,9 @@ def proxy(name,
         docker_index_type='HUB',
         docker_index_url=None,
         docker_v1_enabled=False,
-        http_timeout=60,
-        http_user_agent='',
+        http_retries=None,
+        http_timeout=None,
+        http_user_agent=None,
         maven_layout_policy='STRICT',
         maven_version_policy='MIXED',
         metadata_max_age=1440,
@@ -469,11 +470,14 @@ def proxy(name,
     docker_v1_enabled (bool):
         Enable v1 api support [True|False] (Default: False)
 
+    http_retries: (int):
+        Retries for proxy repositories to upstream (Default: None)
+
     http_timeout: (int):
-        Timeout for proxy repositories to upstream in seconds (Default: 60)
+        Timeout for proxy repositories to upstream in seconds (Default: None)
 
     http_user_agent (str):
-        User agent suffix for proxy repositories (Default: '')
+        User agent suffix for proxy repositories (Default: None)
 
     maven_layout_policy (str):
         Validate all paths are maven artifacts or metadata paths [STRICT|PERMISSIVE] (default: STRICT)
@@ -562,7 +566,7 @@ def proxy(name,
     # connection dictionary
     http_conn = {
         'connection': {
-            'retries': 0,
+            'retries': http_retries,
             'userAgentSuffix': http_user_agent,
             'timeout': http_timeout,
             'enableCircularRedirects': False,
@@ -642,7 +646,7 @@ def proxy(name,
     if remote_auth_type in ['username', 'bearerToken','ntlm'] and (remote_username is not None or remote_bearer_token is not None):
         payload['httpClient'].update(auth[remote_auth_type])
 
-    if http_timeout != 60 or http_user_agent != '':
+    if http_retries is not None or http_timeout is not None or http_user_agent is not None:
         payload['httpClient'].update(http_conn)
 
     if cleanup_policies:

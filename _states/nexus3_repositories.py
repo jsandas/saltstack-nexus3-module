@@ -87,8 +87,9 @@ def present(name,
         docker_index_url=None,
         docker_v1_enabled=False,
         group_members=[],
-        http_timeout=60,
-        http_user_agent='',
+        http_retries=None,
+        http_timeout=None,
+        http_user_agent=None,
         maven_layout_policy='STRICT',
         maven_version_policy='MIXED',
         metadata_max_age=1440,
@@ -174,11 +175,14 @@ def present(name,
         .. note::
             If using CUSTOM then docker_index_url must be specified
 
+    http_retries: (int):
+        Retries for proxy repositories to upstream (Default: None)
+
     http_timeout: (int):
-        Timeout for proxy repositories to upstream in seconds (Default: 60)
+        Timeout for proxy repositories to upstream in seconds (Default: None)
 
     http_user_agent (str):
-        User agent suffix for proxy repositories (Default: '')
+        User agent suffix for proxy repositories (Default: None)
 
     docker_v1_enabled (bool):
         Enable v1 api support [True|False] (Default: False)
@@ -542,6 +546,7 @@ def present(name,
                                                     docker_index_type,
                                                     docker_index_url,
                                                     docker_v1_enabled,
+                                                    http_retries,
                                                     http_timeout,
                                                     http_user_agent,
                                                     maven_layout_policy,
