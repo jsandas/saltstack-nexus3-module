@@ -13,6 +13,6 @@ do
         exit 1
     fi
     _dur=$((_dur+1))
-    sleep 1
+    sleep 2
     echo -ne "."
 done

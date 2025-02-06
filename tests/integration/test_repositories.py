@@ -4,11 +4,19 @@ import salt.client
 
 client = salt.client.LocalClient()
 
+
+# clean the slate
+def test_cleanup():
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-hosted'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-group'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-apt-proxy'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy_auth'])
+
 def test_list_all():
     ret = client.cmd('test.minion', 'nexus3_repositories.list_all')
     # print(ret)
     assert len(ret['test.minion']['repositories']) >= 7,'not enough repositories found'
-
 
 def test_hosted():
     ret = client.cmd('test.minion', 'nexus3_repositories.hosted', ['name=test-yum-hosted','format=yum','yum_repodata_depth=3','yum_deploy_policy=permissive'])
@@ -67,26 +75,18 @@ def test_describe():
     assert ret['test.minion']['repository']['type'] == 'proxy','wrong type found'
     assert ret['test.minion']['repository']['apt']['flat'] == False,'apt flat is incorrect'
 
-# clean the slate
-def cleanup():
-    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-hosted'])
-    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-group'])
-    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy'])
-    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-apt-proxy'])
-    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy_auth'])
 
+# if __name__ == "__main__":
+#     cleanup()
 
-if __name__ == "__main__":
-    cleanup()
+#     test_list_all()
 
-    test_list_all()
+#     test_hosted()
 
-    test_hosted()
+#     test_group()
 
-    test_group()
+#     test_proxy() 
 
-    test_proxy() 
+#     test_proxy_with_auth()
 
-    test_proxy_with_auth()
-
-    test_describe()
+#     test_describe()

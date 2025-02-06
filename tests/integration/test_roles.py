@@ -4,6 +4,12 @@ import salt.client
 
 client = salt.client.LocalClient()
 
+
+def test_cleanup():
+    # clean the slate
+    client.cmd('test.minion', 'nexus3_roles.delete', ['testing1'])
+    client.cmd('test.minion', 'nexus3_roles.delete', ['testing2'])
+    
 def test_create_roles():
     ret = client.cmd('test.minion', 'nexus3_roles.create', ["name=testing1", "description='test role 1'", "roles=['nx-admin']"])
     # print(ret)
@@ -23,12 +29,3 @@ def test_update_roles():
     # print(ret)
     assert ret['test.minion']['role'] != {},'roles is empty'
     assert ret['test.minion']['role']['roles'] == ['nx-anonymous'],'roles is incorrect'
-
-
-# clean the slate
-client.cmd('test.minion', 'nexus3_roles.delete', ['testing1'])
-client.cmd('test.minion', 'nexus3_roles.delete', ['testing2'])
-
-test_create_roles()
-
-test_update_roles()
