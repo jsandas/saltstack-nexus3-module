@@ -69,7 +69,7 @@ def anonymous_access(name,
     if is_update:
         update_results = __salt__['nexus3_anonymous_access.enable'](enabled=enabled)
 
-        if 'error' in update_results.keys():
+        if 'error' in update_results.keys() and update_results['error'] is not None:
             ret['result'] = False
             ret['comment'] = update_results['error']
             return ret        

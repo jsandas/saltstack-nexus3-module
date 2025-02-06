@@ -32,51 +32,23 @@ def test_error_anonymous_access():
 ## States Integration Tests ##
 state_test_data = {
     "results": {
-        "apt": {
-            "result": True,
-            "changes": {
-                "type": "File",
-                "softQuota": None
+        "changes": {
+            "anonymous_access": {
+                "enabled": True,
+                "userId": "anonymous",
+                "realmName": "NexusAuthorizingRealm"
             },
-            "comment": "",
+            "error": None
         },
-        "docker": {
-            "result": True,
-            "changes": {
-                "type": "File",
-                "softQuota": None
-            },
-            "comment": "",
-        },
-        "maven": {
-            "result": True,
-            "changes": {
-                "type": "File",
-                "softQuota": {
-                    "limit": 1000000000,
-                    "type": "spaceRemainingQuota"
-                },
-            },
-            "comment": "",
-        },
-        "s3blobstore": {
-            "result": True,
-            "changes": {
-                "type": "S3",
-                "softQuota": None,
-            },
-            "comment": "",
-        },
+        "result": True,
     }
 }
 
 def test_annonymous_access_state():
+    test_cleanup()
     ret = client.cmd('test.minion', 'state.apply', ['nexus3.anonymous_access'])
-    # pp.pprint(ret['test.minion'])
-    for key, values in state_test_data['results'].items():
-        id = f"nexus3_blobstores_|-create_blobstore_{key}_|-{key}_|-present"
-        output = ret['test.minion'][id]
-        assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
-        assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
-        assert values['changes']['type'] == output['changes']['blobstore']['type'], f"wrong type result! expected: \"{values['changes']['type']}\" got: \"{output['changes']['blobstore']['type']}\""
-        assert values['changes']['softQuota'] == output['changes']['blobstore']['softQuota'], f"wrong type result! expected: \"{values['changes']['softQuota']}\" got: \"{output['changes']['blobstore']['softQuota']}\""
+#     # pp.pprint(ret['test.minion'])
+    id = f"nexus3_security_|-set_anonymous_access_true_|-set_anonymous_access_true_|-anonymous_access"
+    output = ret['test.minion'][id]
+    assert state_test_data['results']['result'] == output['result'], f"wrong state result! expected: \"{state_test_data['results']['result']}\" got: \"{output['result']}\""
+    assert state_test_data['results']['changes'] == output['changes'], f"wrong type result! expected: \"{state_test_data['results']['changes']['type']}\" got: \"{output['changes']['blobstore']['type']}\""
