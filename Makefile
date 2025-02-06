@@ -25,9 +25,8 @@ stop:
 	@docker compose -f $(COMPOSE_FILE) stop
 
 integration: clean
-	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml start_nexus
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml start
-	@docker exec -w /tests/integration salt-master ash -c './test_all.sh'
+	@docker exec -w /tests/integration salt-master ash -c 'pip install pytest; pytest ./'
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml stop
 
 reload:
@@ -44,4 +43,4 @@ clean:
 	@docker system prune -f --volumes
 
 shell:
-	@docker exec -it -w /srv salt-master ash
+	@docker exec -it -w /srv salt-master ash || true

@@ -4,6 +4,12 @@ import salt.client
 
 client = salt.client.LocalClient()
 
+
+def test_cleanup():
+    # clean the slate
+    client.cmd('test.minion', 'nexus3_privileges.delete', ['name=testing1'])
+    client.cmd('test.minion', 'nexus3_privileges.delete', ['name=testing2'])
+
 def test_create_privileges():
     ret = client.cmd('test.minion', 'nexus3_privileges.create', ["name=testing1", "actions=['ADD','READ']", "description='Change password permission'", "domain=userschangepw", "type=application"])
     # print(ret)
@@ -21,7 +27,6 @@ def test_create_privileges():
     assert ret['test.minion']['privilege']['format'] == 'maven2','privilege format is incorrect'
     assert ret['test.minion']['privilege']['repository'] == '*','privilege repository is incorrect'
 
-
 def test_update_privileges():
     ret = client.cmd('test.minion', 'nexus3_privileges.update', ["name=testing1", "description='New Description'", "domain=users"])
     # print(ret)
@@ -32,12 +37,3 @@ def test_update_privileges():
     ret = client.cmd('test.minion', 'nexus3_privileges.update', ["name=testing3", "description='New Description'", "domain=users"])
     # print(ret)
     assert ret['test.minion']['error'] != '','should have had error empty'
-
-
-# clean the slate
-client.cmd('test.minion', 'nexus3_privileges.delete', ['name=testing1'])
-client.cmd('test.minion', 'nexus3_privileges.delete', ['name=testing2'])
-
-test_create_privileges()
-
-test_update_privileges()

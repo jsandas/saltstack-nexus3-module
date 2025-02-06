@@ -1,8 +1,6 @@
-version: '3'
-
 services:
   salt-master:
-    image: saltstack/salt:3006.3
+    image: saltstack/salt:3006.5
     container_name: salt-master
     ports:
       - "4505:4505"
@@ -13,14 +11,14 @@ services:
       - ../../_modules:/srv/salt/_modules
       - ../../_states:/srv/salt/_states
       - ../../_utils:/srv/salt/_utils
-      - ../../nexus3:/srv/salt/nexus3
+      - ./salt/nexus3:/srv/salt/nexus3
       - ../integration:/tests/integration
 
   salt-minion:
-    image: saltstack/salt:3006.3
+    image: saltstack/salt:3006.5
     container_name: salt-minion
     environment: 
-      SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "${NEXUS_PASSWORD}"}}'
+      SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "log_level": "debug", "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "${NEXUS_PASSWORD}"}}'
     links:
       - salt-master:salt-master
       - nexus3:nexus3
@@ -30,7 +28,7 @@ services:
     container_name: nexus3
     ports:
       - "8081:8081"
-      - "5000:5000"
+      # - "5000:5000"
     # volumes:
     #   - ../../tests/files/nexus.properties:/nexus-data/etc/nexus.properties
     links:
