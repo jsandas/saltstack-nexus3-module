@@ -16,7 +16,6 @@ nexus3_repositories.**list_all**():
 
 nexus3_repositories.**group**(*name,format,blobstore='default',docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_v1_enabled=False,group_members=[],strict_content_validation=True*):
 
-    '''
     Nexus 3 supports many different formats.  The bower, docker, maven2, and nuget formats have built-in arguments.
 
     name (str):
@@ -61,25 +60,8 @@ nexus3_repositories.**group**(*name,format,blobstore='default',docker_force_auth
         salt myminion nexus3_repositories.group name=test-yum-group format=yum group_members=['test-yum']
 
 
-nexus3_repositories.**hosted**(*name,
-        format,
-        apt_dist_name='bionic',
-        apt_gpg_passphrase='',
-        apt_gpg_priv_key='',
-        blobstore='default',
-        cleanup_policies=[],
-        docker_force_auth=True,
-        docker_http_port=None,
-        docker_https_port=None,
-        docker_v1_enabled=False,
-        maven_layout_policy='STRICT',
-        maven_version_policy='MIXED',
-        strict_content_validation=True,
-        yum_deploy_policy='STRICT',
-        yum_repodata_depth=0,
-        write_policy='ALLOW_ONCE'*):
+nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passphrase='',apt_gpg_priv_key='',blobstore='default',cleanup_policies=[],docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_v1_enabled=False,maven_layout_policy='STRICT',maven_version_policy='MIXED',strict_content_validation=True,yum_deploy_policy='STRICT',yum_repodata_depth=0,write_policy='ALLOW_ONCE'*):
 
-    '''
     Nexus 3 supports many different formats.  The apt, bower, docker, maven2, and nuget formats have built-in arguments.
 
     name (str):
