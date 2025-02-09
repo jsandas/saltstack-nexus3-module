@@ -88,7 +88,6 @@ def group(name,
 
     strict_content_validation (bool):
         Enable strict content type validation [True|False] (Default: True)
-  }
 
     CLI Example::
 
@@ -251,7 +250,6 @@ def hosted(name,
 
     write_policy (str):
         Controls if deployments of and updates to artifacts are allowed [ALLOW|ALLOW_ONCE|DENY] (Default: ALLOW_ONCE)
-  }
 
     CLI Example::
 
@@ -529,7 +527,7 @@ def proxy(name,
 
         salt myminion nexus3.repositories.proxy name=test_raw format=raw blobstore=raw_blobstore
 
-        salt myminion nexus3_repositories.proxy name=test_apt format=apt remote_url=http://test.example.com remote_username=bob remote_password=testing apt='{'distribution': 'bionic', 'flat':
+        salt myminion nexus3_repositories.proxy name=test_apt format=apt remote_url=http://test.example.com remote_username=bob remote_password=testing apt_dist_name=bionic apt_flat_repo=flat
  False}'
     '''
 
