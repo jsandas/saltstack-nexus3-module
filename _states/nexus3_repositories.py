@@ -74,7 +74,9 @@ def present(name,
         apt_flat_repo=False,
         apt_gpg_passphrase='',
         apt_gpg_priv_key='',
+        auto_block=True,
         blobstore='default',
+        blocked=False,
         bower_rewrite_urls=True,
         cleanup_policies=[],
         content_max_age=1440,
@@ -85,9 +87,14 @@ def present(name,
         docker_index_url=None,
         docker_v1_enabled=False,
         group_members=[],
+        http_retries=None,
+        http_timeout=None,
+        http_user_agent=None,
         maven_layout_policy='STRICT',
         maven_version_policy='MIXED',
         metadata_max_age=1440,
+        negative_cache_enabled=True,
+        negative_cache_max_age=1440,
         ntlm_domain=None,
         ntlm_host=None,
         nuget_cache_max_age=3600,
@@ -127,8 +134,14 @@ def present(name,
         .. note::
             This is require for hosted apt repositories
 
+    auto_block (bool):
+        Auto-block upstream if too many errors (Default: True)
+
     blobstore (str):
         Name of blobstore to use (Default: default)
+
+    blocked (boo):
+        Block repository (Default: False)
 
     bower_rewrite_urls (bool):
         Bower rewrite urls (Default: True)
@@ -162,6 +175,15 @@ def present(name,
         .. note::
             If using CUSTOM then docker_index_url must be specified
 
+    http_retries: (int):
+        Retries for proxy repositories to upstream (Default: None)
+
+    http_timeout: (int):
+        Timeout for proxy repositories to upstream in seconds (Default: None)
+
+    http_user_agent (str):
+        User agent suffix for proxy repositories (Default: None)
+
     docker_v1_enabled (bool):
         Enable v1 api support [True|False] (Default: False)
 
@@ -182,6 +204,12 @@ def present(name,
 
     nuget_cache_max_age (int):
         Nuget cache max age in seconds (Default: 3600)
+
+    negative_cache_enabled (bool):
+        Enable negative caching (ie 404, etc.) (Default: True)
+
+    negative_cache_max_age (int):
+        Negative cache max age in seconds (Default: 1440)
 
     remote_auth_type (str):
         Authentication type for remote url [username|ntlm|bearerToken] (Default: username)
@@ -506,7 +534,9 @@ def present(name,
                                                     remote_url,
                                                     apt_dist_name,
                                                     apt_flat_repo,
+                                                    auto_block,
                                                     blobstore,
+                                                    blocked,
                                                     bower_rewrite_urls,
                                                     cleanup_policies,
                                                     content_max_age,
@@ -516,9 +546,14 @@ def present(name,
                                                     docker_index_type,
                                                     docker_index_url,
                                                     docker_v1_enabled,
+                                                    http_retries,
+                                                    http_timeout,
+                                                    http_user_agent,
                                                     maven_layout_policy,
                                                     maven_version_policy,
                                                     metadata_max_age,
+                                                    negative_cache_enabled,
+                                                    negative_cache_max_age,
                                                     ntlm_domain,
                                                     ntlm_host,
                                                     nuget_cache_max_age,
