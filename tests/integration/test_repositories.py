@@ -92,6 +92,7 @@ state_test_apt_data = {
                     {"remote_url": "http://apt-proxy"},
                     {"apt_dist_name": "bionic"}, 
                     {"apt_flat_repo": True},
+                    {"negative_cache_enabled": False}
                 ],
                 "apt-proxy-http-client": [
                     {"format": "apt"},
@@ -132,45 +133,45 @@ state_test_apt_data = {
         "apt-proxy": {
             "result": True,
             "changes": {
-                    "name": "apt-proxy",
-                    "url": "http://nexus3:8081/repository/apt-proxy",
-                    "online": True,
-                    "storage": {
-                        "blobStoreName": "default",
-                        "strictContentTypeValidation": True,
-                        "writePolicy": "ALLOW"
-                    },
-                    "cleanup": None,
-                    "apt": {
-                        "distribution": "bionic",
-                        "flat": True
-                    },
-                    "proxy": {
-                        "remoteUrl": "http://apt-proxy",
-                        "contentMaxAge": 1440,
-                        "metadataMaxAge": 1440
-                    },
-                    "negativeCache": {
-                        "enabled": True,
-                        "timeToLive": 1440
-                    },
-                    "httpClient": {
-                        "blocked": False,
-                        "autoBlock": True,
-                        "connection": {
-                            "retries": None,
-                            "userAgentSuffix": None,
-                            "timeout": None,
-                            "enableCircularRedirects": False,
-                            "enableCookies": False,
-                            "useTrustStore": False
-                        },
-                        "authentication": None
-                    },
-                    "routingRuleName": None,
-                    "format": "apt",
-                    "type": "proxy"
+                "name": "apt-proxy",
+                "url": "http://nexus3:8081/repository/apt-proxy",
+                "online": True,
+                "storage": {
+                    "blobStoreName": "default",
+                    "strictContentTypeValidation": True,
+                    "writePolicy": "ALLOW"
                 },
+                "cleanup": None,
+                "apt": {
+                    "distribution": "bionic",
+                    "flat": True
+                },
+                "proxy": {
+                    "remoteUrl": "http://apt-proxy",
+                    "contentMaxAge": 1440,
+                    "metadataMaxAge": 1440
+                },
+                "negativeCache": {
+                    "enabled": False,
+                    "timeToLive": 1440
+                },
+                "httpClient": {
+                    "blocked": False,
+                    "autoBlock": True,
+                    "connection": {
+                        "retries": None,
+                        "userAgentSuffix": None,
+                        "timeout": None,
+                        "enableCircularRedirects": False,
+                        "enableCookies": False,
+                        "useTrustStore": False
+                    },
+                    "authentication": None
+                },
+                "routingRuleName": None,
+                "format": "apt",
+                "type": "proxy"
+            },
             "comment": "",
         },
         "apt-proxy-http-client": {
@@ -228,6 +229,8 @@ def test_apt_repository_state():
     for key, values in state_test_apt_data['results'].items():
         id = f"nexus3_repositories_|-repositories_{key}_|-{key}_|-present"
         output = ret['test.minion'][id]
+        print()
+        print(output)
         assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
         assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
         assert values['changes'] == output['changes'], f"wrong changes result! expected: \"{values['changes']}\" got: \"{output['changes']}\""
