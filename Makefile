@@ -2,7 +2,7 @@ PASSWORD=$$(docker exec nexus3 bash -c 'cat /nexus-data/admin.password')
 COMPOSE_FILE=docker-compose.yml
 
 start: start_nexus
-	@docker compose pull
+	@docker compose --progress quiet pull
 	@docker compose up -d
 
 	@sleep 10
@@ -10,7 +10,7 @@ start: start_nexus
 	@docker exec salt-master sh -c 'salt \* saltutil.sync_all' > /dev/null 2>&1
 
 start_nexus:
-	@docker compose -f $(COMPOSE_FILE) pull
+	@docker compose --progress quiet -f $(COMPOSE_FILE) pull
 	@docker compose -f $(COMPOSE_FILE) up -d nexus3
 
 	@./bin/check_nexus.sh

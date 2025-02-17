@@ -467,6 +467,28 @@ def present(name,
                     if ntlm_host != repo['httpClient']['authentication']['ntlmHost']:
                         updates['ntlm_host'] = ntlm_host                                       
 
+            # check for changes to connection
+            if repo['httpClient']['connection']['retries'] and http_retries is None:
+                updates['http_retries'] = http_retries
+                is_update = True
+            if repo['httpClient']['connection']['retries'] is None and http_retries is not None:
+                updates['http_retries'] = http_retries
+                is_update = True
+
+            if repo['httpClient']['connection']['timeout'] and http_timeout is None:
+                updates['http_timeout'] = http_timeout
+                is_update = True
+            if repo['httpClient']['connection']['timeout'] is None and http_timeout is not None:
+                updates['http_timeout'] = http_timeout
+                is_update = True
+
+            if repo['httpClient']['connection']['userAgentSuffix'] and http_user_agent is None:
+                updates['userAgentSuffix'] = http_user_agent
+                is_update = True
+            if repo['httpClient']['connection']['userAgentSuffix'] is None and http_user_agent is not None:
+                updates['userAgentSuffix'] = http_user_agent
+                is_update = True
+
             if format == 'apt':
                 if apt_dist_name != repo['apt']['distribution']:
                     updates['apt_dist_name'] = apt_dist_name
