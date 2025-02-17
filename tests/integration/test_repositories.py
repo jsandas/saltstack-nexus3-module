@@ -224,13 +224,10 @@ state_test_apt_data = {
 def test_apt_repository_state():
     pillar = state_test_apt_data['pillar']
     ret = client.cmd('test.minion', 'state.apply', ['nexus3.repositories', f'pillar={pillar}'])
-    print()
-    print(ret['test.minion'])
+    # print(ret['test.minion'])
     for key, values in state_test_apt_data['results'].items():
         id = f"nexus3_repositories_|-repositories_{key}_|-{key}_|-present"
         output = ret['test.minion'][id]
-        print()
-        print(output)
         assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
         assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
         assert values['changes'] == output['changes'], f"wrong changes result! expected: \"{values['changes']}\" got: \"{output['changes']}\""
@@ -344,7 +341,7 @@ state_test_docker_data = {
 def test_docker_repository_state():
     pillar = state_test_docker_data['pillar']
     ret = client.cmd('test.minion', 'state.apply', ['nexus3.repositories', f'pillar={pillar}'])
-    print(ret['test.minion'])
+    # print(ret['test.minion'])
     for key, values in state_test_docker_data['results'].items():
         id = f"nexus3_repositories_|-repositories_{key}_|-{key}_|-present"
         output = ret['test.minion'][id]
@@ -352,3 +349,100 @@ def test_docker_repository_state():
         assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
         assert values['changes'] == output['changes'], f"wrong type result! expected: \"{values['changes']}\" got: \"{output['changes']}\""
 
+
+state_test_raw_data = {
+    "pillar": {
+        "nexus3": {
+            "repositories": {
+                "raw-hosted": [
+                    {"format": "raw"},
+                    {"type": "hosted"},
+                ],
+                "raw-proxy": [
+                    {"format": "raw"},
+                    {"type": "proxy"},
+                    {"remote_url": "https://registry-1.docker.io"},
+                ]
+            }
+        }
+    },
+    "results": {
+        "raw-hosted": {
+            "result": True,
+            "changes": {
+                "name": "raw-hosted",
+                "url": "http://nexus3:8081/repository/raw-hosted",
+                "online": True,
+                "storage": {
+                    "blobStoreName": "default",
+                    "strictContentTypeValidation": True,
+                    "writePolicy": "ALLOW_ONCE"
+                },
+                "cleanup": None,
+                "component": {
+                    "proprietaryComponents": False
+                },
+                "raw": {
+                    "contentDisposition": "ATTACHMENT"
+                },
+                "format": "raw",
+                "type": "hosted"
+            },
+            "comment": ""
+        },
+        "raw-proxy": {
+            "result": True,
+            "changes": {
+                "name": "raw-proxy",
+                "url": "http://nexus3:8081/repository/raw-proxy",
+                "online": True,
+                "storage": {
+                    "blobStoreName": "default",
+                    "strictContentTypeValidation": True,
+                    "writePolicy": "ALLOW"
+                },
+                "cleanup": None,
+                "proxy": {
+                    "remoteUrl": "https://registry-1.docker.io",
+                    "contentMaxAge": 1440,
+                    "metadataMaxAge": 1440
+                },
+                "negativeCache": {
+                    "enabled": True,
+                    "timeToLive": 1440
+                },
+                "httpClient": {
+                    "blocked": False,
+                    "autoBlock": True,
+                    "connection": {
+                        "retries": None,
+                        "userAgentSuffix": None,
+                        "timeout": None,
+                        "enableCircularRedirects": False,
+                        "enableCookies": False,
+                        "useTrustStore": False
+                    },
+                    "authentication": None
+                },
+                "routingRuleName": None,
+                "raw": {
+                    "contentDisposition": "ATTACHMENT"
+                },
+                "format": "raw",
+                "type": "proxy"
+            },
+            "comment": "",
+        },
+    }
+}
+
+def test_raw_repository_state():
+    pillar = state_test_raw_data['pillar']
+    ret = client.cmd('test.minion', 'state.apply', ['nexus3.repositories', f'pillar={pillar}'])
+    # print(ret['test.minion'])
+    for key, values in state_test_raw_data['results'].items():
+        id = f"nexus3_repositories_|-repositories_{key}_|-{key}_|-present"
+        output = ret['test.minion'][id]
+        assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
+        assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
+        assert values['changes'] == output['changes'], f"wrong type result! expected: \"{values['changes']}\" got: \"{output['changes']}\""
