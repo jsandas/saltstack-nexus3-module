@@ -575,9 +575,6 @@ def present(name,
             ret['comment'] = 'repository {} is in desired state'.format(name)
             return ret
 
-        if is_update:
-            log.error(repo)
-
         resp = __salt__['nexus3_repositories.proxy'](name,
                                                     format,
                                                     remote_url,

@@ -695,8 +695,6 @@ def proxy(name,
 
     nc = nexus3.NexusClient()
 
-    log.error(payload)
-
     if update:
         update_path = repo_base_path + '/' + format_url_string + '/proxy/' + name
         resp = nc.put(update_path, payload)
