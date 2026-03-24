@@ -48,6 +48,16 @@ nexus3:
       - docker_http_port: 5001
       - docker_force_auth: False
       - docker_index_type: HUB
+    docker-proxy2:
+      - format: docker
+      - type: proxy
+      - remote_url: https://registry-1.docker.io
+      - blobstore: docker
+      - docker_path_enabled: True
+      - docker_force_auth: False
+      - docker_index_type: HUB
+      - remote_username: username
+      - remote_password: password
     npm-proxy:
       - format: npm
       - type: proxy
