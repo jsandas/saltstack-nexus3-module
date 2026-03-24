@@ -521,6 +521,13 @@ def present(name,
                     is_update = True                
 
             if format == 'docker':
+                docker_settings = repo.get('docker', {})
+                current_docker_path_enabled = docker_settings.get('pathEnabled', False)
+                if current_docker_path_enabled is None:
+                    current_docker_path_enabled = False
+                current_docker_subdomain = docker_settings.get('subdomain') or None
+                desired_docker_subdomain = docker_subdomain or None
+
                 if docker_force_auth != repo['docker']['forceBasicAuth']:
                     updates['docker_force_auth'] = docker_force_auth
                     is_update = True
@@ -539,11 +546,11 @@ def present(name,
                 if docker_index_url != repo['dockerProxy']['indexUrl']:
                     updates['docker_index_url'] = docker_index_url
                     is_update = True
-                if docker_path_enabled != repo['docker']['pathEnabled']:
+                if docker_path_enabled != current_docker_path_enabled:
                     updates['docker_path_enabled'] = docker_path_enabled
                     is_update = True
-                if docker_subdomain != repo['docker']['subdomain']:
-                    updates['docker_subdomain'] = docker_subdomain
+                if desired_docker_subdomain != current_docker_subdomain:
+                    updates['docker_subdomain'] = desired_docker_subdomain
                     is_update = True
 
             if format == 'maven2':
