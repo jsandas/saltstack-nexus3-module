@@ -178,15 +178,15 @@ def present(name,
             If using CUSTOM then docker_index_url must be specified
 
     docker_path_enabled (bool):
-        Enable path based docker repositories [True|False] (Default: False)
+        Enable path based docker proxy repositories [True|False] (Default: False)
         .. note::
             If true then subdomain will be set to None because path and subdomain are mutually exclusive in nexus
 
     http_retries: (int):
         Retries for proxy repositories to upstream (Default: None)
 
-    docker_subdomain (string):
-        Enable subdomain based docker repositories [True|False] (Default: False)
+    docker_subdomain (str):
+        Enable subdomain based docker proxy repositories (Default: None)
         .. note::
             If true then path will be set to false because path and subdomain are mutually exclusive in nexus
 

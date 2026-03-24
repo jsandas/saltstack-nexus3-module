@@ -472,8 +472,8 @@ def proxy(name,
         .. note::
             If true then subdomain will be set to None because path and subdomain are mutually exclusive in nexus
 
-    docker_subdomain (string):
-        Enable subdomain based docker repositories [True|False] (Default: False)
+    docker_subdomain (str):
+        Enable subdomain based docker repositories (Default: None)
         .. note::
             If true then path will be set to false because path and subdomain are mutually exclusive in nexus
 
@@ -632,6 +632,8 @@ def proxy(name,
         'docker': {
             'v1Enabled': docker_v1_enabled,
             'forceBasicAuth': docker_force_auth,
+            'pathEnabled': False,
+            'subdomain': None
         },
         'dockerProxy': {
             'indexType': docker_index_type.upper(),
@@ -674,10 +676,8 @@ def proxy(name,
             docker['docker']['httpsPort'] = docker_https_port
         if docker_path_enabled:
             docker['docker']['pathEnabled'] = docker_path_enabled
-            docker['docker']['subdomain'] = None
         if docker_subdomain:
             docker['docker']['subdomain'] = docker_subdomain
-            docker['docker']['pathEnabled'] = False
 
         payload.update(docker)
     
