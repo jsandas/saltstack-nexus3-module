@@ -12,6 +12,8 @@ def test_cleanup():
     client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy'])
     client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-apt-proxy'])
     client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-yum-proxy_auth'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-docker-path'])
+    client.cmd('test.minion', 'nexus3_repositories.delete', ['name=test-docker-subdomain'])
 
 def test_list_all():
     ret = client.cmd('test.minion', 'nexus3_repositories.list_all')
@@ -58,6 +60,60 @@ def test_proxy_with_auth():
     assert data['proxy']['remoteUrl'] == 'https://randomurlauth.com','remoteUrl is incorrect'
     assert data['httpClient']['authentication']['type'] == 'username','authentication type is incorrect'
     assert data['httpClient']['authentication']['username'] == 'test_user','authentication username is incorrect'
+
+def test_proxy_docker_path_enabled():
+    # Create a docker proxy repo with path-based routing enabled.
+    # path and subdomain are mutually exclusive; enabling path must clear subdomain.
+    ret = client.cmd('test.minion', 'nexus3_repositories.proxy',
+                     ['name=test-docker-path', 'format=docker',
+                      'remote_url=https://registry-1.docker.io',
+                      'docker_index_type=HUB', 'docker_path_enabled=True'])
+    # print(ret)
+    data = ret['test.minion']['repository']
+    assert data['name'] == 'test-docker-path', 'repo name is incorrect'
+    assert data['docker']['pathEnabled'] == True, 'pathEnabled should be True'
+    assert data['docker']['subdomain'] is None, 'subdomain must be None when path routing is enabled'
+
+
+def test_proxy_docker_subdomain():
+    # Create a docker proxy repo with subdomain-based routing.
+    # The module must set pathEnabled=False when a subdomain is supplied.
+    ret = client.cmd('test.minion', 'nexus3_repositories.proxy',
+                     ['name=test-docker-subdomain', 'format=docker',
+                      'remote_url=https://registry-1.docker.io',
+                      'docker_index_type=HUB', 'docker_subdomain=registry.example.com'])
+    # print(ret)
+    data = ret['test.minion']['repository']
+    assert data['name'] == 'test-docker-subdomain', 'repo name is incorrect'
+    assert data['docker']['subdomain'] == 'registry.example.com', 'subdomain is incorrect'
+    assert data['docker']['pathEnabled'] == False, 'pathEnabled must be False when subdomain is set'
+
+
+def test_proxy_docker_switch_path_to_subdomain():
+    # test-docker-path was created with pathEnabled=True in the previous test.
+    # Switching to subdomain routing must disable path routing.
+    ret = client.cmd('test.minion', 'nexus3_repositories.proxy',
+                     ['name=test-docker-path', 'format=docker',
+                      'remote_url=https://registry-1.docker.io',
+                      'docker_index_type=HUB', 'docker_subdomain=registry.example.com'])
+    # print(ret)
+    data = ret['test.minion']['repository']
+    assert data['docker']['subdomain'] == 'registry.example.com', 'subdomain should be set after switching from path'
+    assert data['docker']['pathEnabled'] == False, 'pathEnabled must be False after switching to subdomain'
+
+
+def test_proxy_docker_switch_subdomain_to_path():
+    # test-docker-subdomain was created with subdomain set in the previous test.
+    # Switching to path routing must clear the subdomain.
+    ret = client.cmd('test.minion', 'nexus3_repositories.proxy',
+                     ['name=test-docker-subdomain', 'format=docker',
+                      'remote_url=https://registry-1.docker.io',
+                      'docker_index_type=HUB', 'docker_path_enabled=True'])
+    # print(ret)
+    data = ret['test.minion']['repository']
+    assert data['docker']['pathEnabled'] == True, 'pathEnabled must be True after switching from subdomain'
+    assert data['docker']['subdomain'] is None, 'subdomain must be None after switching to path routing'
+
 
 def test_describe():
     ret = client.cmd('test.minion', 'nexus3_repositories.describe', ['name=test-yum-hosted'])
@@ -348,6 +404,284 @@ def test_docker_repository_state():
         assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
         assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
         assert values['changes'] == output['changes'], f"wrong type result! expected: \"{values['changes']}\" got: \"{output['changes']}\""
+
+
+# ---------------------------------------------------------------------------
+# Docker routing state-level tests
+# ---------------------------------------------------------------------------
+# These tests cover the new docker_path_enabled / docker_subdomain parameters
+# and their mutual-exclusivity guarantee (enabling one must disable the other).
+
+state_test_docker_path_data = {
+    "pillar": {
+        "nexus3": {
+            "repositories": {
+                "docker-proxy-path": [
+                    {"format": "docker"},
+                    {"type": "proxy"},
+                    {"remote_url": "https://registry-1.docker.io"},
+                    {"docker_http_port": 5002},
+                    {"docker_index_type": "HUB"},
+                    {"docker_path_enabled": True},
+                ],
+            }
+        }
+    },
+    "results": {
+        "docker-proxy-path": {
+            "result": True,
+            "changes": {
+                "name": "docker-proxy-path",
+                "url": "http://nexus3:8081/repository/docker-proxy-path",
+                "online": True,
+                "storage": {
+                    "blobStoreName": "default",
+                    "strictContentTypeValidation": True,
+                    "writePolicy": "ALLOW"
+                },
+                "cleanup": None,
+                "docker": {
+                    "v1Enabled": False,
+                    "forceBasicAuth": True,
+                    "httpPort": 5002,
+                    "httpsPort": None,
+                    "subdomain": None,
+                    "pathEnabled": True,
+                },
+                "dockerProxy": {
+                    "indexType": "HUB",
+                    "indexUrl": None,
+                    "cacheForeignLayers": None,
+                    "foreignLayerUrlWhitelist": []
+                },
+                "proxy": {
+                    "remoteUrl": "https://registry-1.docker.io",
+                    "contentMaxAge": 1440,
+                    "metadataMaxAge": 1440
+                },
+                "negativeCache": {
+                    "enabled": True,
+                    "timeToLive": 1440
+                },
+                "httpClient": {
+                    "blocked": False,
+                    "autoBlock": True,
+                    "connection": {
+                        "retries": None,
+                        "userAgentSuffix": None,
+                        "timeout": None,
+                        "enableCircularRedirects": False,
+                        "enableCookies": False,
+                        "useTrustStore": False
+                    },
+                    "authentication": None
+                },
+                "routingRuleName": None,
+                "format": "docker",
+                "type": "proxy"
+            },
+            "comment": "",
+        },
+    }
+}
+
+state_test_docker_subdomain_data = {
+    "pillar": {
+        "nexus3": {
+            "repositories": {
+                "docker-proxy-subdomain": [
+                    {"format": "docker"},
+                    {"type": "proxy"},
+                    {"remote_url": "https://registry-1.docker.io"},
+                    {"docker_http_port": 5003},
+                    {"docker_index_type": "HUB"},
+                    {"docker_subdomain": "registry.example.com"},
+                ],
+            }
+        }
+    },
+    "results": {
+        "docker-proxy-subdomain": {
+            "result": True,
+            "changes": {
+                "name": "docker-proxy-subdomain",
+                "url": "http://nexus3:8081/repository/docker-proxy-subdomain",
+                "online": True,
+                "storage": {
+                    "blobStoreName": "default",
+                    "strictContentTypeValidation": True,
+                    "writePolicy": "ALLOW"
+                },
+                "cleanup": None,
+                "docker": {
+                    "v1Enabled": False,
+                    "forceBasicAuth": True,
+                    "httpPort": 5003,
+                    "httpsPort": None,
+                    "subdomain": "registry.example.com",
+                    "pathEnabled": False,
+                },
+                "dockerProxy": {
+                    "indexType": "HUB",
+                    "indexUrl": None,
+                    "cacheForeignLayers": None,
+                    "foreignLayerUrlWhitelist": []
+                },
+                "proxy": {
+                    "remoteUrl": "https://registry-1.docker.io",
+                    "contentMaxAge": 1440,
+                    "metadataMaxAge": 1440
+                },
+                "negativeCache": {
+                    "enabled": True,
+                    "timeToLive": 1440
+                },
+                "httpClient": {
+                    "blocked": False,
+                    "autoBlock": True,
+                    "connection": {
+                        "retries": None,
+                        "userAgentSuffix": None,
+                        "timeout": None,
+                        "enableCircularRedirects": False,
+                        "enableCookies": False,
+                        "useTrustStore": False
+                    },
+                    "authentication": None
+                },
+                "routingRuleName": None,
+                "format": "docker",
+                "type": "proxy"
+            },
+            "comment": "",
+        },
+    }
+}
+
+
+def test_docker_path_routing_state():
+    """State applies docker-proxy-path with docker_path_enabled=True.
+
+    Asserts:
+    - docker.pathEnabled is True in the created repository.
+    - docker.subdomain remains None (mutually exclusive).
+    """
+    pillar = state_test_docker_path_data['pillar']
+    ret = client.cmd('test.minion', 'state.apply', ['nexus3.repositories', f'pillar={pillar}'])
+    # print(ret['test.minion'])
+    for key, values in state_test_docker_path_data['results'].items():
+        id = f"nexus3_repositories_|-repositories_{key}_|-{key}_|-present"
+        output = ret['test.minion'][id]
+        assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
+        assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
+        assert values['changes'] == output['changes'], f"wrong changes! expected: \"{values['changes']}\" got: \"{output['changes']}\""
+
+
+def test_docker_subdomain_routing_state():
+    """State applies docker-proxy-subdomain with docker_subdomain set.
+
+    Asserts:
+    - docker.subdomain equals the configured value.
+    - docker.pathEnabled is False (mutually exclusive).
+    """
+    pillar = state_test_docker_subdomain_data['pillar']
+    ret = client.cmd('test.minion', 'state.apply', ['nexus3.repositories', f'pillar={pillar}'])
+    # print(ret['test.minion'])
+    for key, values in state_test_docker_subdomain_data['results'].items():
+        id = f"nexus3_repositories_|-repositories_{key}_|-{key}_|-present"
+        output = ret['test.minion'][id]
+        assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
+        assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
+        assert values['changes'] == output['changes'], f"wrong changes! expected: \"{values['changes']}\" got: \"{output['changes']}\""
+
+
+def test_docker_routing_idempotent_state():
+    """Re-applying the same docker_path_enabled pillar produces no changes.
+
+    The state's update-detection logic must not flag a no-op as an update.
+    """
+    pillar = state_test_docker_path_data['pillar']
+    ret = client.cmd('test.minion', 'state.apply', ['nexus3.repositories', f'pillar={pillar}'])
+    # print(ret['test.minion'])
+    id = "nexus3_repositories_|-repositories_docker-proxy-path_|-docker-proxy-path_|-present"
+    output = ret['test.minion'][id]
+    assert output['result'] == True, f"state should succeed: {output['result']}"
+    assert output['changes'] == {}, f"no changes expected on re-apply, got: {output['changes']}"
+    assert 'desired state' in output['comment'], f"unexpected comment: {output['comment']}"
+
+
+def test_docker_routing_switch_path_to_subdomain_state():
+    """Switching docker-proxy-path from path routing to subdomain routing is detected as an update.
+
+    After the switch:
+    - docker.subdomain equals the new value.
+    - docker.pathEnabled becomes False.
+    The state module must detect the change and trigger a PUT to Nexus.
+    """
+    # Pillar that switches to subdomain routing for the repo previously set up
+    # with docker_path_enabled=True by test_docker_path_routing_state.
+    switch_pillar = {
+        "nexus3": {
+            "repositories": {
+                "docker-proxy-path": [
+                    {"format": "docker"},
+                    {"type": "proxy"},
+                    {"remote_url": "https://registry-1.docker.io"},
+                    {"docker_http_port": 5002},
+                    {"docker_index_type": "HUB"},
+                    {"docker_subdomain": "registry.example.com"},
+                ],
+            }
+        }
+    }
+    ret = client.cmd('test.minion', 'state.apply', ['nexus3.repositories', f'pillar={switch_pillar}'])
+    # print(ret['test.minion'])
+    id = "nexus3_repositories_|-repositories_docker-proxy-path_|-docker-proxy-path_|-present"
+    output = ret['test.minion'][id]
+    assert output['result'] == True, f"state should succeed after routing switch: {output['result']}"
+    assert output['changes'] != {}, "changes must be non-empty when routing mode switches"
+    docker_section = output['changes']['docker']
+    assert docker_section['subdomain'] == 'registry.example.com', \
+        f"subdomain should be updated, got: {docker_section['subdomain']}"
+    assert docker_section['pathEnabled'] == False, \
+        f"pathEnabled must be False after switch to subdomain, got: {docker_section['pathEnabled']}"
+
+
+def test_docker_routing_switch_subdomain_to_path_state():
+    """Switching docker-proxy-subdomain from subdomain routing to path routing is detected as an update.
+
+    After the switch:
+    - docker.pathEnabled becomes True.
+    - docker.subdomain becomes None.
+    The state module must detect the change and trigger a PUT to Nexus.
+    """
+    # Pillar that switches to path routing for the repo previously set up
+    # with docker_subdomain by test_docker_subdomain_routing_state.
+    switch_pillar = {
+        "nexus3": {
+            "repositories": {
+                "docker-proxy-subdomain": [
+                    {"format": "docker"},
+                    {"type": "proxy"},
+                    {"remote_url": "https://registry-1.docker.io"},
+                    {"docker_http_port": 5003},
+                    {"docker_index_type": "HUB"},
+                    {"docker_path_enabled": True},
+                ],
+            }
+        }
+    }
+    ret = client.cmd('test.minion', 'state.apply', ['nexus3.repositories', f'pillar={switch_pillar}'])
+    # print(ret['test.minion'])
+    id = "nexus3_repositories_|-repositories_docker-proxy-subdomain_|-docker-proxy-subdomain_|-present"
+    output = ret['test.minion'][id]
+    assert output['result'] == True, f"state should succeed after routing switch: {output['result']}"
+    assert output['changes'] != {}, "changes must be non-empty when routing mode switches"
+    docker_section = output['changes']['docker']
+    assert docker_section['pathEnabled'] == True, \
+        f"pathEnabled must be True after switch from subdomain, got: {docker_section['pathEnabled']}"
+    assert docker_section['subdomain'] is None, \
+        f"subdomain must be None after switch to path routing, got: {docker_section['subdomain']}"
 
 
 state_test_raw_data = {
