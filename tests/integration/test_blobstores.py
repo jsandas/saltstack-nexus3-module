@@ -142,10 +142,20 @@ def test_blobstores_state():
     for key, values in state_test_data['results'].items():
         id = f"nexus3_blobstores_|-create_blobstore_{key}_|-{key}_|-present"
         output = ret['test.minion'][id]
-        assert values['result'] == output['result'], f"wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\""
-        assert values['comment'] == output['comment'], f"wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
-        assert values['changes']['type'] == output['changes']['blobstore']['type'], f"wrong type result! expected: \"{values['changes']['type']}\" got: \"{output['changes']['blobstore']['type']}\""
-        assert values['changes']['softQuota'] == output['changes']['blobstore']['softQuota'], f"wrong type result! expected: \"{values['changes']['softQuota']}\" got: \"{output['changes']['blobstore']['softQuota']}\""
+        assert values['result'] == output['result'], (
+            f"[{key}] wrong state result! expected: \"{values['result']}\" got: \"{output['result']}\"\n"
+            f"  comment: {output['comment']}\n"
+            f"  changes: {output['changes']}"
+        )
+        assert values['comment'] == output['comment'], (
+            f"[{key}] wrong state comment! expected: \"{values['comment']}\" got: \"{output['comment']}\""
+        )
+        assert values['changes']['type'] == output['changes']['blobstore']['type'], (
+            f"[{key}] wrong type result! expected: \"{values['changes']['type']}\" got: \"{output['changes']['blobstore']['type']}\""
+        )
+        assert values['changes']['softQuota'] == output['changes']['blobstore']['softQuota'], (
+            f"[{key}] wrong softQuota! expected: \"{values['changes']['softQuota']}\" got: \"{output['changes']['blobstore']['softQuota']}\""
+        )
 
 
 state_test_data2 = {
