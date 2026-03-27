@@ -51,8 +51,8 @@ services:
     image: minio/mc
     container_name: minio-mc
     volumes:
-      - ../../tests/files/config.json:/root/.mc/config.json
+      - ../../tests/files/minio-setup.sh:/root/minio-setup.sh
     entrypoint: /bin/sh
-    command: -c 'until mc mb --ignore-existing local/nexus3; do sleep 1; done'
+    command: -c '/root/minio-setup.sh'
     links:
       - minio:minio
