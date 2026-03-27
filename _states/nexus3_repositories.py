@@ -351,7 +351,7 @@ def present(name,
 
     if type == 'hosted':
         if exists:
-            if repo['cleanup'] is not None and cleanup_policies != repo['cleanup']['policyNames']:
+            if (repo['cleanup'] is not None and cleanup_policies != repo['cleanup']['policyNames']) or (cleanup_policies and repo['cleanup'] is None):
                 updates['cleanup_policies'] = cleanup_policies
                 is_update = True
             if write_policy.upper() != repo['storage']['writePolicy']:
