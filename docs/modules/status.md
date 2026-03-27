@@ -1,4 +1,4 @@
-nexus3_status.**check**():
+nexus3_status.**check**(**):
 
     Health check endpoint that returns the results of the system status checks
 

@@ -1,4 +1,9 @@
-nexus3_scripts.base_url(*name*):
+nexus3_scripts.**_connection_info**(**):
+
+    Gets configuration from minion config/pillars
+
+
+nexus3_scripts.**base_url**(*name*):
 
     Set base url for Nexus
 
@@ -15,7 +20,7 @@ nexus3_scripts.base_url(*name*):
       nexus3_scripts.base_url
 
 
-nexus3_scripts.task(*name,typeId,taskProperties,cron,setAlertEmail=None*):
+nexus3_scripts.**task**(*name,typeId,taskProperties,cron,setAlertEmail=None*):
 
     name (str):
         Name of task
@@ -40,14 +45,16 @@ nexus3_scripts.task(*name,typeId,taskProperties,cron,setAlertEmail=None*):
 
         Note:
             Cron schedule notes:
-            Field Name	Allowed Values
-            Seconds	    0-59
-            Minutes	    0-59
-            Hours	    0-23
-            Dayofmonth	1-31
-            Month	    1-12 or JAN-DEC
-            Dayofweek	1-7 or SUN-SAT
-            Year(optional)	empty, 1970-2099
+            Field Name  Allowed Values
+            Seconds         0-59
+            Minutes         0-59
+            Hours           0-23
+            Dayofmonth  1-31
+            Month           1-12 or JAN-DEC
+            Dayofweek   1-7 or SUN-SAT
+            Year(optional)      empty, 1970-2099
+    Returns:
+        str: metadata about task if successful
 
     .. code-block:: yaml
 

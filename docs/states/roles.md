@@ -13,7 +13,7 @@ nexus3_roles.**present**(*name,description,privileges,roles*):
 
     name (str):
         name of role
-    
+
     description (str):
         description of role
 
