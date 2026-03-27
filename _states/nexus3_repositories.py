@@ -14,7 +14,6 @@ state module for Nexus 3 repositories
 
 '''
 
-import json
 import logging
 
 log = logging.getLogger(__name__)
@@ -182,22 +181,22 @@ def present(name,
         .. note::
             If true then subdomain will be set to None because path and subdomain are mutually exclusive in nexus
 
-    http_retries: (int):
-        Retries for proxy repositories to upstream (Default: None)
-
     docker_subdomain (str):
         Enable subdomain based docker proxy repositories (Default: None)
         .. note::
             If true then path will be set to false because path and subdomain are mutually exclusive in nexus
+
+    docker_v1_enabled (bool):
+        Enable v1 api support [True|False] (Default: False)
+
+    http_retries: (int):
+        Retries for proxy repositories to upstream (Default: None)
 
     http_timeout: (int):
         Timeout for proxy repositories to upstream in seconds (Default: None)
 
     http_user_agent (str):
         User agent suffix for proxy repositories (Default: None)
-
-    docker_v1_enabled (bool):
-        Enable v1 api support [True|False] (Default: False)
 
     maven_layout_policy (str):
         Validate all paths are maven artifacts or metadata paths [STRICT|PERMISSIVE] (default: STRICT)
@@ -369,7 +368,6 @@ def present(name,
                 # if apt_gpg_priv_key != repo['aptSigning']['keypair']:
                 #     updates['apt_gpg_priv_key'] = apt_gpg_priv_key
                 #     is_update = True
-                is_update = True
 
             if format == 'docker':
                 if docker_force_auth != repo['docker']['forceBasicAuth']:
@@ -404,6 +402,7 @@ def present(name,
         if __opts__['test']:
             if exists:            
                 if is_update:
+                    log.error(repo)
                     ret['result'] = None
                     ret['comment'] = 'repository {} will be updated with: {}'.format(name, updates)
                 else:
