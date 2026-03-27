@@ -51,7 +51,8 @@ services:
     image: minio/mc
     container_name: minio-mc
     volumes:
-      - ../../tests/files/config.json:/root/.mc/config.json
-    command: 'mb local/nexus3'
+      - ../../tests/files/minio-setup.sh:/root/minio-setup.sh
+    entrypoint: /bin/sh
+    command: -c '/root/minio-setup.sh'
     links:
       - minio:minio

@@ -85,6 +85,8 @@ def present(name,
         docker_https_port=None,
         docker_index_type='HUB',
         docker_index_url=None,
+        docker_path_enabled=False,
+        docker_subdomain=None,
         docker_v1_enabled=False,
         group_members=[],
         http_retries=None,
@@ -175,8 +177,18 @@ def present(name,
         .. note::
             If using CUSTOM then docker_index_url must be specified
 
+    docker_path_enabled (bool):
+        Enable path based docker proxy repositories [True|False] (Default: False)
+        .. note::
+            If true then subdomain will be set to None because path and subdomain are mutually exclusive in nexus
+
     http_retries: (int):
         Retries for proxy repositories to upstream (Default: None)
+
+    docker_subdomain (str):
+        Enable subdomain based docker proxy repositories (Default: None)
+        .. note::
+            If true then path will be set to false because path and subdomain are mutually exclusive in nexus
 
     http_timeout: (int):
         Timeout for proxy repositories to upstream in seconds (Default: None)
@@ -324,6 +336,9 @@ def present(name,
             ret['comment'] = 'repository {} is in desired state'.format(name)
             return ret
 
+        if is_update:
+            log.debug(repo)
+
         resp = __salt__['nexus3_repositories.group'](name,
                                                 format,
                                                 blobstore,
@@ -401,6 +416,9 @@ def present(name,
         if exists and not is_update:      
             ret['comment'] = 'repository {} is in desired state'.format(name)
             return ret
+
+        if is_update:
+            log.debug(repo)
 
         resp = __salt__['nexus3_repositories.hosted'](name,
                                                 format,
@@ -503,6 +521,13 @@ def present(name,
                     is_update = True                
 
             if format == 'docker':
+                docker_settings = repo.get('docker', {})
+                current_docker_path_enabled = docker_settings.get('pathEnabled', False)
+                if current_docker_path_enabled is None:
+                    current_docker_path_enabled = False
+                current_docker_subdomain = docker_settings.get('subdomain') or None
+                desired_docker_subdomain = docker_subdomain or None
+
                 if docker_force_auth != repo['docker']['forceBasicAuth']:
                     updates['docker_force_auth'] = docker_force_auth
                     is_update = True
@@ -520,6 +545,12 @@ def present(name,
                     is_update = True
                 if docker_index_url != repo['dockerProxy']['indexUrl']:
                     updates['docker_index_url'] = docker_index_url
+                    is_update = True
+                if docker_path_enabled != current_docker_path_enabled:
+                    updates['docker_path_enabled'] = docker_path_enabled
+                    is_update = True
+                if desired_docker_subdomain != current_docker_subdomain:
+                    updates['docker_subdomain'] = desired_docker_subdomain
                     is_update = True
 
             if format == 'maven2':
@@ -567,6 +598,8 @@ def present(name,
                                                     docker_https_port,
                                                     docker_index_type,
                                                     docker_index_url,
+                                                    docker_path_enabled,
+                                                    docker_subdomain,
                                                     docker_v1_enabled,
                                                     http_retries,
                                                     http_timeout,

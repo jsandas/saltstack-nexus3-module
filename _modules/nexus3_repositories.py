@@ -386,6 +386,8 @@ def proxy(name,
         docker_https_port=None,
         docker_index_type='HUB',
         docker_index_url=None,
+        docker_path_enabled=False,
+        docker_subdomain=None,
         docker_v1_enabled=False,
         http_retries=None,
         http_timeout=None,
@@ -464,6 +466,16 @@ def proxy(name,
         Url for docker index (Default: None)
         .. note::
             If using CUSTOM then docker_index_url must be specified
+
+    docker_path_enabled (bool):
+        Enable path based docker repositories [True|False] (Default: False)
+        .. note::
+            If true then subdomain will be set to None because path and subdomain are mutually exclusive in nexus
+
+    docker_subdomain (str):
+        Enable subdomain based docker repositories (Default: None)
+        .. note::
+            If true then path will be set to false because path and subdomain are mutually exclusive in nexus
 
     docker_v1_enabled (bool):
         Enable v1 api support [True|False] (Default: False)
@@ -557,8 +569,7 @@ def proxy(name,
             'authentication': None,
             'blocked': blocked,
             'autoBlock': auto_block
-        },
-        'routingRule': 'string'
+        }
     }
 
     # connection dictionary
@@ -621,6 +632,8 @@ def proxy(name,
         'docker': {
             'v1Enabled': docker_v1_enabled,
             'forceBasicAuth': docker_force_auth,
+            'pathEnabled': False,
+            'subdomain': None
         },
         'dockerProxy': {
             'indexType': docker_index_type.upper(),
@@ -661,6 +674,11 @@ def proxy(name,
             docker['docker']['httpPort'] = docker_http_port
         if docker_https_port is not None:
             docker['docker']['httpsPort'] = docker_https_port
+        if docker_path_enabled:
+            docker['docker']['pathEnabled'] = docker_path_enabled
+        if docker_subdomain:
+            docker['docker']['subdomain'] = docker_subdomain
+
         payload.update(docker)
     
     if format == 'maven2':

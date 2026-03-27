@@ -216,7 +216,8 @@ def present(name,
                 updates['s3_prefix'] = s3_prefix
                 is_update = True
 
-            if s3_config['bucket']['expiration'] != s3_expiration:
+            current_s3_expiration = s3_config['bucket'].get('expiration', 3)
+            if current_s3_expiration != s3_expiration:
                 updates['s3_expiration'] = s3_expiration
                 is_update = True
 
