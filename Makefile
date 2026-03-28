@@ -1,7 +1,7 @@
 PASSWORD=$$(docker exec nexus3 bash -c 'cat /nexus-data/admin.password')
 COMPOSE_FILE=docker-compose.yml
 
-.PHONY: start start_nexus stop integration reload clean shell docs docs-check
+.PHONY: start start_nexus stop integration reload clean shell docs docs-check set-version
 
 start: start_nexus
 	@docker compose --progress quiet pull
@@ -52,3 +52,10 @@ docs:
 
 docs-check:
 	@python3 ./bin/generate_docs_from_docstrings.py --check
+
+set-version:
+	@if [ -n "$(VERSION)" ]; then \
+		python3 ./bin/update_file_versions.py "$(VERSION)"; \
+	else \
+		python3 ./bin/update_file_versions.py --from-branch; \
+	fi

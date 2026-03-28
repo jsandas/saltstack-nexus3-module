@@ -1,8 +1,7 @@
 '''
 state module for Nexus 3 blobstores
 
-:version: v0.2.2
-
+:version: v0.4.0
 :configuration: In order to connect to Nexus 3, certain configuration is required
     in /etc/salt/minion on the relevant minions.
 
