@@ -1,8 +1,7 @@
 '''
 state module for working with the Nexus 3 Script API
 
-:version: v0.2.2
-
+:version: v0.4.0
 This module can be used for managing parts of Nexus that are not available in the rest api
 
 .. note::
