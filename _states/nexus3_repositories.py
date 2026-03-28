@@ -402,7 +402,6 @@ def present(name,
         if __opts__['test']:
             if exists:            
                 if is_update:
-                    log.error(repo)
                     ret['result'] = None
                     ret['comment'] = 'repository {} will be updated with: {}'.format(name, updates)
                 else:
