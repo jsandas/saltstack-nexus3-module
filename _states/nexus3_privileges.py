@@ -14,7 +14,6 @@ state module for Nexus 3 privileges
 
 '''
 
-import json
 import logging
 
 log = logging.getLogger(__name__)

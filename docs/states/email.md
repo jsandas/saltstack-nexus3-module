@@ -1,4 +1,4 @@
-nexus3_email.clear(*name*):
+nexus3_email.**clear**(*name*):
 
     name (str):
         state id name
@@ -12,7 +12,7 @@ nexus3_email.clear(*name*):
           nexus3_email.clear
 
 
-nexus3_email.configure(*name,enabled,fromAddress='nexus@example.org',host='localhost',nexusTrustStoreEnabled=False,password=None,port=0,sslOnConnectEnabled=False,sslServerIdentityCheckEnabled=False,startTlsEnabled=False,startTlsRequired=False,subjectPrefix=None,username=''*):
+nexus3_email.**configure**(*name,enabled,fromAddress='nexus@example.org',host='localhost',nexusTrustStoreEnabled=False,password=None,port=0,sslOnConnectEnabled=False,sslServerIdentityCheckEnabled=False,startTlsEnabled=False,startTlsRequired=False,subjectPrefix=None,username=''*):
 
     name (str):
         state id name
@@ -36,7 +36,7 @@ nexus3_email.configure(*name,enabled,fromAddress='nexus@example.org',host='local
 
     password (str):
         smtp password (Default: None)
-       
+
     port (int):
         smtp port (Default: 0)
 

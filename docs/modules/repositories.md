@@ -1,17 +1,6 @@
+nexus3_repositories.**_format_url_string**(*format*):
 
-
-    CLI Example::
-
-        salt myminion nexus3.repositories.create_hosted name=test-raw format=raw blobstore=raw_blobstore
-
-        salt myminion nexus3_repositories.create_hosted name=test-yum format=yum yum_repodata_depth=3 yum_deploy_policy=permissive
-    
-
-nexus3_repositories.**list_all**():
-
-    CLI Example::
-
-        salt myminion nexus3_repositories.list_all
+    Helper function to handle inconsistency in format name and api url paths
 
 
 nexus3_repositories.**group**(*name,format,blobstore='default',docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_v1_enabled=False,group_members=[],strict_content_validation=True*):
@@ -20,10 +9,10 @@ nexus3_repositories.**group**(*name,format,blobstore='default',docker_force_auth
 
     name (str):
         Name of repository
-    
+
     format (str):
         Format of repository [bower|cocoapads|conan|docker|etc.]
-        .. note::
+        Note:
             This can be any officaly supported repository format for Nexus
 
     blobstore (str):
@@ -34,12 +23,12 @@ nexus3_repositories.**group**(*name,format,blobstore='default',docker_force_auth
 
     docker_http_port (int):
         HTTP port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is behind a secure proxy
 
     docker_https_port (int):
         HTTPS port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is configured for https
 
     docker_v1_enabled (bool):
@@ -47,7 +36,7 @@ nexus3_repositories.**group**(*name,format,blobstore='default',docker_force_auth
 
     group_members (list):
         List of repositories in group (Default: [])
-        .. note::
+        Note:
             The list cannot be empty.  An error will be returned
 
     strict_content_validation (bool):
@@ -66,10 +55,10 @@ nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passp
 
     name (str):
         Name of repository
-    
+
     format (str):
         Format of repository [apt|bower|cocoapads|conan|docker|maven2|etc.]
-        .. note::
+        Note:
             This can be any officaly supported repository format for Nexus
 
     apt_dist_name (str):
@@ -80,7 +69,7 @@ nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passp
 
     apt_gpg_priv_key (str):
         Base64 string of GPG signing private key (Default: '')
-        .. note::
+        Note:
             create base64 string to preserve newline characters:
               ?> base64 private-key.gpg
 
@@ -95,12 +84,12 @@ nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passp
 
     docker_http_port (int):
         HTTP port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is behind a secure proxy
 
     docker_https_port (int):
         HTTPS port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is configured for https
 
     docker_v1_enabled (bool):
@@ -128,21 +117,21 @@ nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passp
 
     .. code-block:: bash
 
-        salt myminion nexus3.repositories.create_hosted name=test-raw format=raw blobstore=raw_blobstore
+        salt myminion nexus3_repositories.hosted name=test-raw format=raw blobstore=raw_blobstore
 
-        salt myminion nexus3_repositories.create_hosted name=test-yum format=yum yum_repodata_depth=3 yum_deploy_policy=permissive
+        salt myminion nexus3_repositories.hosted name=test-yum format=yum yum_repodata_depth=3 yum_deploy_policy=permissive
 
 
-nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt_flat_repo=False,auto_block=True,blobstore='default',blocked=False,bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url=None,docker_v1_enabled=False,http_retries=None,http_timeout=None,http_user_agent=None,maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,negative_cache_enabled=True,negative_cache_max_age=1440,ntlm_domain=None,ntlm_host=None,nuget_cache_max_age=3600,remote_auth_type='username',remote_bearer_token=None,remote_password=None,remote_username=None,strict_content_validation=True*):
+nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt_flat_repo=False,auto_block=True,blobstore='default',blocked=False,bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url=None,docker_path_enabled=False,docker_subdomain=None,docker_v1_enabled=False,http_retries=None,http_timeout=None,http_user_agent=None,maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,negative_cache_enabled=True,negative_cache_max_age=1440,ntlm_domain=None,ntlm_host=None,nuget_cache_max_age=3600,remote_auth_type='username',remote_bearer_token=None,remote_password=None,remote_username=None,strict_content_validation=True*):
 
     Nexus 3 supports many different formats.  The apt, bower, docker, maven2, and nuget formats have built-in arguments.
 
     name (str):
         Name of repository
-    
+
     format (str):
         Format of repository [apt|bower|cocoapads|conan|docker|maven2|etc.]
-        .. note::
+        Note:
             This can be any officaly supported repository format for Nexus
 
     remote_url (str):
@@ -165,7 +154,7 @@ nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt
 
     bower_rewrite_urls (bool):
         Bower rewrite urls (Default: True)
-    
+
     cleanup_policies (list):
         List of cleanup policies to apply to repository (Default: [])
 
@@ -177,23 +166,33 @@ nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt
 
     docker_http_port (int):
         HTTP port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is behind a secure proxy
 
     docker_https_port (int):
         HTTPS port for docker api (Default: None)
-        .. note::
+        Note:
             Used if the server is configured for https
 
     docker_index_type (str):
         Type of index for docker registry [REGISTRY|HUB|CUSTOM] (Default: HUB)
-        .. note::
+        Note:
             If using CUSTOM then docker_index_url must be specified
 
     docker_index_url (str):
         Url for docker index (Default: None)
-        .. note::
+        Note:
             If using CUSTOM then docker_index_url must be specified
+
+    docker_path_enabled (bool):
+        Enable path based docker repositories [True|False] (Default: False)
+        Note:
+            If true then subdomain will be set to None because path and subdomain are mutually exclusive in nexus
+
+    docker_subdomain (str):
+        Enable subdomain based docker repositories (Default: None)
+        Note:
+            If true then path will be set to false because path and subdomain are mutually exclusive in nexus
 
     docker_v1_enabled (bool):
         Enable v1 api support [True|False] (Default: False)
@@ -233,12 +232,12 @@ nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt
 
     remote_auth_type (str):
         Authentication type for remote url [username|ntlm|bearerToken] (Default: username)
-        .. note::
+        Note:
             Setting the bearerToken value currently does work with the REST API.  This will have to be set in the UI for now.
             https://github.com/sonatype/nexus-public/issues/247
 
     remote_bearer_token (str):
-        .. note::
+        Note:
             Setting the bearerToken value currently does work with the REST API.  This will have to be set in the UI for now.
             https://github.com/sonatype/nexus-public/issues/247
 
@@ -255,6 +254,39 @@ nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt
 
     .. code-block:: bash
 
-        salt myminion nexus3.repositories.proxy name=test_raw format=raw blobstore=raw_blobstore
+        salt myminion nexus3_repositories.proxy name=test_raw format=raw remote_url=http://test.example.com blobstore=raw_blobstore
 
         salt myminion nexus3_repositories.proxy name=test_apt format=apt remote_url=http://test.example.com remote_username=bob remote_password=testing apt_dist_name=bionic apt_flat_repo=False
+
+
+nexus3_repositories.**delete**(*name*):
+
+    name (str):
+        name of repository
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_repositories.delete name=maven-central
+
+
+nexus3_repositories.**describe**(*name*):
+
+    name (str):
+        name of repository
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_repositories.describe name=maven-central
+
+
+nexus3_repositories.**list_all**(**):
+
+    CLI Example::
+
+    .. code-block:: bash
+
+        salt myminion nexus3_repositories.list_all

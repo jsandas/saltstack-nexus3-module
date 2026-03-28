@@ -1,4 +1,4 @@
-nexus3_blobstores.**create**(*name,quota_type=None,quota_limit=1000000,store_type='file',s3_accessKeyId='',s3_bucket='nexus3',s3_endpoint='',s3_expiration=3,s3_forcePathStyle=False,s3_region=Default,s3_secretAccessKey=''*):
+nexus3_blobstores.**create**(*name,quota_type=None,quota_limit=1000000,store_type='file',s3_accessKeyId='',s3_bucket='nexus3',s3_endpoint='',s3_expiration=3,s3_forcePathStyle=False,s3_prefix='',s3_region='Default',s3_secretAccessKey=''*):
 
     name (str):
         Name of blobstore
@@ -35,7 +35,7 @@ nexus3_blobstores.**create**(*name,quota_type=None,quota_limit=1000000,store_typ
 
     s3_forcePathStyle (bool):
         force path style url format (Default: False)
-        .. note:
+        Note:
             if using s3 compatible service like min.io, set this to True
 
     s3_region (str):
@@ -46,10 +46,12 @@ nexus3_blobstores.**create**(*name,quota_type=None,quota_limit=1000000,store_typ
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_blobstores.create name=myblobstore
         salt myminion nexus3_blobstores.create name=myblobstore quota_type=spaceRemainingQuota spaceRemainingQuota=5000000
         salt myminion nexus3_blobstores.create name=mys3blobstore store_type=s3 s3_bucket=nexus3 s3_accessKeyId=AKIAIOSFODNN7EXAMPLE s3_secretAccessKey=wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY s3_endpoint=http://minio:9000 s3_forcePathStyle=True
-    
+
 
 nexus3_blobstores.**delete**(*name*):
 
@@ -58,8 +60,10 @@ nexus3_blobstores.**delete**(*name*):
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_blobstores.delete name=myblobstore
-    
+
 
 nexus3_blobstores.**describe**(*name*):
 
@@ -68,15 +72,19 @@ nexus3_blobstores.**describe**(*name*):
 
     CLI Example::
 
-        salt myminion nexus3_blobstores.describe name=myblobstore
-    
+    .. code-block:: bash
 
-nexus3_blobstores.**list_all**():
+        salt myminion nexus3_blobstores.describe name=myblobstore
+
+
+nexus3_blobstores.**list_all**(**):
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_blobstores.list_all
-    
+
 
 nexus3_blobstores.**update**(*name,quota_type=None,quota_limit=1000000,s3_accessKeyId='',s3_bucket='nexus3',s3_endpoint='',s3_expiration=3,s3_forcePathStyle=False,s3_prefix='',s3_region='Default',s3_secretAccessKey=''*):
 
@@ -112,7 +120,7 @@ nexus3_blobstores.**update**(*name,quota_type=None,quota_limit=1000000,s3_access
 
     s3_forcePathStyle (bool):
         force path style url format (Default: False)
-        .. note:
+        Note:
             if using s3 compatible service like min.io, set this to True
 
     s3_region (str):
@@ -122,6 +130,8 @@ nexus3_blobstores.**update**(*name,quota_type=None,quota_limit=1000000,s3_access
         AWS Secret Access Key for S3 bucket (Default: '')
 
     CLI Example::
+
+    .. code-block:: bash
 
         salt myminion nexus3_blobstores.update name=myblobstore quota_type=spaceRemainingQuota quota_limit=5000000
         salt myminion nexus3_blobstores.update name=mys3blobstore s3_bucket=nexus3 s3_accessKeyId=AKIAIOSFODNN7EXAMPLE s3_secretAccessKey=wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY s3_endpoint=http://minio:9000 s3_forcePathStyle=True

@@ -16,7 +16,7 @@ nexus3_email.**configure**(*enabled,fromAddress='nexus@example.org',host='localh
 
     password (str):
         smtp password (Default: None)
-       
+
     port (int):
         smtp port (Default: 0)
 
@@ -46,30 +46,38 @@ nexus3_email.**configure**(*enabled,fromAddress='nexus@example.org',host='localh
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_email.configure enabled=True host=smtp.example.com
 
         salt myminion nexus3_email.configure enabled=False
-    
 
-nexus3_email.**describe**():
+
+nexus3_email.**describe**(**):
 
     CLI Example::
+
+    .. code-block:: bash
 
         salt myminion nexus3_email.describe
-    
 
-nexus3_email.**reset**():
+
+nexus3_email.**reset**(**):
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_email.reset
-    
+
 
 nexus3_email.**verify**(*to*):
 
     CLI Example::
-    
+
     to (str):
         address to send test email to
-    
-        salt myminion nexus3_email.verify to=test@domain.com
+
+    .. code-block:: bash
+
+        salt myminion nexus3_email.verify

@@ -43,10 +43,12 @@ nexus3_privileges.**create**(*name,type,actions=[],contentSelector=None,descript
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_privileges.create name=nx-userschangepw actions="['ADD','READ']" description='Change password permission' domain=userschangepw type=application
 
         salt myminion nexus3_privileges.create name=nx-repository-view-nuget-nuget-hosted-browse actions=['BROWSE'] description='Browse privilege for nuget-hosted repository views' format=nuget repository=nuget-hosted type=repository-view
-    
+
 
 nexus3_privileges.**delete**(*name*):
 
@@ -55,8 +57,10 @@ nexus3_privileges.**delete**(*name*):
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_privileges.delete nx-analytics-all
-    
+
 
 nexus3_privileges.**describe**(*name*):
 
@@ -65,15 +69,19 @@ nexus3_privileges.**describe**(*name*):
 
     CLI Example::
 
-        salt myminion nexus3_privileges.describe nx-analytics-all
-    
+    .. code-block:: bash
 
-nexus3_privileges.**list_all**():
+        salt myminion nexus3_privileges.describe nx-analytics-all
+
+
+nexus3_privileges.**list_all**(**):
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_privileges.list_all
-    
+
 
 nexus3_privileges.**update**(*name,actions=None,contentSelector=None,description=None,domain=None,format=None,pattern=None,repository=None,scriptName=None*):
 
@@ -115,5 +123,7 @@ nexus3_privileges.**update**(*name,actions=None,contentSelector=None,description
         script name (Default: None)
 
     CLI Example::
+
+    .. code-block:: bash
 
         salt myminion nexus3_privileges.update name=testing actions="['ADD','READ']" description='Change password permission' domain=userschangepw type=application

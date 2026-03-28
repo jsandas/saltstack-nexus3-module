@@ -1,6 +1,8 @@
 PASSWORD=$$(docker exec nexus3 bash -c 'cat /nexus-data/admin.password')
 COMPOSE_FILE=docker-compose.yml
 
+.PHONY: start start_nexus stop integration reload clean shell docs docs-check
+
 start: start_nexus
 	@docker compose --progress quiet pull
 	@docker compose up -d
@@ -44,3 +46,9 @@ clean:
 
 shell:
 	@docker exec -it -w /srv salt-master ash || true
+
+docs:
+	@python3 ./bin/generate_docs_from_docstrings.py
+
+docs-check:
+	@python3 ./bin/generate_docs_from_docstrings.py --check

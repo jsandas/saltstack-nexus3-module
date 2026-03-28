@@ -1,11 +1,11 @@
-nexus3_security.anonymous_access(*name,enabled*):
+nexus3_security.**anonymous_access**(*name,enabled*):
 
     name (str):
         state id name
         Note:
             do not provide this argument, this is only here
             because salt passes this arg always
-    
+
     enabled (bool):
         enable or disable anonymous access [True|False]
 
@@ -16,14 +16,14 @@ nexus3_security.anonymous_access(*name,enabled*):
             - enabled: True
 
 
-nexus3_security.realms(*name,realms*):
+nexus3_security.**realms**(*name,realms*):
 
     name (str):
         state id name
         Note:
             do not provide this argument, this is only here
             because salt passes this arg always
-    
+
     realms (list):
         list of realms in order they should be used 
         Note:

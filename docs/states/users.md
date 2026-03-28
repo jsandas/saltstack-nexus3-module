@@ -13,7 +13,7 @@ nexus3_users.**present**(*name,password,emailAddress,firstName,lastName,roles=['
 
     name (str):
         name of user
-    
+
     password (str):
         password of user
 
@@ -28,7 +28,7 @@ nexus3_users.**present**(*name,password,emailAddress,firstName,lastName,roles=['
 
     lastName (str):
         last name
-    
+
     roles (list):
         list of roles (Default: ['nx-anonymous'])
 

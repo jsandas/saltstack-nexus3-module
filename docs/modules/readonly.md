@@ -1,4 +1,4 @@
-nexus3_readonly.**describe**():
+nexus3_readonly.**describe**(**):
 
     CLI Example::
 
@@ -7,7 +7,7 @@ nexus3_readonly.**describe**():
         salt myminion nexus3_readonly.describe
 
 
-nexus3_readonly.**enabled**(*state, force_release=True*):
+nexus3_readonly.**enabled**(*state,force_release=False*):
 
     state (bool):
         enable or disable read-only [True|False]

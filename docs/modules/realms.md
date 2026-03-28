@@ -1,27 +1,33 @@
-nexus3_realms.**list_active**():
+nexus3_realms.**list_active**(**):
 
     CLI Example::
+
+    .. code-block:: bash
 
         salt myminion nexus3_realms.list_active
-    
 
-nexus3_realms.**list_all**():
+
+nexus3_realms.**list_all**(**):
 
     CLI Example::
 
-        salt myminion nexus3_realms.list_all
-    
+    .. code-block:: bash
 
-nexus3_realms.**reset**():
+        salt myminion nexus3_realms.list_all
+
+
+nexus3_realms.**reset**(**):
 
     Resets realms to default
 
     CLI Example::
 
-        salt myminion nexus3_realms.reset
-    
+    .. code-block:: bash
 
-nexus3_realms.**update**(*realms*):
+        salt myminion nexus3_realms.reset
+
+
+nexus3_realms.**update**(*realms=[]*):
 
     realms (list):
         list of realms in order they should be used 
@@ -30,5 +36,7 @@ nexus3_realms.**update**(*realms*):
             the current list
 
     CLI Example::
+
+    .. code-block:: bash
 
         salt myminion nexus3_realms.update realms="['NexusAuthenticatingRealm','NexusAuthorizingRealm','NpmToken','DockerToken']"

@@ -2,7 +2,7 @@ nexus3_roles.**create**(*name,description='',privileges=[],roles=[]*):
 
     name (str):
         name of role
-    
+
     description (str):
         description of role
 
@@ -14,8 +14,10 @@ nexus3_roles.**create**(*name,description='',privileges=[],roles=[]*):
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_roles.create name=test_role description='test role' roles="['nx-admin']"
-    
+
 
 nexus3_roles.**delete**(*name*):
 
@@ -24,8 +26,10 @@ nexus3_roles.**delete**(*name*):
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_roles.delete nx-admin
-    
+
 
 nexus3_roles.**describe**(*name*):
 
@@ -34,21 +38,25 @@ nexus3_roles.**describe**(*name*):
 
     CLI Example::
 
-        salt myminion nexus3_roles.describe nx-admin
-    
+    .. code-block:: bash
 
-nexus3_roles.**list_all**():
+        salt myminion nexus3_roles.describe nx-admin
+
+
+nexus3_roles.**list_all**(**):
 
     CLI Example::
 
+    .. code-block:: bash
+
         salt myminion nexus3_roles.list_all
-    
+
 
 nexus3_roles.**update**(*name,description=None,privileges=None,roles=None*):
 
     name (str):
         name of role
-    
+
     description (str):
         description of role (Default: None)
 
@@ -59,5 +67,7 @@ nexus3_roles.**update**(*name,description=None,privileges=None,roles=None*):
         roles to inherit from (Default: None)
 
     CLI Example::
+
+    .. code-block:: bash
 
         salt myminion nexus3_roles.update name=test_role roles="['nx-admin']"
