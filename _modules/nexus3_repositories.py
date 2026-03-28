@@ -537,10 +537,9 @@ def proxy(name,
 
     .. code-block:: bash
 
-        salt myminion nexus3.repositories.proxy name=test_raw format=raw blobstore=raw_blobstore
+        salt myminion nexus3_repositories.proxy name=test_raw format=raw remote_url=http://test.example.com blobstore=raw_blobstore
 
-        salt myminion nexus3_repositories.proxy name=test_apt format=apt remote_url=http://test.example.com remote_username=bob remote_password=testing apt_dist_name=bionic apt_flat_repo=flat
- False}'
+        salt myminion nexus3_repositories.proxy name=test_apt format=apt remote_url=http://test.example.com remote_username=bob remote_password=testing apt_dist_name=bionic apt_flat_repo=False
     '''
 
     ret = {
@@ -729,7 +728,7 @@ def delete(name):
 
     .. code-block:: bash
 
-        salt myminion nexus3_repository.delete name=maven-central
+        salt myminion nexus3_repositories.delete name=maven-central
     '''
 
     ret = {
@@ -762,7 +761,7 @@ def describe(name):
 
     .. code-block:: bash
 
-        salt myminion nexus3_repository.describe name=maven-central
+        salt myminion nexus3_repositories.describe name=maven-central
     '''
 
     ret = {
