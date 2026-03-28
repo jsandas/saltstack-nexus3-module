@@ -80,4 +80,4 @@ nexus3_email.**verify**(*to*):
 
     .. code-block:: bash
 
-        salt myminion nexus3_email.verify to=test@domain.com
+        salt myminion nexus3_email.verify

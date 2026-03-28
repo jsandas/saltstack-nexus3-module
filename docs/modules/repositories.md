@@ -117,9 +117,9 @@ nexus3_repositories.**hosted**(*name,format,apt_dist_name='bionic',apt_gpg_passp
 
     .. code-block:: bash
 
-        salt myminion nexus3.repositories.create_hosted name=test-raw format=raw blobstore=raw_blobstore
+        salt myminion nexus3_repositories.hosted name=test-raw format=raw blobstore=raw_blobstore
 
-        salt myminion nexus3_repositories.create_hosted name=test-yum format=yum yum_repodata_depth=3 yum_deploy_policy=permissive
+        salt myminion nexus3_repositories.hosted name=test-yum format=yum yum_repodata_depth=3 yum_deploy_policy=permissive
 
 
 nexus3_repositories.**proxy**(*name,format,remote_url,apt_dist_name='bionic',apt_flat_repo=False,auto_block=True,blobstore='default',blocked=False,bower_rewrite_urls=True,cleanup_policies=[],content_max_age=1440,docker_force_auth=True,docker_http_port=None,docker_https_port=None,docker_index_type='HUB',docker_index_url=None,docker_path_enabled=False,docker_subdomain=None,docker_v1_enabled=False,http_retries=None,http_timeout=None,http_user_agent=None,maven_layout_policy='STRICT',maven_version_policy='MIXED',metadata_max_age=1440,negative_cache_enabled=True,negative_cache_max_age=1440,ntlm_domain=None,ntlm_host=None,nuget_cache_max_age=3600,remote_auth_type='username',remote_bearer_token=None,remote_password=None,remote_username=None,strict_content_validation=True*):

@@ -255,9 +255,9 @@ def hosted(name,
 
     .. code-block:: bash
 
-        salt myminion nexus3.repositories.create_hosted name=test-raw format=raw blobstore=raw_blobstore
+        salt myminion nexus3_repositories.hosted name=test-raw format=raw blobstore=raw_blobstore
 
-        salt myminion nexus3_repositories.create_hosted name=test-yum format=yum yum_repodata_depth=3 yum_deploy_policy=permissive
+        salt myminion nexus3_repositories.hosted name=test-yum format=yum yum_repodata_depth=3 yum_deploy_policy=permissive
     '''
 
     ret = {
