@@ -1,0 +1,1 @@
+Established the initial Salt extension migration foundation: package layout, loader entry points, modern CI/lint/docs scaffolding, and tiered test workflow.

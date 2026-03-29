@@ -1,7 +1,7 @@
 PASSWORD=$$(docker exec nexus3 bash -c 'cat /nexus-data/admin.password')
 COMPOSE_FILE=docker-compose.yml
 
-.PHONY: start start_nexus stop integration reload clean shell docs docs-check set-version
+.PHONY: start start_nexus stop integration reload clean shell docs docs-check docs-sphinx set-version test test-integration lint format changelog-draft sync-src
 
 start: start_nexus
 	@docker compose --progress quiet pull
@@ -31,6 +31,18 @@ integration: clean
 	@docker exec -w /tests/integration salt-master ash -c 'pip install pytest; pytest ./'
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml stop
 
+test:
+	@nox -e tests
+
+test-integration:
+	@nox -e integration
+
+lint:
+	@pre-commit run --all-files
+
+format:
+	@ruff format src _modules _states _utils tests
+
 reload:
 	@docker exec -it salt-master salt-key -D -y
 	@docker rm -f salt-minion
@@ -52,6 +64,15 @@ docs:
 
 docs-check:
 	@python3 ./bin/generate_docs_from_docstrings.py --check
+
+docs-sphinx:
+	@nox -e docs
+
+changelog-draft:
+	@nox -e changelog
+
+sync-src:
+	@python3 ./bin/sync_legacy_to_src.py
 
 set-version:
 	@if [ -n "$(VERSION)" ]; then \
