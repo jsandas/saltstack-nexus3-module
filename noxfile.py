@@ -17,7 +17,6 @@ def integration(session):
 def lint(session):
     session.install("ruff")
     session.run("ruff", "check", "src")
-    session.run("ruff", "check", "_modules", "_states", "_utils")
 
 
 @nox.session

@@ -41,7 +41,7 @@ lint:
 	@pre-commit run --all-files
 
 format:
-	@ruff format src _modules _states _utils tests
+	@ruff format src tests
 
 reload:
 	@docker exec -it salt-master salt-key -D -y
