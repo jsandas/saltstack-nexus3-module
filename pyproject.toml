@@ -27,6 +27,7 @@ dependencies = [
 [project.optional-dependencies]
 tests = [
   "pytest>=8",
+  "salt>=3006",
 ]
 docs = [
   "myst-parser>=4.0",
