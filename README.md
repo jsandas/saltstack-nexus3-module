@@ -28,6 +28,12 @@ Then run saltutil.sync_all to copy the files to the minion.
     make changelog-draft
     make sync-src
 
+  Docs:
+
+  - [Installation](docs/topics/installation.md)
+  - [Migration](docs/topics/migration.md)
+  - [Deprecation Policy](docs/topics/deprecation-policy.md)
+
 The files under the `nexus3` and `salt/pillar` folders can be used as examples for using these modules.
 
 The nexus3 execution modules depend on the python requests library which should already be installed from the installation of the salt minion.

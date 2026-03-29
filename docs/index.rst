@@ -5,7 +5,9 @@ saltext-nexus3
    :maxdepth: 2
    :caption: Topics
 
+   topics/installation
    topics/migration
+   topics/deprecation-policy
 
 .. toctree::
    :maxdepth: 1
