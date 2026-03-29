@@ -8,9 +8,7 @@ services:
     environment: 
       SALT_MASTER_CONFIG: '{"auto_accept": true}'
     volumes:
-      - ../../_modules:/srv/salt/_modules
-      - ../../_states:/srv/salt/_states
-      - ../../_utils:/srv/salt/_utils
+      - ../../:/workspace
       - ./salt/nexus3:/srv/salt/nexus3
       - ../integration:/tests/integration
 
@@ -18,7 +16,9 @@ services:
     image: saltstack/salt:3006.5
     container_name: salt-minion
     environment: 
-      SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "log_level": "debug", "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "${NEXUS_PASSWORD}"}}'
+      SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "log_level": "debug", "module_dirs": ["/workspace/src/saltext/nexus3/modules"], "states_dirs": ["/workspace/src/saltext/nexus3/states"], "utils_dirs": ["/workspace/src/saltext/nexus3/utils"], "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "${NEXUS_PASSWORD}"}}'
+    volumes:
+      - ../../:/workspace
     links:
       - salt-master:salt-master
       - nexus3:nexus3

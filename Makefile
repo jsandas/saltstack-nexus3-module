@@ -7,6 +7,12 @@ start: start_nexus
 	@docker compose --progress quiet pull
 	@docker compose up -d
 
+	@sleep 5
+	@echo " installing package in salt containers..."
+	@docker exec salt-master sh -c 'python3 -m pip install -e /workspace >/dev/null'
+	@docker exec salt-minion sh -c 'python3 -m pip install -e /workspace >/dev/null'
+	@docker restart salt-minion > /dev/null
+
 	@sleep 10
 	@echo " syncing files with minion..."
 	@docker exec salt-master sh -c 'salt \* saltutil.sync_all' > /dev/null 2>&1
