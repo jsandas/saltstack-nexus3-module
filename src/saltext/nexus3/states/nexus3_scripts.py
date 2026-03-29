@@ -2,6 +2,7 @@
 state module for working with the Nexus 3 Script API
 
 :version: v0.4.0
+
 This module can be used for managing parts of Nexus that are not available in the rest api
 
 .. note::
@@ -312,6 +313,7 @@ def task(name,
             Month	    1-12 or JAN-DEC
             Dayofweek	1-7 or SUN-SAT
             Year(optional)	empty, 1970-2099
+
     Returns:
         str: metadata about task if successful
 

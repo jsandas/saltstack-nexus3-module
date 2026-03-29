@@ -145,7 +145,7 @@ def present(name,
 
     bower_rewrite_urls (bool):
         Bower rewrite urls (Default: True)
-    
+
     cleanup_policies (list):
         List of cleanup policies to apply to repository (Default: [])
 
@@ -253,6 +253,7 @@ def present(name,
 
     yum_repodata_depth (int):
         Specifies the repository depth where repodata folder(s) are created (Default: 0)
+
     .. code-block:: yaml
 
         create_repository:

@@ -184,11 +184,9 @@ def reset():
 
 def verify(to):
     '''
-    CLI Example::
-    
     to (str):
         address to send test email to
-    
+
     .. code-block:: bash
 
         salt myminion nexus3_email.verify
