@@ -28,5 +28,5 @@ def docs(session):
 
 @nox.session
 def changelog(session):
-    session.install("towncrier>=24.8")
+    session.install("towncrier>=24.8", "-e", ".")
     session.run("towncrier", "build", "--draft")
