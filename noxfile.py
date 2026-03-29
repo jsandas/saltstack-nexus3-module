@@ -9,7 +9,7 @@ def tests(session):
 
 @nox.session
 def integration(session):
-    session.install("-e", ".[tests]")
+    session.install("-e", ".[tests-integration]")
     session.run("pytest", "tests/integration")
 
 

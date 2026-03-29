@@ -27,6 +27,9 @@ dependencies = [
 [project.optional-dependencies]
 tests = [
   "pytest>=8",
+]
+tests-integration = [
+  "pytest>=8",
   "salt>=3006",
 ]
 docs = [
