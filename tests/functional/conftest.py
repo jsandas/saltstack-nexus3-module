@@ -20,6 +20,7 @@ def salt_loader_opts(tmp_path):
 
 	return {
 		"id": "saltext-nexus3-functional-minion",
+		"test": False,
 		"cachedir": str(cache_dir),
 		"extension_modules": str(extmods_dir),
 		"sock_dir": str(sock_dir),
