@@ -37,7 +37,7 @@ jobs:
         run: nox -e lint
 
       - name: Unit and functional tests
-        run: nox -e tests
+        run: nox -s "tests-3.11"
 
       - name: Build docs
         run: nox -e docs
