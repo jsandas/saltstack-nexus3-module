@@ -1,5 +1,3 @@
-import pytest
-
 from saltext.nexus3.states import nexus3_roles
 
 
@@ -36,7 +34,6 @@ def test_present_in_test_mode_reports_create_without_calling_create(monkeypatch)
     assert called["create"] is False
 
 
-@pytest.mark.xfail(strict=True, reason="nexus3_roles.present calls update even when no drift")
 def test_present_existing_role_no_drift_does_not_call_update(monkeypatch):
     called = {"update": 0}
 
@@ -77,10 +74,6 @@ def test_present_existing_role_no_drift_does_not_call_update(monkeypatch):
     assert called["update"] == 0
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="nexus3_roles.present uses 'update' instead of 'is_update' and misses update plan in test mode",
-)
 def test_present_in_test_mode_with_drift_reports_update_plan(monkeypatch):
     called = {"update": 0}
 

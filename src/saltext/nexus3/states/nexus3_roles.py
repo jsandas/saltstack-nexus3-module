@@ -126,15 +126,15 @@ def present(name,
 
         if meta['role']['description'] != description:
             updates['description'] = description
-            update = True
+            is_update = True
 
         if meta['role']['privileges'] != privileges:
             updates['privileges'] = privileges
-            update = True
+            is_update = True
 
         if meta['role']['roles'] != roles:
             updates['roles'] = roles
-            update = True
+            is_update = True
 
         if __opts__['test']:
 
@@ -144,7 +144,13 @@ def present(name,
                 return ret
             else:
                 ret['comment'] = 'role {} is in desired state.'.format(name)
-        
+
+                return ret
+
+        if not is_update:
+            ret['comment'] = 'role {} is in desired state.'.format(name)
+            return ret
+
         update_results = __salt__['nexus3_roles.update'](name,description,privileges,roles)
 
         if 'error' in update_results.keys():
