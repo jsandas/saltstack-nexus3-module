@@ -6,7 +6,9 @@ updates:
       # Check for updates to GitHub Actions every month
       interval: "monthly"
     groups:
-      github-actions: ["*"]
+      github-actions: 
+        patterns: 
+          - "*"
 
   - package-ecosystem: "pip"
     directory: "/"
@@ -14,4 +16,6 @@ updates:
       # Check for Python dependency updates every month
       interval: "monthly"
     groups:
-      pip: ["*"]
+      pip:
+        patterns:
+          - "*"
