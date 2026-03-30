@@ -4,3 +4,8 @@ __pycache__
 *.log
 .vagrant
 .env
+*.egg-info/
+*.egg
+build/
+dist/
+docs/_build/

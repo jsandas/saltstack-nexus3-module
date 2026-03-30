@@ -1,0 +1,10 @@
+{% for section, _ in sections.items() %}
+{% if sections[section] %}
+### {{ definitions[section]['name'] }}
+{% for category, val in sections[section].items() %}
+{% for text, values in val.items() %}
+- {{ text }}
+{% endfor %}
+{% endfor %}
+{% endif %}
+{% endfor %}

@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows"
+    schedule:
+      # Check for updates to GitHub Actions every month
+      interval: "monthly"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      # Check for Python dependency updates every month
+      interval: "monthly"
