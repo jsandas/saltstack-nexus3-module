@@ -39,7 +39,7 @@ def test_present_rejects_type_or_format_change(monkeypatch):
     ret = nexus3_repositories.present(name="repo-a", type="hosted", format="maven2")
 
     assert ret["result"] is False
-    assert "cannot modified" in ret["comment"]
+    assert "cannot be modified" in ret["comment"]
 
 
 def test_present_group_no_drift_returns_desired_state(monkeypatch):

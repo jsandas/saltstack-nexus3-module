@@ -290,7 +290,7 @@ def present(name,
     if exists:
         if type != repo['type'] or format != repo['format']:
             ret['result'] = False
-            ret['comment'] = 'repository type and format cannot modified'
+            ret['comment'] = 'repository type and format cannot be modified'
             return ret
         if blobstore != repo['storage']['blobStoreName']:
             updates['blobstore'] = blobstore
