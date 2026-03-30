@@ -77,6 +77,11 @@ target-version = "py310"
 "_states/*.py" = ["F821"]
 "_utils/*.py" = ["F821"]
 
+[tool.pytest.ini_options]
+filterwarnings = [
+  "ignore:the load_module\\(\\) method is deprecated.*:DeprecationWarning",
+]
+
 [tool.towncrier]
 package = "saltext.nexus3"
 filename = "CHANGELOG.md"

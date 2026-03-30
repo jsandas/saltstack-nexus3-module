@@ -38,7 +38,7 @@ integration: clean
 	@echo "==> target=integration: invoking start with COMPOSE_FILE=tests/files/integration.yml"
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml start
 	@echo "==> target=integration: running pytest in salt-master"
-	@docker exec -w /tests/integration salt-master ash -c 'pip install pytest; pytest ./'
+	@docker exec -w /tests/integration salt-master ash -c 'pip install pytest; pytest -c /workspace/pyproject.toml ./'
 	@echo "==> target=integration: invoking stop with COMPOSE_FILE=tests/files/integration.yml"
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml stop
 
