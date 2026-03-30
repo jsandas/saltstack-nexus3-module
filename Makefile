@@ -5,8 +5,8 @@ COMPOSE_FILE=docker-compose.yml
 
 start: start_nexus
 	@echo "==> target=start COMPOSE_FILE=$(COMPOSE_FILE)"
-	@docker compose --progress quiet pull
-	@docker compose up -d
+	@docker compose --progress quiet -f $(COMPOSE_FILE) pull
+	@docker compose -f $(COMPOSE_FILE) up -d
 
 	@sleep 5
 	@echo " installing package in salt containers..."
