@@ -4,6 +4,7 @@ COMPOSE_FILE=docker-compose.yml
 .PHONY: start start_nexus stop integration reload clean shell docs docs-check docs-sphinx set-version test test-integration lint format changelog-draft sync-src
 
 start: start_nexus
+	@echo "==> target=start COMPOSE_FILE=$(COMPOSE_FILE)"
 	@docker compose --progress quiet pull
 	@docker compose up -d
 
@@ -18,6 +19,7 @@ start: start_nexus
 	@docker exec salt-master sh -c 'salt \* saltutil.sync_all' > /dev/null 2>&1
 
 start_nexus:
+	@echo "==> target=start_nexus COMPOSE_FILE=$(COMPOSE_FILE)"
 	@docker compose --progress quiet -f $(COMPOSE_FILE) pull
 	@docker compose -f $(COMPOSE_FILE) up -d nexus3
 
@@ -33,8 +35,11 @@ stop:
 	@docker compose -f $(COMPOSE_FILE) stop
 
 integration: clean
+	@echo "==> target=integration: invoking start with COMPOSE_FILE=tests/files/integration.yml"
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml start
+	@echo "==> target=integration: running pytest in salt-master"
 	@docker exec -w /tests/integration salt-master ash -c 'pip install pytest; pytest ./'
+	@echo "==> target=integration: invoking stop with COMPOSE_FILE=tests/files/integration.yml"
 	@$(MAKE) COMPOSE_FILE=tests/files/integration.yml stop
 
 test:

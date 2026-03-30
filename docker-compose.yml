@@ -16,7 +16,7 @@ services:
     image: saltstack/salt:3006.5
     container_name: salt-minion
     environment: 
-      SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "module_dirs": ["/workspace/src/saltext/nexus3/modules"], "states_dirs": ["/workspace/src/saltext/nexus3/states"], "utils_dirs": ["/workspace/src/saltext/nexus3/utils"], "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "${NEXUS_PASSWORD}"}}'
+      SALT_MINION_CONFIG: '{"id": "test.minion", "master": "salt-master", "nexus3": {"hostname": "http://nexus3:8081", "username": "admin", "password": "${NEXUS_PASSWORD}"}}'
     volumes:
       - $PWD:/workspace
     links:
