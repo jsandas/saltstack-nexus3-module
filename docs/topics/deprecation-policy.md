@@ -10,8 +10,7 @@ This project follows a staged deprecation process to protect existing Salt deplo
 
 ## Current policy
 
-- Legacy file_root sync deployment is supported for one migration release window.
-- Package-based installation is the strategic path and receives primary documentation and CI coverage.
+- Package-based installation is the supported path and receives primary documentation and CI coverage.
 - New features should target the package layout first.
 
 ## Required deprecation lifecycle
@@ -21,10 +20,13 @@ This project follows a staged deprecation process to protect existing Salt deplo
 3. Emit release-note reminders before removal.
 4. Remove deprecated paths in a major or clearly signaled breaking release.
 
-## What is currently marked for future removal
+## Completed deprecations
 
-- Direct distribution model that requires manually copying `_modules`, `_states`, and `_utils`.
-- Legacy-only operational guidance once migration window is closed.
+- Direct distribution model that required manually copying `_modules`, `_states`, and `_utils`.
+
+## Potential future removals
+
+- Compatibility shims that exist only for pre-extension consumers.
 
 ## Compatibility expectations
 

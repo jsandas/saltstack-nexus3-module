@@ -1,10 +1,10 @@
 # Installation
 
-This project currently supports two installation models during the migration window.
+This project is distributed as a Salt extension package.
 
-## Preferred: package-based installation
+## Supported installation path
 
-Use the package path for new deployments and all development workflows.
+Use the package path for all deployments and development workflows.
 
 ```bash
 python3 -m venv .venv
@@ -19,25 +19,8 @@ Package-based installation enables:
 - Reproducible dependency management.
 - CI parity with local development.
 
-## Legacy: file_root sync installation
+## Legacy file_root layout status
 
-Legacy deployment remains supported for transition compatibility.
+The legacy `_modules`, `_states`, and `_utils` file_root layout has been removed.
 
-1. Copy `_modules`, `_states`, and `_utils` to the Salt files root.
-2. Run sync on minions.
-
-```bash
-salt '*' saltutil.sync_all
-```
-
-Use legacy mode only when existing automation depends on the old layout.
-
-## Migration helper for dual-path maintenance
-
-While both layouts coexist, keep the package mirror in sync with:
-
-```bash
-make sync-src
-```
-
-This command copies legacy loader folders into `src/saltext/nexus3` and applies import rewrites needed by the package layout.
+If you are migrating from that layout, use package installation and loader entry points from `src/saltext/nexus3`.

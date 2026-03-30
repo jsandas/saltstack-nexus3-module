@@ -1,34 +1,27 @@
 # Migration Status
 
-This project is migrating to the Salt extension package layout.
+This project has migrated to the Salt extension package layout.
 
-## Current transition choices
+## Current state
 
 - New package layout lives under src/saltext/nexus3.
-- Legacy file_root sync paths remain available during the migration window.
-- Modern CI and packaging are being introduced incrementally.
+- Legacy file_root sync paths have been removed.
+- CI, packaging, and docs now target the package layout.
 
 ## Migration phases
 
 1. Establish packaging and loader entry points.
-2. Mirror legacy modules/states/utils into package layout.
-3. Split quality gates into PR, push, and tag workflows.
-4. Expand unit and functional coverage while preserving integration tests.
-5. Phase out legacy deployment guidance after the compatibility window.
+2. Split quality gates into PR, push, and tag workflows.
+3. Expand unit and functional coverage while preserving integration tests.
+4. Move docs reference to Sphinx autodoc from `src`.
+5. Remove legacy loader folders from the repository.
 
-## Compatibility window
+## Compatibility note
 
-- Legacy sync deployment remains available for one release window.
-- Package-based installation is the preferred path for new and existing environments.
-- Changes that alter user-facing behavior must be tracked through changelog fragments.
+- Package-based installation is the only supported path.
+- Changes that alter user-facing behavior are tracked through changelog fragments.
 
 ## Operational guidance
-
-- Keep package mirror in sync during transition:
-
-```bash
-make sync-src
-```
 
 - Run package-path quality checks before release:
 
