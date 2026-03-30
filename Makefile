@@ -30,6 +30,7 @@ start_nexus:
 	@docker exec nexus3 bash -c 'cat /nexus-data/admin.password'
 	@echo
 	@echo "NEXUS_PASSWORD=$(PASSWORD)" > .env
+	@echo "NEXUS_PASSWORD=$(PASSWORD)" > $(dir $(COMPOSE_FILE)).env
 
 stop:
 	@docker compose -f $(COMPOSE_FILE) stop
