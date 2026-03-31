@@ -26,7 +26,7 @@ The legacy file_root sync layout (`_modules`, `_states`, `_utils`) has been remo
   - [API Modules Reference](docs/ref/modules.rst)
   - [API States Reference](docs/ref/states.rst)
 
-The files under the `nexus3` and `salt/pillar` folders can be used as examples for using these modules.
+The files under `tests/files/salt/nexus3` and `tests/files/salt/pillar` can be used as examples for using these modules.
 
 The nexus3 execution modules depend on the python requests library which should already be installed from the installation of the salt minion.
 
