@@ -9,8 +9,8 @@ services:
       SALT_MASTER_CONFIG: '{"auto_accept": true}'
     volumes:
       - $PWD:/workspace
-      - $PWD/nexus3:/srv/salt/nexus3
-      - $PWD/salt/pillar:/srv/pillar
+      - $PWD/tests/files/salt/nexus3:/srv/salt/nexus3
+      - $PWD/tests/files/salt/pillar:/srv/pillar
 
   salt-minion:
     image: saltstack/salt:3006.5
